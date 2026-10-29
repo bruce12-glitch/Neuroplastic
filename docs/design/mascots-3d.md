@@ -27,8 +27,9 @@ The original generated PNGs are encoded to WebP quality 86, preserving their dim
 
 ## Verification
 
-- Inspect all eight generated portraits for identity, pose, hands, props, and consistent rendering.
-- Verify all configured asset files exist, are square, and retain transparency.
-- Run TypeScript and the production build, plus the existing utility and rules checks.
-- Verify the deployed site uses the new portrait URLs in the symposium, atlas, article cards, and reader feedback; record a desktop screenshot.
+- All eight generated portraits were inspected for identity, pose, hands, props, and consistent rendering. All configured assets exist in the production build, are square, and retain transparency.
+- TypeScript, all 19 existing utility/Firestore checks, Firestore rules lint, and the GitHub Pages production build passed. Both GitHub Actions build and deployment completed successfully.
+- Live desktop review at 1363px passed with no horizontal overflow. All six subject portraits loaded from the new URLs on the homepage and in the atlas; the reader's Diogenes hint and Archimedes success portraits also loaded correctly.
+- Keyboard selection with Enter passed. A real pointer interaction produced 3.5 degrees of yaw, 1.5 degrees of pitch, and the intended 10px hover depth in the computed CSS transform.
+- The final deployed views are recorded in `mascots-3d-desktop.jpg` and the updated `finance-desktop.jpg`.
 - Phone/tablet viewport rendering and OS-level motion-preference switching remain outside this environment's available browser checks.
