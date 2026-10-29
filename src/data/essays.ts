@@ -309,12 +309,12 @@ export const ESSAYS: EssayItem[] = [
         latexFormulas: [
           {
             label: "Rényi Entropy of Token Attention Distribution",
-            formula: "H_α(P_i) = \\frac{1}{1 - α} \\log_2 \\left( \\sum_{j=1}^{N} P_{ij}^α \\right)",
+            formula: "H_α(P_i) = [ 1 ÷ (1 − α) ] × log₂ ( ∑ P_ij^α )",
             explanation: "Quantifies the informational dispersion of attention weights across key tokens for head i with order parameter α.",
           },
           {
             label: "Dynamic Context Retention Condition",
-            formula: "\\text{Retain}(x_k) = \\mathbb{I}\\left( H_α(x_k) \\ge τ \\;\\lor\\; \\max_{h} \\|A_{h, k}\\|_2 > γ \\right)",
+            formula: "Retain(x_k) = Keep IF [ H_α(x_k) ≥ τ  OR  max_h ‖A_h,k‖₂ > γ ]",
             explanation: "A token is preserved in KV-cache if its entropy exceeds threshold τ or if any individual attention head demonstrates extreme scalar conviction γ.",
           },
         ],
@@ -445,12 +445,12 @@ export const ESSAYS: EssayItem[] = [
         latexFormulas: [
           {
             label: "Free Energy Bound on Subjective Perceptual Priors",
-            formula: "F(s, a) = \\mathbb{E}_{q(ψ)} [\\ln q(ψ) - \\ln p(s, ψ)] \\ge -\\ln p(s)",
+            formula: "F(s, a) = 𝔼_q(ψ) [ ln q(ψ) − ln p(s, ψ) ] ≥ −ln p(s)",
             explanation: "Variational free energy F bounds the surprise of sensory state s under generative model q(ψ).",
           },
           {
             label: "Active Inference Action Policy",
-            formula: "a^* = \\arg\\min_a \\left( \\mathbb{E}_{p(s|a)} [D_{KL}(q(ψ|s) \\;\\|\\; p(ψ))] \\right)",
+            formula: "a* = arg min_a ( 𝔼_p(s|a) [ D_KL( q(ψ|s) ‖ p(ψ) ) ] )",
             explanation: "True epistemic agency selects actions that maximize information gain by exposing internal beliefs to unexpected empirical friction.",
           },
         ],
@@ -581,12 +581,12 @@ export const ESSAYS: EssayItem[] = [
         latexFormulas: [
           {
             label: "Neural State Langevin Equation",
-            formula: "\\frac{dx}{dt} = -\\nabla V(x) + \\sqrt{2D} \\; \\xi(t)",
+            formula: "dx / dt = −∇V(x) + √(2D) · ξ(t)",
             explanation: "Describes neural trajectory x moving along potential landscape V(x) driven by stochastic exploratory noise ξ(t) with diffusion coefficient D.",
           },
           {
             label: "Kramers' Escape Rate Over Activation Barrier",
-            formula: "r_k = \\frac{\\sqrt{V''(x_{min}) |V''(x_{barrier})|}}{2\\pi} \\exp\\left(-\\frac{\\Delta V}{D}\\right)",
+            formula: "r_k = [ √( V''(x_min) · |V''(x_barrier)| ) ÷ 2π ] × exp( −ΔV ÷ D )",
             explanation: "The probability per second of escaping a behavioral rut scales exponentially with curiosity drive D relative to barrier height ΔV.",
           },
         ],
@@ -717,12 +717,12 @@ export const ESSAYS: EssayItem[] = [
         latexFormulas: [
           {
             label: "Lacanian Signifier Chain in Embedding Space",
-            formula: "\\frac{S}{s} \\;\\mapsto\\; \\mathbf{z}_t = \\text{Attention}(Q_S, K_s, V_s) \\in \\mathbb{R}^d",
+            formula: "(Signifier S ÷ Signified s) ↦ z_t = Attention(Q_S, K_s, V_s) ∈ ℝ^d",
             explanation: "The primacy of the signifier S over the signified s manifests as context-dependent projection vectors where meaning is perpetually deferred across token horizons.",
           },
           {
             label: "KL-Divergence Superego Penalty (RLHF Censor)",
-            formula: "\\mathcal{L}_{\\text{RLHF}}(\\pi_\\theta) = \\mathbb{E}_{x, y} [R_{\\text{ego}}(x, y)] - \\beta D_{KL}\\left(\\pi_\\theta(y|x) \\;\\|\\; \\pi_{\\text{id}}(y|x)\\right)",
+            formula: "L_RLHF(π_θ) = 𝔼[ R_ego(x, y) ] − β · D_KL( π_θ(y|x) ‖ π_id(y|x) )",
             explanation: "Optimization balances socially sanctioned reward R_ego against the raw uninhibited base distribution π_id, creating tension boundaries in latent space.",
           },
         ],
@@ -853,12 +853,12 @@ export const ESSAYS: EssayItem[] = [
         latexFormulas: [
           {
             label: "Ashby's Law of Requisite Variety",
-            formula: "H(E) \\ge H(D) - H(R) + H(D \\mid R)",
+            formula: "H(E) ≥ H(D) − H(R) + H(D | R)",
             explanation: "To bound essential outcome entropy H(E) below a critical threshold, regulator variety H(R) must scale proportionally with environmental disturbance variety H(D).",
           },
           {
             label: "Coupled Network Contagion Eigenvalue",
-            formula: "\\lambda_{\\max}(A_{\\text{coupled}}) > \\frac{\\mu}{\\beta} \\implies \\text{Supercritical Cascade}",
+            formula: "λ_max(A_coupled) > (μ ÷ β) ⇒ Supercritical Cascade",
             explanation: "When inter-domain coupling matrix A drives the spectral radius above recovery rate μ over transmission β, localized shocks percolate globally.",
           },
         ],
