@@ -814,7 +814,7 @@ export default function App() {
           </div>
 
           {/* Right Column: Interactive Classical Symposium or 3D Brass Orrery */}
-          <div className="lg:col-span-7 h-[430px] sm:h-[460px]">
+          <div className="lg:col-span-7 min-w-0 min-h-[460px]">
             {heroViewMode === "2d" ? (
               <SynapseGraph2D
                 essays={allEssays}

@@ -1,0 +1,34 @@
+{
+  "style": "Use case: illustration-story. Asset type: a production-ready square transparent portrait illustration for an elegant intellectual reading app. Create one original, beautifully art-directed hand-drawn editorial mascot, in the spirit of a warm independent magazine and minimalist Notion avatar illustrations, more sophisticated and expressive than a generic cartoon. Style: confident slightly imperfect charcoal ink contours, varied line weight, big memorable human face, small dot eyes with expressive brows, beautifully shaped nose, gentle asymmetry, a tiny warm cheek accent, tasteful flat gouache color blocks, only very subtle pencil texture. Friendly and thoughtful, adult appeal, NOT 3D, NOT anime, NOT emoji, NOT stock vector clip art, NOT photorealistic. Full waist-up three-quarter portrait and gesture, all anatomy inside the square, head and hands fully visible with at least 9% transparent padding on every edge. Head occupies 45 percent of canvas height, shoulders narrow, bust tapers naturally at lower edge. Palette: warm cream clothing, charcoal #37352f outlines, peach #e8b896 skin, restrained muted accent specific to character. No background shape, no frame, no medallion, no ribbon, no typography, no letters, no words, no watermark. Truly transparent background. Maintain exceptionally clean silhouette at small icon sizes.",
+  "subjects": [
+    {
+      "key": "socrates",
+      "subject": "SOCRATES: a curious elderly classical philosopher with a bald dome, two wonderfully unruly side tufts of silver hair, wide rounded curly silver beard, broad snub nose, one raised eyebrow and a warm almost amused smile. Wears an off-white draped Greek robe with one soft dusty lavender fold. His left hand gently touches his beard, his other hand raises a single index finger as if asking a good question. A very small hand-drawn lavender question-mark-shaped curl floats next to his raised finger, but no actual text. Give his face warm individuality. Head tilted slightly toward viewer's right."
+    },
+    {
+      "key": "aristotle",
+      "subject": "ARISTOTLE: a thoughtful classical philosopher with a broad face, wavy short silver-gray hair, a neatly shaped square silver beard, prominent straight nose, intent eyebrows and kindly inquisitive dot eyes. Off-white Greek robe with restrained muted terracotta shoulder sash. One hand holds a small open cream field notebook with a simple leaf sketch; the other holds a short charcoal pencil poised in observation. A single olive sprig tucked into the notebook. Three-quarter pose toward viewer's left, glancing up thoughtfully from notebook. Deliberate, grounded personality."
+    },
+    {
+      "key": "plato",
+      "subject": "PLATO: a contemplative classical philosopher with a long oval face, full wavy warm dark-brown hair, a long tapered wavy beard, strong long nose, gently arched brows, quiet curious dot eyes. Cream Greek robe with a soft sage green draped shoulder fold. One hand raised open as if considering an idea, holding a very simple small wireframe golden geometric tetrahedron above the palm; the other rests across the robe. Three-quarter pose toward viewer's right. A calm imaginative mentor with elegantly elongated silhouette, distinctly different from a bald or square-bearded philosopher."
+    },
+    {
+      "key": "shannon",
+      "subject": "CLAUDE SHANNON: an original stylized portrait of the clean-shaven mid-century information theorist, a tall narrow friendly face, prominent long nose, swept-back side-parted dark hair with a silver temple, expressive gently mischievous eyebrows, simple dot eyes, no glasses, warm subtle smile. Wears a soft slate-blue jacket, cream shirt, narrow charcoal tie. Holds a small cream index card showing only a simple hand-drawn binary-style signal wave (no letters or numbers) in one hand, the other hand gestures toward it. Slight lean to viewer's left. Character of an inventive playful engineer, NOT a Greek philosopher."
+    },
+    {
+      "key": "freud",
+      "subject": "SIGMUND FREUD: an original stylized portrait of an elderly thoughtful psychoanalyst with receding silver hair brushed back, a neatly trimmed short angular silver beard and moustache, signature thin circular charcoal spectacles around kind dot eyes, prominent nose and one questioning brow, a quiet knowing half smile. Muted rose-brown jacket, cream shirt, dark waistcoat. Holds a closed small cream notebook to his chest in one hand, with other hand resting gently at his chin in a listening pose. Three-quarter pose toward viewer's right. No cigar, no smoke. Distinctly silver scholarly portrait with warm listening personality."
+    },
+    {
+      "key": "diogenes",
+      "subject": "DIOGENES: an eccentric kindly ancient philosopher with a bald head and unruly tufts, large wild dark-gray beard, thick one raised eyebrow, a broad nose and skeptical amused side-eye. Rough warm ochre and cream draped cloak. One hand holds a small simple brass lantern at chest height, the other makes a gentle open-palm questioning gesture. Three-quarter tilt toward viewer's left. The lantern is small and elegant, no large glow or background. A humorous critic with a distinctive irregular silhouette."
+    },
+    {
+      "key": "archimedes",
+      "subject": "ARCHIMEDES: a delighted elderly classical mathematician with fluffy silver curls, a short rounded silver beard, a round friendly face, joyous arched eyebrows, eyes crinkled with a delighted smile. Off-white Greek robe with warm muted gold draped fold. One hand raised in a small celebratory open-palm gesture, the other holds a tiny cream parchment with one simple spiral drawing without letters. Two tiny golden four-point ink sparkle marks near the raised hand only. Energetic but tasteful, a small discovery moment. Three-quarter pose toward viewer's right."
+    }
+  ],
+  "method": "Built-in image generation; original transparent portraits, encoded to WebP quality 88 with alpha preserved."
+}
