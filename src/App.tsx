@@ -60,7 +60,7 @@ export default function App() {
   const [activeEssayId, setActiveEssayId] = useState<string | null>(null);
   const [selectedPillar, setSelectedPillar] = useState<string>("all");
   const [searchFilter, setSearchFilter] = useState<string>("");
-  const [heroViewMode, setHeroViewMode] = useState<"symposium" | "atlas">("atlas");
+  const [heroViewMode, setHeroViewMode] = useState<"symposium" | "atlas">("symposium");
 
   // Custom & Updated Blogs State
   const [customEssays, setCustomEssays] = useState<EssayItem[]>(() => {
@@ -530,9 +530,6 @@ export default function App() {
                 <span className="font-display font-bold text-xl tracking-tight text-[#191919]">
                   Nureoplastic
                 </span>
-                <span className="text-[11px] font-code text-[#5A5955]">
-                  · {dbSyncStatus === "saving" ? "Syncing..." : "Database Active"}
-                </span>
               </div>
               <p className="hidden md:block text-[11px] font-ui text-[#5A5955] -mt-0.5">
                 World View · Psychology · Philosophy · AI Research · Psychoanalysis
@@ -616,29 +613,18 @@ export default function App() {
       {/* Hero Section: Editorial Proposition, Interwoven Mind Brand Emblem & Symposium Stage */}
       <section className="max-w-7xl mx-auto px-4 lg:px-8 pt-8 pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Left Column: High-Craft Editorial Typography & Woven-Mind Emblem */}
+          {/* Left Column: Editorial Introduction */}
           <div className="lg:col-span-5 space-y-5">
             <div className="text-xs font-code font-bold uppercase tracking-widest text-[#5A5955]">
-              INTERACTIVE DIGITAL GARDEN · FIVE INTELLECTUAL DOMAINS
+              ESSAYS ON MIND, CULTURE &amp; FIRST PRINCIPLES
             </div>
 
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-[50px] font-bold text-[#191919] leading-[1.06] tracking-tight">
-              Where World View, Psyche &amp; Neural Architecture Converge.
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-[52px] font-bold text-[#191919] leading-[1.06] tracking-tight">
+              Slow Reading for Minds That Refuse Easy Answers.
             </h1>
 
-            {/* Signature Nureoplastic Interwoven Mind Horizon Emblem */}
-            <NureoplasticLogo
-              variant="scene"
-              onClick={() => audio.playClick()}
-            />
-
-            <p className="text-base font-editorial text-[#5A5955] leading-relaxed">
-              An interactive monograph studio and cognitive reader exploring{" "}
-              <strong className="text-[#191919] font-semibold">World View</strong>,{" "}
-              <strong className="text-[#191919] font-semibold">Psychology</strong>,{" "}
-              <strong className="text-[#191919] font-semibold">Philosophy</strong>,{" "}
-              <strong className="text-[#191919] font-semibold">AI Research</strong>, and{" "}
-              <strong className="text-[#191919] font-semibold">Psychoanalysis</strong> through live mathematical sandboxes, database-persisted monographs, and scholarly discourse.
+            <p className="text-base sm:text-lg font-editorial text-[#5A5955] leading-relaxed">
+              Long-form writing on how human consciousness, historical forces, and formal logic shape the way we understand reality. Move freely between concise summaries, full dialectical essays, and plain-English derivations.
             </p>
 
             {/* Search Input */}
@@ -752,7 +738,7 @@ export default function App() {
           </div>
 
           <div className="text-xs font-code text-[#5A5955]">
-            {filteredEssays.length} MONOGRAPHS IN DATABASE
+            {filteredEssays.length} {filteredEssays.length === 1 ? "ESSAY" : "ESSAYS"}
           </div>
         </div>
       </section>
@@ -792,7 +778,7 @@ export default function App() {
                       {essay.isCustom && (
                         <>
                           <span className="text-[#5A5955]">·</span>
-                          <span className="text-[#439C00] font-bold">DB STORED</span>
+                          <span className="text-[#439C00] font-bold">ORIGINAL</span>
                         </>
                       )}
                       {isMastered && (
@@ -874,10 +860,10 @@ export default function App() {
             <NureoplasticLogo variant="mark" size={48} onClick={() => audio.playClick()} />
             <div>
               <div className="font-display font-bold text-base text-[#191919]">
-                Nureoplastic Interactive Monograph Studio
+                Nureoplastic — Journal of Cross-Disciplinary Inquiry
               </div>
               <p className="text-xs font-ui text-[#5A5955]">
-                Backed by Cloud Firestore &amp; Persistent Monograph Storage · 5 Intellectual Domains
+                Essays, margin notes, and reader discussions across World View, Psychology, Philosophy, AI, and Psychoanalysis.
               </p>
             </div>
           </div>
