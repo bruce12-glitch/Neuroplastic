@@ -78,3 +78,16 @@ npx eslint firestore.rules
 npx tsx --test firestore.rules.test.ts
 npm run build
 ```
+
+## GitHub Pages deployment
+
+The `Deploy to GitHub Pages` Actions workflow installs the locked dependencies, checks TypeScript, runs the rules tests, and publishes `dist/` on pushes to `main`. It can also be started from the Actions tab. Pages uses the GitHub Actions publishing source.
+
+To reproduce the project-path build locally:
+
+```bash
+npm ci
+GITHUB_PAGES=true npm run build
+```
+
+This publishes the frontend. GitHub Pages does not run `server.ts` or its `/api/` endpoints. Server-backed features need a separately hosted API, and Firebase sign-in needs the Pages hostname allowed in Firebase Authentication. Keep server credentials out of the static build.
