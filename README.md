@@ -41,6 +41,7 @@ Interactive peer annotation and commentary on every monograph:
 - **3D Portraits (`<NotionMascot />`)** — Eight original sculpted character renders, including Charlie Munger as the Finance guide, shared across the garden and reader. Soft studio lighting, transparent backgrounds, and subtle pointer tilt give the cast a consistent dimensional finish. See [the collection and generation prompts](docs/design/mascots-3d.md).
 - **Classical Symposium & Dialectical Salon (`<SynapseGraph2D />`)** — Interactive 2D conceptual map connecting monographs across disciplines.
 - **Living Atlas (`<LivingAtlas />`)** — An animated sketchbook connects six subject guides. Select a portrait to change the reading invitation, then explore the subject. Includes pause/resume, reduced-motion support, and off-screen suspension.
+- **Desktop cursor** — A dark pointer with a thin white edge and soft cyan glow follows the supplied cursor reference. Buttons and links use a matching hand. Native text, precision, and disabled cursors remain available; touch and forced-colors modes use standard cursors.
 
 ### 6. Dual-Layer Database Persistence (Cloud Firestore + Server Store)
 All newly created monographs, customized blogs, and dialectical comments are automatically persisted across sessions:
