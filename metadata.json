@@ -1,0 +1,6 @@
+{
+  "name": "Nureoplastic — Cognitive Digital Garden",
+  "description": "An interactive digital garden and cognitive blog exploring Philosophy, AI Research, and Human Behavior with Notion minimalism and Duolingo tactility.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
