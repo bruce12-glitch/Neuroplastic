@@ -27,55 +27,55 @@ interface ThinkerPortrait {
   alt: string;
 }
 
-/** Original editorial portraits. Questions are product prompts, not historical quotations. */
+/** Original 3D-rendered portraits. Questions are product prompts, not historical quotations. */
 export const THINKER_PORTRAITS: Record<MascotVariant, ThinkerPortrait> = {
   steward: {
-    name: "Charlie Munger", asset: "charlie-munger", color: "#426545", paper: "#eaf4e8",
+    name: "Charlie Munger", asset: "3d/charlie-munger", color: "#426545", paper: "#eaf4e8",
     role: "A patient approach to money",
     question: "Which assumptions deserve a closer look?",
-    alt: "Charlie Munger with swept white hair, dark rectangular glasses, a navy suit, and a cream notebook.",
+    alt: "3D portrait of Charlie Munger with swept white hair, dark rectangular glasses, a navy suit, and a cream notebook.",
   },
   philosopher: {
-    name: "Socrates", asset: "socrates", color: "#75609b", paper: "#eee8f5",
+    name: "Socrates", asset: "3d/socrates", color: "#75609b", paper: "#eee8f5",
     role: "The art of a better question",
     question: "What if the question is where we should begin?",
-    alt: "Socrates with an unruly silver beard, a raised eyebrow, and an inquisitive finger.",
+    alt: "3D portrait of Socrates with an unruly silver beard, a raised eyebrow, and an inquisitive finger.",
   },
   cartographer: {
-    name: "Aristotle", asset: "aristotle", color: "#a26745", paper: "#f7eadf",
+    name: "Aristotle", asset: "3d/aristotle", color: "#a26745", paper: "#f7eadf",
     role: "A little closer to the world",
     question: "What changes when we look a little closer?",
-    alt: "Aristotle in a terracotta sash, observing a leaf in his field notebook.",
+    alt: "3D portrait of Aristotle in a terracotta sash, observing a leaf in his field notebook.",
   },
   observer: {
-    name: "Plato", asset: "plato", color: "#54785d", paper: "#e8efe5",
+    name: "Plato", asset: "3d/plato", color: "#54785d", paper: "#e8efe5",
     role: "Beyond the familiar",
     question: "Which patterns are hiding in plain sight?",
-    alt: "Plato with a long brown beard and a sage robe, considering a geometric form.",
+    alt: "3D portrait of Plato with a long brown beard and a sage robe, considering a golden geometric form.",
   },
   architect: {
-    name: "Claude Shannon", asset: "shannon", color: "#4e7298", paper: "#e6edf5",
+    name: "Claude Shannon", asset: "3d/shannon", color: "#4e7298", paper: "#e6edf5",
     role: "Finding the signal",
     question: "What is the signal, and what can we let go?",
-    alt: "Claude Shannon in a blue jacket, sharing a hand-drawn signal on an index card.",
+    alt: "3D portrait of Claude Shannon in a blue jacket, sharing a signal diagram on an index card.",
   },
   analyst: {
-    name: "Sigmund Freud", asset: "freud", color: "#98616c", paper: "#f4e7ea",
+    name: "Sigmund Freud", asset: "3d/freud", color: "#98616c", paper: "#f4e7ea",
     role: "Listening beneath the surface",
     question: "What might we notice if we pause and listen?",
-    alt: "Sigmund Freud with silver hair and round spectacles, listening with a notebook.",
+    alt: "3D portrait of Sigmund Freud with silver hair and round spectacles, listening with a notebook.",
   },
   critic: {
-    name: "Diogenes", asset: "diogenes", color: "#916e3e", paper: "#f2ebdf",
+    name: "Diogenes", asset: "3d/diogenes", color: "#916e3e", paper: "#f2ebdf",
     role: "A useful dose of doubt",
     question: "Is that an answer, or just a comfortable assumption?",
-    alt: "Diogenes with a wild beard, a skeptical eyebrow, and a small brass lantern.",
+    alt: "3D portrait of Diogenes with a wild beard, a skeptical eyebrow, and a small brass lantern.",
   },
   celebrating: {
-    name: "Archimedes", asset: "archimedes", color: "#9b792f", paper: "#f7f0d9",
+    name: "Archimedes", asset: "3d/archimedes", color: "#9b792f", paper: "#f7f0d9",
     role: "Room for a little discovery",
     question: "One small discovery. A whole new way to see.",
-    alt: "A delighted Archimedes with silver curls, a raised hand, and a spiral sketch.",
+    alt: "3D portrait of a delighted Archimedes with silver curls, a raised hand, and a spiral sketch.",
   },
 };
 
@@ -104,8 +104,8 @@ export const NotionMascot: React.FC<NotionMascotProps> = ({
     if (!rect.width || !rect.height) return;
     const x = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width - 0.5) * 2));
     const y = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height - 0.5) * 2));
-    event.currentTarget.style.setProperty("--mascot-turn", `${x * 3}deg`);
-    event.currentTarget.style.setProperty("--mascot-lean", `${y * -2}deg`);
+    event.currentTarget.style.setProperty("--mascot-turn", `${x * 7}deg`);
+    event.currentTarget.style.setProperty("--mascot-lean", `${y * -5}deg`);
   };
 
   return (
@@ -114,6 +114,7 @@ export const NotionMascot: React.FC<NotionMascotProps> = ({
       className={`notion-mascot ${className}`}
       data-mood={mood}
       data-interactive={followsPointer || undefined}
+      data-render="3d"
       style={{ width: size, height: size }}
       onPointerMove={followsPointer ? followPointer : undefined}
       onPointerLeave={resetPose}
