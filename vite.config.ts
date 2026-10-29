@@ -5,6 +5,8 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    // Project Pages serves assets below the repository name; local/Sites builds stay at /.
+    base: process.env.GITHUB_PAGES === 'true' ? '/Neuroplastic/' : '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
