@@ -271,17 +271,19 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
 
           {/* Right HUD Controls */}
           <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => {
-                audio.playClick();
-                onEditEssay(essay);
-              }}
-              className="duo-btn text-xs font-ui font-extrabold px-3 py-1.5 rounded-xl bg-[#FFF9E0] text-[#191919] flex items-center gap-1.5"
-              title="Customize or Edit this Monograph"
-            >
-              <PenTool className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Customize Blog</span>
-            </button>
+            {essay.isCustom && (
+              <button
+                onClick={() => {
+                  audio.playClick();
+                  onEditEssay(essay);
+                }}
+                className="duo-btn text-xs font-ui font-extrabold px-3 py-1.5 rounded-xl bg-white text-[#191919] flex items-center gap-1.5"
+                title="Edit this Monograph"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Edit Monograph</span>
+              </button>
+            )}
 
             <button
               onClick={() => {
