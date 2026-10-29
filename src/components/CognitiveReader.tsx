@@ -855,11 +855,11 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
             essayId={essay.id}
             essayTitle={essay.title}
             comments={comments}
-            pendingQuote={pendingQuote}
-            onClearQuote={() => setPendingQuote(null)}
+            pendingQuote={pendingQuote ?? undefined}
+            onClearPendingQuote={() => setPendingQuote(null)}
             onAddComment={onAddComment}
-            onReplyComment={onReplyComment}
-            onUpvoteComment={onUpvoteComment}
+            onAddReply={onReplyComment}
+            onUpvote={onUpvoteComment}
             onPlayClick={() => audio.playClick()}
           />
         </div>

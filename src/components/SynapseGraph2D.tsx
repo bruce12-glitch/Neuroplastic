@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { NotionMascot } from "./NotionMascot.tsx";
+import { NotionMascot, THINKER_PORTRAITS } from "./NotionMascot.tsx";
 import { EssayItem, PILLAR_METADATA, PillarId } from "../data/essays.ts";
-import { ArrowRight, BookOpen, Quote, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Check } from "lucide-react";
 
 interface SynapseGraph2DProps {
   essays: EssayItem[];
@@ -10,221 +10,120 @@ interface SynapseGraph2DProps {
 }
 
 const DOMAIN_ORDER: PillarId[] = [
-  "philosophy",
-  "worldview",
-  "psychology",
-  "ai",
-  "psychoanalysis",
+  "philosophy", "worldview", "psychology", "ai", "psychoanalysis",
 ];
 
-const DIALECTICAL_DIALOGUES: Record<
-  PillarId,
-  { thinker: string; maxim: string; interlocutor: string; tension: string }
-> = {
-  philosophy: {
-    thinker: "Socrates",
-    maxim: "MAIEUTIKÉ (Epistemic Midwifery)",
-    interlocutor: "Claude Shannon",
-    tension:
-      "When synthetic models mirror our own language games, only Socratic elenchus and embodied consequence can distinguish wisdom from fluent simulation.",
-  },
-  worldview: {
-    thinker: "Aristotle",
-    maxim: "P → Q (First-Principles Causality)",
-    interlocutor: "Ibn Khaldun",
-    tension:
-      "Civilizational resilience requires moving from brittle linear optimization to modular, polycentric governance capable of absorbing non-linear shocks.",
-  },
-  psychology: {
-    thinker: "Plato",
-    maxim: "EIDOS & Allegory of the Basin",
-    interlocutor: "William James",
-    tension:
-      "Habit loops act as energetic chains inside the prefrontal cave; escaping local dopamine basins demands deliberate stochastic activation energy.",
-  },
-  ai: {
-    thinker: "Claude Shannon",
-    maxim: "H(X) = -Σ P(x) log P(x)",
-    interlocutor: "Ludwig Wittgenstein",
-    tension:
-      "Information entropy separates high-conviction semantic propositions from low-entropy syntactic noise inside transformer context windows.",
-  },
-  psychoanalysis: {
-    thinker: "Sigmund Freud & Lacan",
-    maxim: "$ ◊ a (The Algorithmic Mirror)",
-    interlocutor: "Socrates",
-    tension:
-      "The prompt window functions as Lacan's 'sujet supposé savoir', reflecting the user's repressed signifiers back in idealized form.",
-  },
-};
-
-/**
- * Classical Symposium & Dialectical Gallery Stage
- * Replaces the sparse node-dot graph with a warm, museum-grade interactive Symposium
- * featuring the 5 Classical Thinker Medallions, live Dialectical Tension cards, and Monograph previews.
- */
+/** The existing domain/essay navigation, with room for the original illustrated cast. */
 export const SynapseGraph2D: React.FC<SynapseGraph2DProps> = ({
-  essays,
-  onSelectEssay,
-  masteredEssays,
+  essays, onSelectEssay, masteredEssays,
 }) => {
-  const [selectedEssayId, setSelectedEssayId] = useState<string>(
-    essays[0]?.id || "directionless-philosopher"
-  );
-
-  const activeEssay =
-    essays.find((e) => e.id === selectedEssayId) || essays[0];
-
+  const [selectedEssayId, setSelectedEssayId] = useState<string>(essays[0]?.id || "");
+  const activeEssay = essays.find((essay) => essay.id === selectedEssayId) || essays[0];
   if (!activeEssay) return null;
 
-  const activeMeta =
-    PILLAR_METADATA[activeEssay.pillar] || PILLAR_METADATA.philosophy;
-  const dialogue =
-    DIALECTICAL_DIALOGUES[activeEssay.pillar] ||
-    DIALECTICAL_DIALOGUES.philosophy;
-
-  const handleSelectDomain = (pillar: PillarId) => {
-    const match = essays.find((e) => e.pillar === pillar);
-    if (match) {
-      setSelectedEssayId(match.id);
-    }
-  };
+  const activeMeta = PILLAR_METADATA[activeEssay.pillar] || PILLAR_METADATA.philosophy;
+  const portrait = THINKER_PORTRAITS[activeMeta.mascot];
+  const domainEssays = essays.filter((essay) => essay.pillar === activeEssay.pillar);
+  const theme = {
+    "--notion-design-portrait-paper": portrait.paper,
+    "--notion-design-portrait-accent": portrait.color,
+  } as React.CSSProperties;
 
   return (
-    <div className="border-2 border-[#191919] shadow-[0_8px_0_0_#191919] rounded-3xl bg-[#EAE5D9] p-4 sm:p-5 flex flex-col justify-between h-full">
-      {/* Classical Ribbon Header */}
-      <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-[#191919]">
+    <section className="thinker-salon" aria-label="The thinking room" style={theme}>
+      <header className="thinker-salon__header">
         <div>
-          <span className="text-[10px] font-code font-bold uppercase tracking-widest text-[#5A5955] block">
-            SYMPOSIUM OF THE FIVE DOMAINS · SELECT A THINKER
-          </span>
-          <h4 className="font-display font-bold text-base sm:text-lg text-[#191919]">
-            Classical Thinkers &amp; Dialectical Synthesis
-          </h4>
+          <p className="thinker-salon__eyebrow">THE THINKING ROOM</p>
+          <h4 className="font-display">Good company for curious minds.</h4>
         </div>
-
-        <span className="px-2.5 py-1 rounded-xl bg-[#F4EBC8] border-2 border-[#191919] text-[10px] font-code font-bold text-[#191919] shadow-[0_2px_0_0_#191919]">
-          {essays.length} MONOGRAPHS
+        <span className="thinker-salon__edition" aria-label={`${essays.length} essays to explore`}>
+          <BookOpen size={13} aria-hidden="true" />
+          {essays.length} essays
         </span>
+      </header>
+
+      <div className="thinker-feature">
+        <div className="thinker-feature__portrait">
+          <span className="thinker-feature__arch" aria-hidden="true" />
+          <svg className="thinker-feature__doodle" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <path d="M20 3c0 11-5 17-17 17 12 0 17 5 17 17 0-12 5-17 17-17C25 20 20 14 20 3Z" />
+          </svg>
+          <NotionMascot variant={activeMeta.mascot} mood="curious" size={184} decorative />
+        </div>
+        <div className="thinker-feature__intro">
+          <p className="thinker-salon__eyebrow">YOUR GUIDE TO {activeMeta.label.toUpperCase()}</p>
+          <h5 className="font-display">{portrait.name}</h5>
+          <p className="thinker-feature__role">{portrait.role}</p>
+          <p className="thinker-feature__question font-editorial">{portrait.question}</p>
+        </div>
       </div>
 
-      {/* Row of 5 Interactive Classical Thinker Portrait Medallions */}
-      <div className="grid grid-cols-5 gap-2 my-3">
-        {DOMAIN_ORDER.map((pillarKey) => {
-          const meta = PILLAR_METADATA[pillarKey];
-          const isSelected = activeEssay.pillar === pillarKey;
-          const domainEssay = essays.find((e) => e.pillar === pillarKey);
-          const isMastered =
-            domainEssay && masteredEssays.includes(domainEssay.id);
-
+      <div className="thinker-selector" role="group" aria-label="Choose a thinker and subject">
+        {DOMAIN_ORDER.map((pillar) => {
+          const meta = PILLAR_METADATA[pillar];
+          const thinker = THINKER_PORTRAITS[meta.mascot];
+          const selected = activeEssay.pillar === pillar;
+          const domainEssay = essays.find((essay) => essay.pillar === pillar);
+          const mastered = domainEssay && masteredEssays.includes(domainEssay.id);
           return (
             <button
-              key={pillarKey}
+              key={pillar}
               type="button"
-              onClick={() => handleSelectDomain(pillarKey)}
-              className={`group relative rounded-2xl p-1.5 pt-2 transition-all flex flex-col items-center cursor-pointer border-2 ${
-                isSelected
-                  ? "bg-white border-[#191919] shadow-[0_4px_0_0_#191919] -translate-y-1"
-                  : "bg-[#F7F5EE]/75 border-transparent hover:border-[#191919]/40 hover:bg-white/90"
-              }`}
+              className="thinker-selector__item"
+              aria-pressed={selected}
+              aria-label={`Explore ${meta.label} with ${thinker.name}${mastered ? ", mastered" : ""}`}
+              disabled={!domainEssay}
+              onClick={() => domainEssay && setSelectedEssayId(domainEssay.id)}
+              style={{
+                "--notion-design-portrait-paper": thinker.paper,
+                "--notion-design-portrait-accent": thinker.color,
+              } as React.CSSProperties}
             >
-              {isMastered && (
-                <span
-                  className="absolute top-1.5 left-1.5 w-4 h-4 rounded-full bg-[#FFC800] border border-[#191919] text-[9px] font-black flex items-center justify-center z-10"
-                  title="Concept Mastered"
-                >
-                  ✓
-                </span>
-              )}
-
-              <NotionMascot
-                variant={meta.mascot}
-                mood={isSelected ? "curious" : "neutral"}
-                size={76}
-                interactiveEyes={isSelected}
-              />
-
-              <span
-                className={`mt-1 text-[10px] font-ui font-extrabold uppercase tracking-tight truncate max-w-full px-1.5 py-0.5 rounded ${
-                  isSelected
-                    ? "bg-[#191919] text-[#F4EBC8]"
-                    : "text-[#5A5955] group-hover:text-[#191919]"
-                }`}
-              >
-                {meta.label}
+              <span className="thinker-selector__art">
+                <NotionMascot variant={meta.mascot} size={78} interactive={false} decorative />
+                {mastered && <span className="thinker-selector__mastered"><Check size={11} /></span>}
               </span>
+              <span className="thinker-selector__name">{thinker.name.split(" ").pop()}</span>
+              <span className="thinker-selector__subject">{meta.label}</span>
+              <span className="thinker-selector__dot" aria-hidden="true" />
             </button>
           );
         })}
       </div>
 
-      {/* Active Thinker's Dialectical Salon Card */}
-      <div className="bg-white border-2 border-[#191919] rounded-2xl p-4 shadow-[0_4px_0_0_#191919] flex flex-col justify-between gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E2E0DC] pb-2.5">
-          <div className="flex items-center gap-2">
-            <span
-              className="px-2.5 py-0.5 rounded-md border border-[#191919] text-[10px] font-code font-bold uppercase text-[#191919]"
-              style={{ backgroundColor: activeMeta.surfaceColor }}
-            >
-              {activeMeta.symbol} {activeMeta.label}
-            </span>
-            <span className="text-xs font-ui font-extrabold text-[#191919]">
-              {dialogue.thinker} · <span className="font-code text-[#5A5955]">{dialogue.maxim}</span>
-            </span>
-          </div>
-
-          {/* Domain Monograph Switcher if multiple exist */}
-          <div className="flex items-center gap-1">
-            {essays
-              .filter((e) => e.pillar === activeEssay.pillar)
-              .map((e, idx) => (
-                <button
-                  key={e.id}
-                  type="button"
-                  onClick={() => setSelectedEssayId(e.id)}
-                  className={`px-2 py-0.5 rounded text-[10px] font-code font-bold border ${
-                    e.id === activeEssay.id
-                      ? "bg-[#191919] text-white border-[#191919]"
-                      : "bg-[#F7F6F3] text-[#5A5955] border-[#E2E0DC]"
-                  }`}
-                >
-                  Paper #{idx + 1}
-                </button>
-              ))}
-          </div>
-        </div>
-
-        {/* Selected Monograph Headline & Dialectical Tension */}
-        <div className="space-y-1.5">
-          <h5 className="font-display font-bold text-base sm:text-lg text-[#191919] leading-snug line-clamp-1">
-            {activeEssay.title}
-          </h5>
-          <p className="font-editorial italic text-xs sm:text-sm text-[#5A5955] line-clamp-2 leading-relaxed">
-            “{dialogue.tension}”
+      <div className="thinker-reading">
+        <div className="thinker-reading__details">
+          <p className="thinker-salon__eyebrow">
+            START EXPLORING <span aria-hidden="true">·</span> {activeEssay.readingTimeMinutes} MIN READ
           </p>
+          <h6 className="font-display">{activeEssay.title}</h6>
         </div>
-
-        {/* Bottom Action Row */}
-        <div className="pt-2 border-t border-[#E2E0DC] flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-[11px] font-code text-[#5A5955]">
-            <span>{activeEssay.readingTimeMinutes} MIN READ</span>
-            <span>·</span>
-            <span>3-LEVEL DEPTH</span>
-            <span>·</span>
-            <span className="text-[#191919] font-bold">+{activeEssay.xpReward} XP</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => onSelectEssay(activeEssay.id)}
-            className="duo-btn duo-btn-streak text-xs font-ui font-extrabold px-4 py-2 rounded-xl shrink-0 flex items-center gap-1.5"
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>Read Monograph</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
+        <button
+          type="button"
+          className="thinker-reading__open"
+          onClick={() => onSelectEssay(activeEssay.id)}
+          aria-label={`Read Monograph: ${activeEssay.title}`}
+        >
+          <span>Read essay</span>
+          <ArrowRight size={16} aria-hidden="true" />
+        </button>
       </div>
-    </div>
+
+      {domainEssays.length > 1 && (
+        <div className="thinker-reading__switcher" role="group" aria-label="More essays in this subject">
+          {domainEssays.map((essay, index) => (
+            <button
+              type="button"
+              key={essay.id}
+              aria-pressed={essay.id === activeEssay.id}
+              aria-label={`Select essay ${index + 1}: ${essay.title}`}
+              onClick={() => setSelectedEssayId(essay.id)}
+            >
+              Essay {index + 1}
+            </button>
+          ))}
+        </div>
+      )}
+    </section>
   );
 };
