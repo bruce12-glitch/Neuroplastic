@@ -1,5 +1,7 @@
 # Nureoplastic — Epistemic Monograph Studio & Cognitive Depth Reader
 
+**Live website:** [https://bruce12-glitch.github.io/Neuroplastic/](https://bruce12-glitch.github.io/Neuroplastic/)
+
 **Nureoplastic** is an interactive digital garden, monograph publishing studio, and dialectical discourse platform built for cross-disciplinary inquiry across **World View**, **Psychology**, **Philosophy**, **AI Research**, and **Psychoanalysis**.
 
 ---
