@@ -342,7 +342,7 @@ export function buildCustomEssay(draft: CustomBlogDraft): { valid: boolean; erro
         latexFormulas: [
           {
             label: draft.formalEquationLabel?.trim() || "System State Evolution",
-            formula: draft.formalEquation?.trim() || "\\Phi(t+1) = \\mathcal{F}\\left(\\Phi(t), \\nabla \\mathcal{H}_{\\text{epistemic}}\\right)",
+            formula: draft.formalEquation?.trim() || "Φ(t + 1) = Update( Φ(t), ∇EpistemicSurprise )",
             explanation:
               draft.formalExplanation?.trim() ||
               "Formalizes the transition of the conceptual state under epistemic gradient updates.",
