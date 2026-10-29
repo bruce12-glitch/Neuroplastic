@@ -29,4 +29,6 @@ Sources and editorial notes are retained when a sourced essay is customized and 
 - TypeScript check and GitHub Pages production build.
 - Ten utility tests, including compounding arithmetic, zero interest, and constructing a Finance post.
 - Existing Firestore structural tests and rules lint.
-- Browser review is performed against the deployed GitHub Pages site; this environment blocked the local preview server.
+- Live desktop browser review passed: Finance filtering, loaded mascot assets, both navigation views, all three reader depths, five source links, keyboard-operated zero-interest calculation, quiz retry, successful completion, and persisted completion status.
+- Actual rendered quiz colors were verified: dark text on lime for success, and dark red on pale rose for retry.
+- Narrow layouts are implemented and reviewed in source. Phone/tablet viewport checks and OS reduced-motion switching were not browser-verified: the local preview server and local-file preview were blocked by this environment. No workaround for those restrictions was used.

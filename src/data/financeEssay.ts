@@ -122,7 +122,7 @@ export const FINANCE_ESSAY: EssayItem = {
     question: "What actually creates the extra growth from compounding?",
     scenario: "Penny leaves 1,000 in a hypothetical account paying a fixed 5% annually, with all interest kept in the account. The second year earns 52.50 instead of 50. Why?",
     options: [
-      { id: "reinvested-interest", text: "The second year earns interest on the first year’s interest too.", isCorrect: true, explanation: "Exactly. The second year starts with 1,050, so 5% of that balance is 52.50. This example assumes a fixed rate and excludes fees and taxes." },
+      { id: "reinvested-interest", text: "The second year earns interest on the first year’s interest too.", isCorrect: true, explanation: "The second year starts with 1,050, so 5% of that balance is 52.50. This example assumes a fixed rate and excludes fees and taxes." },
       { id: "higher-rate", text: "The interest rate must have increased.", isCorrect: false, explanation: "The rate stayed at 5%. It is applied to a larger starting balance in the second year." },
       { id: "guaranteed-market", text: "Every investment grows by at least 5% if you wait.", isCorrect: false, explanation: "A hypothetical fixed-rate example is not a promise about real investments. Returns can vary and losses are possible." },
     ],

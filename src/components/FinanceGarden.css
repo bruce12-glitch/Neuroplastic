@@ -107,7 +107,6 @@
   .finance-garden__guide-copy h3 { font-size: 19px; }
   .finance-garden__eyebrow { font-size: 9px; }
   .finance-garden__path { font-size: 11px; }
-  .thinker-selector { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
   .compound-lab { padding: 20px 16px; }
   .compound-lab__header h3 { font-size: 22px; }
   .compound-lab__controls { grid-template-columns: 1fr; gap: 8px; }

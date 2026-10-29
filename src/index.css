@@ -492,6 +492,9 @@
   background: #eee8f5;
   color: #4534b3;
 }
+@media (max-width: 639px) {
+  .thinker-selector { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+}
 @media (max-width: 479px) {
   .thinker-salon { padding: 16px 12px; border-radius: 20px; }
   .thinker-salon__header h4 { font-size: 16px; }

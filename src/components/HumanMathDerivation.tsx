@@ -771,7 +771,7 @@ const STEP_TITLES = [
   "System Setup & Variables",
   "Governing Dynamics & Cost",
   "Core Mechanism & Transformation",
-  "Practical Outcome & Guarantee",
+  "Practical Outcome & Limits",
 ];
 
 export const HumanMathDerivation: React.FC<HumanMathDerivationProps> = ({

@@ -43,6 +43,11 @@ const FIELD_TEMPLATES: Record<PillarId, Partial<CustomBlogDraft>> = {
     formalEquationLabel: "Annual Compound Growth",
     formalEquation: "A = P × (1 + r)^n",
     formalExplanation: "P is one initial deposit, r a hypothetical fixed annual rate as a decimal, and n the number of years. A is the final balance before costs, tax, and inflation.",
+    quizQuestion: "What does a constant-rate growth example tell us?",
+    quizScenario: "Penny draws a smooth compounding curve using one deposit and a fixed annual rate.",
+    quizCorrectAnswer: "It illustrates growth under stated assumptions, rather than predicting an investment’s return.",
+    quizWrongAnswer1: "Every investment grows smoothly at the illustrated rate.",
+    quizWrongAnswer2: "A longer time horizon removes every possible risk.",
   },
   worldview: {
     title: "The Sovereign Stack and Post-Westphalian Protocols",
@@ -298,6 +303,11 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
     if (tpl.formalEquationLabel) setFormalEquationLabel(tpl.formalEquationLabel);
     if (tpl.formalEquation) setFormalEquation(tpl.formalEquation);
     if (tpl.formalExplanation) setFormalExplanation(tpl.formalExplanation);
+    if (tpl.quizQuestion) setQuizQuestion(tpl.quizQuestion);
+    if (tpl.quizScenario) setQuizScenario(tpl.quizScenario);
+    if (tpl.quizCorrectAnswer) setQuizCorrectAnswer(tpl.quizCorrectAnswer);
+    if (tpl.quizWrongAnswer1) setQuizWrongAnswer1(tpl.quizWrongAnswer1);
+    if (tpl.quizWrongAnswer2) setQuizWrongAnswer2(tpl.quizWrongAnswer2);
     setErrorMsg(null);
   };
 
@@ -483,9 +493,9 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
               {/* 5 Fields of Interest Selector */}
               <div>
                 <label className="block text-xs font-ui font-black uppercase tracking-wider text-[#191919] mb-2.5">
-                  Select Field of Interest (5 Core Domains)
+                  Select Field of Interest ({Object.keys(PILLAR_METADATA).length} Core Domains)
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                   {(Object.keys(PILLAR_METADATA) as PillarId[]).map((pKey) => {
                     const meta = PILLAR_METADATA[pKey];
                     const isSelected = pillar === pKey;
@@ -493,6 +503,7 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
                       <button
                         key={pKey}
                         type="button"
+                        aria-pressed={isSelected}
                         onClick={() => {
                           onPlayClick();
                           setPillar(pKey);
@@ -509,7 +520,7 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
                         <div className="flex items-center justify-between mb-1.5">
                           <span
                             className="w-6 h-6 rounded-lg border border-[#191919] text-white font-code font-bold text-xs flex items-center justify-center"
-                            style={{ backgroundColor: meta.surfaceColor }}
+                            style={{ backgroundColor: meta.surfaceColor, color: pKey === "finance" ? "#111111" : undefined }}
                           >
                             {meta.symbol}
                           </span>
@@ -784,6 +795,7 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
                     <button
                       key={sb.id}
                       type="button"
+                      aria-pressed={sandboxType === sb.id}
                       onClick={() => {
                         onPlayClick();
                         setSandboxType(sb.id);
