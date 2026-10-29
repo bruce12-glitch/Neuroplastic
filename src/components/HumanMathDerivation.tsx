@@ -40,6 +40,44 @@ const CURATED_FORMULA_GUIDES: Record<
     variables: { symbol: string; name: string; meaning: string }[];
   }
 > = {
+  "Annual Compound Growth": {
+    plainRule: { lhs: "Final balance", operator: "=", rhsParts: [
+      { term: "Starting amount", role: "One initial deposit", joiner: "×" },
+      { term: "(1 + annual rate) raised to years", role: "Repeat the same multiplier each year" },
+    ] },
+    typesetHtml: <div className="text-center font-serif text-xl">A = P × (1 + r)<sup>n</sup></div>,
+    variables: [
+      { symbol: "A", name: "Final balance", meaning: "The amount after n years, before costs, tax, or inflation." },
+      { symbol: "P", name: "Principal", meaning: "The single starting deposit, with no later deposits or withdrawals." },
+      { symbol: "r", name: "Annual rate", meaning: "A hypothetical constant rate as a decimal: 5% is 0.05." },
+      { symbol: "n", name: "Years", meaning: "The number of annual compounding periods." },
+    ],
+  },
+  "Simple Interest Comparison": {
+    plainRule: { lhs: "Simple-interest balance", operator: "=", rhsParts: [
+      { term: "Starting amount", role: "The original deposit", joiner: "×" },
+      { term: "1 + annual rate × years", role: "Add equal interest amounts without reinvesting gains" },
+    ] },
+    typesetHtml: <div className="text-center font-serif text-xl">S = P × (1 + r × n)</div>,
+    variables: [
+      { symbol: "S", name: "Simple-interest balance", meaning: "The original deposit plus interest calculated only on that original deposit." },
+      { symbol: "P", name: "Principal", meaning: "The original amount used to calculate every year's interest." },
+      { symbol: "r", name: "Annual rate", meaning: "The fixed rate as a decimal, such as 0.05 for 5%." },
+      { symbol: "n", name: "Years", meaning: "The number of years interest is added." },
+    ],
+  },
+  "Purchasing Power After Inflation": {
+    plainRule: { lhs: "Real growth", operator: "=", rhsParts: [
+      { term: "(1 + money return) ÷ (1 + inflation)", role: "Compare the money multiplier with the price multiplier", joiner: "−" },
+      { term: "1", role: "Remove the original purchasing power" },
+    ] },
+    typesetHtml: <div className="text-center font-serif text-lg">Real growth = (1 + return) ÷ (1 + inflation) − 1</div>,
+    variables: [
+      { symbol: "Return", name: "Nominal return", meaning: "Growth in the money balance during the period, expressed as a decimal." },
+      { symbol: "Inflation", name: "Growth in prices", meaning: "The price increase for the same period, expressed as a decimal." },
+      { symbol: "Real growth", name: "Change in purchasing power", meaning: "The result describes what the money can buy, before taxes and fees in this example." },
+    ],
+  },
   "Rényi Entropy of Token Attention Distribution": {
     plainRule: {
       lhs: "Token Information Score",

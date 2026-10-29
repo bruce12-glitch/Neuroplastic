@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { exportVaultToMarkdown } from "../utils/rules.ts";
 import { NotionMascot } from "./NotionMascot.tsx";
+import { PILLAR_METADATA, type PillarId } from "../data/essays.ts";
 import {
   X,
   Download,
@@ -58,7 +59,7 @@ export const SynapseVaultDrawer: React.FC<SynapseVaultDrawerProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `nureoplastic-study-notes-${new Date().toISOString().slice(0, 10)}.md`;
+    link.download = `neuroplastic-study-notes-${new Date().toISOString().slice(0, 10)}.md`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -73,6 +74,8 @@ export const SynapseVaultDrawer: React.FC<SynapseVaultDrawerProps> = ({
 
   const getPillarBadge = (pillar: string) => {
     switch (pillar.toLowerCase()) {
+      case "finance":
+        return <span className="px-2 py-0.5 rounded text-[10px] font-ui font-extrabold bg-[#EAF4E8] text-[#426545] border border-[#426545]">Finance</span>;
       case "philosophy":
         return <span className="px-2 py-0.5 rounded text-[10px] font-ui font-extrabold bg-[#F7E8FF] text-[#9B42D6] border border-[#9B42D6]">Philosophy</span>;
       case "ai":
@@ -135,7 +138,7 @@ export const SynapseVaultDrawer: React.FC<SynapseVaultDrawerProps> = ({
 
             {/* Pillar Filter Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-              {["all", "philosophy", "ai", "behavior"].map((p) => (
+              {["all", ...Object.keys(PILLAR_METADATA), "behavior"].map((p) => (
                 <button
                   key={p}
                   onClick={() => setSelectedPillar(p)}
@@ -145,7 +148,7 @@ export const SynapseVaultDrawer: React.FC<SynapseVaultDrawerProps> = ({
                       : "bg-white text-[#191919]"
                   }`}
                 >
-                  {p === "all" ? "All Pillars" : p}
+                  {p === "all" ? "All Pillars" : PILLAR_METADATA[p as PillarId]?.label || p}
                 </button>
               ))}
             </div>
@@ -303,7 +306,7 @@ export const SynapseVaultDrawer: React.FC<SynapseVaultDrawerProps> = ({
             >
               <div className="flex items-center justify-between pb-3 border-b border-[#191919]/20">
                 <span className="font-ui font-black text-xs tracking-widest uppercase">
-                  NUREOPLASTIC
+                  NEUROPLASTIC
                 </span>
                 <span className="text-[10px] font-code opacity-70">
                   Epistemic Vault
@@ -327,7 +330,7 @@ export const SynapseVaultDrawer: React.FC<SynapseVaultDrawerProps> = ({
             <div className="mt-4 flex items-center justify-end gap-2">
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText(`"${quoteCardItem.text}" — Nureoplastic (${quoteCardItem.essayTitle})`);
+                  navigator.clipboard.writeText(`"${quoteCardItem.text}" — Neuroplastic (${quoteCardItem.essayTitle})`);
                   setQuoteCardItem(null);
                 }}
                 className="duo-btn text-xs font-ui font-bold px-4 py-2 rounded-xl bg-white text-[#191919]"

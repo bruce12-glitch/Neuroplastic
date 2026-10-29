@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { EssayItem, EssayComment, PILLAR_METADATA } from "../data/essays.ts";
 import { NotionMascot } from "./NotionMascot.tsx";
-import { NureoplasticLogo } from "./NureoplasticLogo.tsx";
+import { NeuroplasticLogo } from "./NeuroplasticLogo.tsx";
 import { SocraticMarginCallout } from "./SocraticMarginCallout.tsx";
 import { EntropyPruningSandbox } from "./sandboxes/EntropyPruningSandbox.tsx";
 import { EpistemicHorizonSandbox } from "./sandboxes/EpistemicHorizonSandbox.tsx";
 import { AttractorBasinSandbox } from "./sandboxes/AttractorBasinSandbox.tsx";
+import { CompoundInterestSandbox } from "./sandboxes/CompoundInterestSandbox.tsx";
 import { DialecticalComments } from "./DialecticalComments.tsx";
 import { HumanMathDerivation } from "./HumanMathDerivation.tsx";
 import {
@@ -190,12 +191,14 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
       setQuizState("correct");
       audio.playSuccessChord();
 
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.8 },
-        colors: ["#58CC02", "#1CB0F6", "#CE82FF", "#FFC800", "#FF6B8B"],
-      });
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.8 },
+          colors: ["#58CC02", "#1CB0F6", "#CE82FF", "#FFC800", "#FF6B8B"],
+        });
+      }
 
       onCompleteMastery(essay.id, essay.xpReward);
     } else {
@@ -240,7 +243,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
           {/* Brand Mark & Back button */}
           <div className="flex items-center gap-2 shrink-0">
-            <NureoplasticLogo variant="mark" size={36} onClick={onBack} />
+            <NeuroplasticLogo variant="mark" size={36} onClick={onBack} />
             <button
               onClick={onBack}
               className="duo-btn text-xs font-ui font-extrabold px-3 py-1.5 rounded-xl bg-white text-[#191919] flex items-center gap-1.5 shrink-0"
@@ -568,7 +571,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
                       {row.traditionalView}
                     </div>
                     <div className="text-[#191919] bg-[#FFF9E0] p-3 rounded-xl border border-[#191919]">
-                      <span className="font-bold text-[#439C00] block mb-1">Nureoplastic Synthesis</span>
+                      <span className="font-bold text-[#439C00] block mb-1">Neuroplastic Synthesis</span>
                       {row.nureoplasticSynthesis}
                     </div>
                   </div>
@@ -681,6 +684,25 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
           />
         )}
 
+        {essay.sources && essay.sources.length > 0 && (
+          <section className="essay-sources" aria-labelledby="essay-sources-heading">
+            <h3 id="essay-sources-heading" className="font-display">Sources & further reading</h3>
+            {essay.editorialNote && <p>{essay.editorialNote}</p>}
+            <ol>
+              {essay.sources.map((source, index) => (
+                <li key={source.url}>
+                  <span>[{index + 1}]</span>
+                  <div>
+                    <a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}<span className="sr-only"> (opens in a new tab)</span></a>
+                    <small>{source.publisher}</small>
+                    <small>{source.note}</small>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
         {/* Inline Interactive Concept Sandbox */}
         <section className="my-14 text-[#191919]">
           <div className="text-center mb-4">
@@ -692,6 +714,8 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
           {essay.sandboxType === "entropy" && (
             <EntropyPruningSandbox onInteract={() => audio.playToggle()} />
           )}
+
+          {essay.sandboxType === "compound" && <CompoundInterestSandbox />}
 
           {essay.sandboxType === "epistemic" && (
             <EpistemicHorizonSandbox onInteract={() => audio.playToggle()} />
@@ -706,7 +730,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
         </section>
 
         {/* End-of-Essay "Neuro-Lock" Mastery Challenge Card */}
-        <section className="mt-14 pt-8 border-t-2 border-[#191919] text-[#191919]">
+        <section className={`mt-14 pt-8 border-t-2 border-[#191919] text-[#191919] ${essay.pillar === "finance" ? "finance-quiz" : ""}`}>
           <div className="border-2 border-[#191919] shadow-[0_8px_0_0_#191919] rounded-3xl bg-white p-6 sm:p-8">
             <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-[#E2E0DC]">
               <div className="flex items-center gap-3">
@@ -718,7 +742,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
                     NEURO-LOCK CONCEPT VERIFICATION
                   </span>
                   <h3 className="font-display font-bold text-xl text-[#191919]">
-                    Dialectical Mastery Check
+                    {essay.pillar === "finance" ? "Penny’s Knowledge Check" : "Dialectical Mastery Check"}
                   </h3>
                 </div>
               </div>
@@ -742,7 +766,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
             </div>
 
             <div className="space-y-3">
-              {essay.masteryQuiz.options.map((opt) => {
+              {essay.masteryQuiz.options.map((opt, index) => {
                 const isSelected = selectedOptionId === opt.id;
                 const isWrong = isSelected && quizState === "wrong";
                 const isCorrect = isSelected && quizState === "correct";
@@ -752,6 +776,8 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
                     key={opt.id}
                     onClick={() => handleQuizSubmit(opt.id)}
                     disabled={quizState === "correct"}
+                    aria-pressed={isSelected}
+                    data-result={isCorrect ? "correct" : isWrong ? "retry" : undefined}
                     className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex items-start gap-3 duo-btn ${
                       isCorrect
                         ? "bg-[#58CC02] text-white border-[#191919] shadow-[0_4px_0_0_#439C00]"
@@ -769,13 +795,13 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
                           : "bg-[#EFECE6] text-[#191919] border-[#191919]"
                       }`}
                     >
-                      {opt.id.slice(-1)}
+                      {index + 1}
                     </span>
                     <div className="flex-1">
                       <p className="text-sm font-ui font-bold leading-relaxed">{opt.text}</p>
                       {(isCorrect || isWrong) && (
-                        <p className="text-xs font-ui mt-2 opacity-95 leading-relaxed">
-                          {opt.explanation}
+                        <p className="text-xs font-ui mt-2 opacity-95 leading-relaxed" role="status">
+                          <strong>{isCorrect ? "Correct. " : "Try again. "}</strong>{opt.explanation}
                         </p>
                       )}
                     </div>
@@ -786,7 +812,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
 
             {quizState === "wrong" && showQuizHint && (
               <div className="mt-4 p-4 bg-[#FFEBEB] border-2 border-[#FF4B4B] rounded-2xl flex items-center gap-3">
-                <NotionMascot variant="critic" mood="oops" size={54} interactiveEyes={false} />
+                <NotionMascot variant={essay.pillar === "finance" ? "steward" : "critic"} mood="oops" size={54} interactiveEyes={false} />
                 <div className="text-xs font-ui">
                   <strong className="text-[#FF4B4B] block mb-0.5">Socratic Hint:</strong>
                   <p className="text-[#191919]">{essay.masteryQuiz.hint}</p>
@@ -797,7 +823,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
             {quizState === "correct" && (
               <div className="mt-4 p-5 bg-[#ECF9E0] border-2 border-[#58CC02] rounded-2xl flex items-center justify-between gap-4 shadow-[0_4px_0_0_#439C00]">
                 <div className="flex items-center gap-3">
-                  <NotionMascot variant="celebrating" mood="excited" size={60} interactiveEyes={false} />
+                  <NotionMascot variant={essay.pillar === "finance" ? "steward" : "celebrating"} mood="excited" size={60} interactiveEyes={false} />
                   <div>
                     <h5 className="font-ui font-black text-base text-[#191919]">
                       Neuro-Lock Unlocked! (+{essay.xpReward} XP)

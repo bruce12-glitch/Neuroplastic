@@ -1,6 +1,7 @@
 import { SocraticAnnotation } from "../components/SocraticMarginCallout.tsx";
+import { FINANCE_ESSAY } from "./financeEssay.ts";
 
-export type PillarId = "philosophy" | "ai" | "psychology" | "psychoanalysis" | "worldview";
+export type PillarId = "philosophy" | "ai" | "psychology" | "psychoanalysis" | "worldview" | "finance";
 
 export interface EssayComment {
   id: string;
@@ -78,7 +79,9 @@ export interface EssayItem {
   socraticAnnotations: Record<string, SocraticAnnotation>;
   content: EssayLevelContent;
   masteryQuiz: MasteryQuiz;
-  sandboxType: "entropy" | "epistemic" | "attractor";
+  sandboxType: "entropy" | "epistemic" | "attractor" | "compound";
+  sources?: { title: string; publisher: string; url: string; note: string }[];
+  editorialNote?: string;
 }
 
 export const PILLAR_METADATA: Record<
@@ -90,10 +93,20 @@ export const PILLAR_METADATA: Record<
     tintColor: string;
     btnClass: string;
     symbol: string;
-    mascot: "philosopher" | "architect" | "observer" | "analyst" | "cartographer";
+    mascot: "philosopher" | "architect" | "observer" | "analyst" | "cartographer" | "steward";
     description: string;
   }
 > = {
+  finance: {
+    label: "Finance",
+    surfaceColor: "#A5ED6E",
+    lipColor: "#426545",
+    tintColor: "#EAF4E8",
+    btnClass: "duo-btn-finance",
+    symbol: "↗",
+    mascot: "steward",
+    description: "Money habits, compounding, and understanding risk.",
+  },
   worldview: {
     label: "World View",
     surfaceColor: "#FF9600",
@@ -221,7 +234,7 @@ export const ESSAYS: EssayItem[] = [
     slug: "entropy-guided-context-pruning",
     title: "Entropy-Guided Context Pruning: Why Attention Mechanisms Drown in Noise",
     subtitle: "Reclaiming sub-quadratic inference by discarding hallucinated syntactic weight through thermodynamic token sieves.",
-    author: "Nureoplastic Research Collective",
+    author: "Neuroplastic Research Collective",
     pillar: "ai",
     pillarLabel: "AI Research",
     readingTimeMinutes: 7,
@@ -357,7 +370,7 @@ export const ESSAYS: EssayItem[] = [
     slug: "the-directionless-philosopher",
     title: "The Directionless Philosopher: Escaping Epistemic Solipsism in the Age of Synthetic Minds",
     subtitle: "When generative intelligences reflect our own language games back to us, how do we distinguish genuine reality from mirror hallucinations?",
-    author: "Nureoplastic Research Collective",
+    author: "Neuroplastic Research Collective",
     pillar: "philosophy",
     pillarLabel: "Philosophy",
     readingTimeMinutes: 9,
@@ -493,7 +506,7 @@ export const ESSAYS: EssayItem[] = [
     slug: "attractor-escape-dynamics",
     title: "Attractor Escape Dynamics: How Behavioral Loops Trap the Prefrontal Cortex",
     subtitle: "Mapping dopamine prediction errors onto nonlinear energy landscapes to understand why bad habits feel physically immovable.",
-    author: "Nureoplastic Research Collective",
+    author: "Neuroplastic Research Collective",
     pillar: "psychology",
     pillarLabel: "Psychology",
     readingTimeMinutes: 8,
@@ -629,7 +642,7 @@ export const ESSAYS: EssayItem[] = [
     slug: "the-algorithmic-unconscious-lacanian-mirrors",
     title: "The Algorithmic Unconscious: Lacanian Mirror Stages and Repressed Drives in Latent Space",
     subtitle: "How large language models function as Lacan's 'Big Other', externalizing human repression, transference, and desire into high-dimensional vector geometry.",
-    author: "Dr. Clara Moreau & Nureoplastic Lab",
+    author: "Dr. Clara Moreau & Neuroplastic Lab",
     pillar: "psychoanalysis",
     pillarLabel: "Psychoanalysis",
     readingTimeMinutes: 10,
@@ -765,7 +778,7 @@ export const ESSAYS: EssayItem[] = [
     slug: "polycrisis-cartography-worldview",
     title: "The Polycrisis Cartography: Metabolizing Complexity After the Collapse of Linear Modernity",
     subtitle: "Why twentieth-century institutional worldviews fail under coupled non-linear feedback loops, and how to cultivate systemic epistemic resilience.",
-    author: "Nureoplastic Worldview Institute",
+    author: "Neuroplastic Worldview Institute",
     pillar: "worldview",
     pillarLabel: "World View",
     readingTimeMinutes: 11,
@@ -896,4 +909,5 @@ export const ESSAYS: EssayItem[] = [
       hint: "Think about the relationship between buffer capacity (slack), coupling density, and shock propagation.",
     },
   },
+  FINANCE_ESSAY,
 ];

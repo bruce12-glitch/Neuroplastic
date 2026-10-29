@@ -10,7 +10,7 @@ interface SynapseGraph2DProps {
 }
 
 const DOMAIN_ORDER: PillarId[] = [
-  "philosophy", "worldview", "psychology", "ai", "psychoanalysis",
+  "philosophy", "worldview", "psychology", "ai", "psychoanalysis", "finance",
 ];
 
 /** The existing domain/essay navigation, with room for the original illustrated cast. */

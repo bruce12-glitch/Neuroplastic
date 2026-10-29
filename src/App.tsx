@@ -9,7 +9,8 @@ import {
 } from "./data/essays.ts";
 import { useTactileAudio } from "./hooks/useTactileAudio.ts";
 import { NotionMascot } from "./components/NotionMascot.tsx";
-import { NureoplasticLogo } from "./components/NureoplasticLogo.tsx";
+import { NeuroplasticLogo } from "./components/NeuroplasticLogo.tsx";
+import { FinanceGarden } from "./components/FinanceGarden.tsx";
 import { SynapseGraph2D } from "./components/SynapseGraph2D.tsx";
 import { LivingAtlas } from "./components/LivingAtlas.tsx";
 import { CognitiveReader } from "./components/CognitiveReader.tsx";
@@ -510,7 +511,9 @@ export default function App() {
     { id: "philosophy", label: "Philosophy", symbol: "Φ", btnClass: "duo-btn-phil" },
     { id: "ai", label: "AI Research", symbol: "λ", btnClass: "duo-btn-ai" },
     { id: "psychoanalysis", label: "Psychoanalysis", symbol: "Δ", btnClass: "duo-btn-psycho" },
+    { id: "finance", label: "Finance", symbol: "↗", btnClass: "duo-btn-finance" },
   ];
+  const financeGuide = allEssays.find((essay) => essay.id === "money-time-and-compounding");
 
   return (
     <div className="min-h-screen bg-[#F7F6F3] text-[#191919] font-ui antialiased flex flex-col">
@@ -519,7 +522,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-wrap xl:flex-nowrap items-center justify-between gap-3 xl:gap-4">
           {/* Brand Identity with Sculpted Woven-Mind Logo */}
           <div className="flex items-center gap-3.5">
-            <NureoplasticLogo
+            <NeuroplasticLogo
               variant="mark"
               size={44}
               onClick={() => audio.playClick()}
@@ -528,11 +531,11 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-display font-bold text-xl tracking-tight text-[#191919]">
-                  Nureoplastic
+                  Neuroplastic
                 </span>
               </div>
               <p className="hidden md:block text-[11px] font-ui text-[#5A5955] -mt-0.5">
-                World View · Psychology · Philosophy · AI Research · Psychoanalysis
+                World View · Psychology · Philosophy · AI Research · Psychoanalysis · Finance
               </p>
             </div>
           </div>
@@ -711,7 +714,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 5-Field Domain Filter Bar */}
+      {/* Subject filters */}
       <section className="max-w-7xl mx-auto px-4 lg:px-8 pb-4 w-full">
         <div className="p-3 bg-white border-2 border-[#191919] shadow-[0_4px_0_0_#191919] rounded-2xl flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
@@ -724,7 +727,8 @@ export default function App() {
                     audio.playToggle();
                     setSelectedPillar(item.id);
                   }}
-                  className={`duo-btn text-xs font-ui font-extrabold px-3.5 py-2 rounded-xl flex items-center gap-1.5 transition-all ${
+                  aria-pressed={isSelected}
+                  className={`duo-btn min-h-11 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#5645d4] text-xs font-ui font-extrabold px-3.5 py-2 rounded-xl flex items-center gap-1.5 transition-all ${
                     isSelected
                       ? item.btnClass || "bg-[#191919] text-white"
                       : "bg-[#F7F6F3] text-[#191919] hover:bg-[#EFECE6]"
@@ -742,6 +746,16 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {financeGuide && !searchFilter && (selectedPillar === "all" || selectedPillar === "finance") && (
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 pt-4 w-full" id="finance">
+          <FinanceGarden
+            essay={financeGuide}
+            mastered={masteredEssays.includes(financeGuide.id)}
+            onRead={() => { audio.playClick(); handleSelectEssay(financeGuide.id); }}
+          />
+        </div>
+      )}
 
       {/* Editorial Bento Essay Grid */}
       <section className="max-w-7xl mx-auto px-4 lg:px-8 py-8 flex-1 w-full">
@@ -809,7 +823,7 @@ export default function App() {
                         {meta.description}
                       </span>
                       <div className="text-xs font-ui font-bold text-[#191919]">
-                        By {essay.author || "Nureoplastic Editorial"} · {essay.publishedDate}
+                        By {essay.author || "Neuroplastic Editorial"} · {essay.publishedDate}
                       </div>
                     </div>
                     <NotionMascot
@@ -857,13 +871,13 @@ export default function App() {
       <footer className="border-t-2 border-[#191919] bg-white py-10 px-4 lg:px-8 mt-12">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3.5">
-            <NureoplasticLogo variant="mark" size={48} onClick={() => audio.playClick()} />
+            <NeuroplasticLogo variant="mark" size={48} onClick={() => audio.playClick()} />
             <div>
               <div className="font-display font-bold text-base text-[#191919]">
-                Nureoplastic — Journal of Cross-Disciplinary Inquiry
+                Neuroplastic — Journal of Cross-Disciplinary Inquiry
               </div>
               <p className="text-xs font-ui text-[#5A5955]">
-                Essays, margin notes, and reader discussions across World View, Psychology, Philosophy, AI, and Psychoanalysis.
+                Essays, margin notes, and reader discussions across World View, Psychology, Philosophy, AI, Psychoanalysis, and Finance.
               </p>
             </div>
           </div>

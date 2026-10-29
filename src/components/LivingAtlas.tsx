@@ -20,6 +20,9 @@ interface AtlasDomain {
 }
 
 const DOMAINS: AtlasDomain[] = [
+  { id: "finance", label: "Finance", mascot: "steward", x: 50, y: 15,
+    path: "M343 145C312 117 378 87 340 55",
+    invitation: "Make room for the future, one thoughtful money habit at a time." },
   { id: "philosophy", label: "Philosophy", mascot: "philosopher", x: 19, y: 25,
     path: "M305 154C250 150 240 34 129 93",
     invitation: "Start with a question. See where it takes you." },
@@ -81,7 +84,7 @@ export function LivingAtlas({ onSelectPillar, activePillarFilter }: LivingAtlasP
     <section
       ref={rootRef}
       className="living-atlas"
-      aria-label="The Living Atlas — explore five connected subjects"
+      aria-label="The Living Atlas — explore six connected subjects"
       data-motion={motionOff ? "paused" : "playing"}
       style={{ "--atlas-active": portrait.color, "--atlas-paper": portrait.paper } as React.CSSProperties}
     >
@@ -148,7 +151,6 @@ export function LivingAtlas({ onSelectPillar, activePillarFilter }: LivingAtlasP
             </g>
           </svg>
           <span className="living-atlas__book-note font-display">what if?</span>
-          <span className="living-atlas__annotation font-editorial">one idea leads to another</span>
         </div>
 
         <div className="living-atlas__nodes" role="group" aria-label="Choose a subject to explore">
@@ -168,7 +170,7 @@ export function LivingAtlas({ onSelectPillar, activePillarFilter }: LivingAtlasP
                 onPointerLeave={() => setHovered(null)}
                 onFocus={() => setHovered(domain.id)}
                 onBlur={() => setHovered(null)}
-                style={{ left: `${domain.x}%`, top: `${domain.y}%`, "--node-ink": guide.color, "--node-paper": guide.paper, "--node-delay": `${index * -1.3}s`, "--node-tilt": `${[-6, 5, 4, -4, 3][index]}deg` } as React.CSSProperties}
+                style={{ left: `${domain.x}%`, top: `${domain.y}%`, "--node-ink": guide.color, "--node-paper": guide.paper, "--node-delay": `${index * -1.3}s`, "--node-tilt": `${[-3, -6, 5, 4, -4, 3][index]}deg` } as React.CSSProperties}
               >
                 <span className="atlas-node__portrait">
                   <span className="atlas-node__halo" aria-hidden="true" />

@@ -26,6 +26,24 @@ interface BlogCreatorModalProps {
 }
 
 const FIELD_TEMPLATES: Record<PillarId, Partial<CustomBlogDraft>> = {
+  finance: {
+    title: "The Money Goal Notebook: Purpose Before Products",
+    subtitle: "A simple framework for writing down what money is for, when you need it, and which assumptions deserve a closer look.",
+    tags: ["Money basics", "Goals", "Financial literacy"],
+    sandboxType: "compound",
+    tldrBullets: [
+      "Name the goal and the date before comparing financial products.",
+      "Keep hypothetical arithmetic separate from predictions about actual returns.",
+      "Link primary sources and explain the limits of every numerical example.",
+    ],
+    sections: [{
+      heading: "01. Give the goal a sentence",
+      body: "Write down the purpose of the money, the date you expect to need it, and what uncertainty could affect the plan. Explain the assumptions behind your example and add sources readers can check.\n\nUse the experiment below to explain annual compounding. Its smooth curve assumes a constant rate and excludes fees, taxes, inflation, extra deposits, and losses; it is not a forecast.",
+    }],
+    formalEquationLabel: "Annual Compound Growth",
+    formalEquation: "A = P × (1 + r)^n",
+    formalExplanation: "P is one initial deposit, r a hypothetical fixed annual rate as a decimal, and n the number of years. A is the final balance before costs, tax, and inflation.",
+  },
   worldview: {
     title: "The Sovereign Stack and Post-Westphalian Protocols",
     subtitle:
@@ -166,7 +184,7 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
   const [author, setAuthor] = useState("Independent Scholar");
   const [pillar, setPillar] = useState<PillarId>("philosophy");
   const [tagInput, setTagInput] = useState("Epistemology, Synthesis, First-Principles");
-  const [sandboxType, setSandboxType] = useState<"entropy" | "epistemic" | "attractor">("epistemic");
+  const [sandboxType, setSandboxType] = useState<EssayItem["sandboxType"]>("epistemic");
 
   // Level 1 TL;DR Bullets
   const [tldrBullets, setTldrBullets] = useState<string[]>([
@@ -208,7 +226,7 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
     if (initialEssay) {
       setTitle(initialEssay.title);
       setSubtitle(initialEssay.subtitle);
-      setAuthor(initialEssay.author || "Nureoplastic Editorial");
+      setAuthor(initialEssay.author || "Neuroplastic Editorial");
       setPillar(initialEssay.pillar);
       setTagInput(initialEssay.tags.join(", "));
       setSandboxType(initialEssay.sandboxType);
@@ -335,6 +353,10 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
       return;
     }
 
+    // Keep attribution and source context when editing a sourced built-in essay.
+    if (initialEssay?.sources) result.essay.sources = initialEssay.sources;
+    if (initialEssay?.editorialNote) result.essay.editorialNote = initialEssay.editorialNote;
+
     // Preserve existing socraticAnnotations if customizing a built-in essay
     if (initialEssay && Object.keys(initialEssay.socraticAnnotations).length > 0) {
       result.essay.socraticAnnotations = initialEssay.socraticAnnotations;
@@ -360,7 +382,7 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
             </div>
             <div>
               <span className="text-[10px] font-code font-bold uppercase tracking-widest text-[#5A5955] block">
-                NUREOPLASTIC PUBLISHING STUDIO
+                NEUROPLASTIC PUBLISHING STUDIO
               </span>
               <h2 className="font-display text-xl sm:text-2xl font-bold text-[#191919]">
                 {initialEssay ? `Customize Monograph: ${initialEssay.title.slice(0, 28)}…` : "Author & Customize Interactive Blog"}
@@ -734,10 +756,15 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
                   Embedded Interactive Simulation Sandbox
                 </h4>
                 <p className="text-xs font-ui text-[#5A5955]">
-                  Every Nureoplastic blog embeds a live interactive physics or mathematical simulation inside the essay reader.
+                  Every Neuroplastic blog includes an interactive experiment to help readers explore its ideas.
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
+                    {
+                      id: "compound" as const,
+                      title: "Penny’s Compounding Experiment",
+                      desc: "Compare simple and compound growth with clearly labeled hypothetical assumptions.",
+                    },
                     {
                       id: "epistemic" as const,
                       title: "2D Epistemic Horizon Matrix",

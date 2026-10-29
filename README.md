@@ -1,20 +1,23 @@
-# Nureoplastic — Epistemic Monograph Studio & Cognitive Depth Reader
+# Neuroplastic — Epistemic Monograph Studio & Cognitive Depth Reader
 
 **Live website:** [https://bruce12-glitch.github.io/Neuroplastic/](https://bruce12-glitch.github.io/Neuroplastic/)
 
-**Nureoplastic** is an interactive digital garden, monograph publishing studio, and dialectical discourse platform built for cross-disciplinary inquiry across **World View**, **Psychology**, **Philosophy**, **AI Research**, and **Psychoanalysis**.
+**Neuroplastic** is an interactive digital garden, monograph publishing studio, and dialectical discourse platform built for cross-disciplinary inquiry across **World View**, **Psychology**, **Philosophy**, **AI Research**, **Psychoanalysis**, and **Finance**.
 
 ---
 
 ## Core Architecture & Features
 
-### 1. Five Intellectual Domains
-Every monograph in Nureoplastic is indexed under one of five foundational fields of inquiry, paired with a signature domain palette and classical thinker archetype:
-- **World View ($\Omega$)** — Geopolitics, macro-history, and polycrisis cartography (*Plato*).
-- **Psychology ($\Psi$)** — Cognitive dynamics, behavioral attractors, and neuroplasticity (*Socrates*).
-- **Philosophy ($\Phi$)** — Epistemology, continental ontology, and modal logic (*Aristotle*).
+### 1. Six Intellectual Domains
+Every monograph in Neuroplastic is indexed under one of six fields of inquiry, paired with a signature domain palette and illustrated guide:
+- **World View ($\Omega$)** — Geopolitics, macro-history, and polycrisis cartography (*Aristotle*).
+- **Psychology ($\Psi$)** — Cognitive dynamics, behavioral attractors, and neuroplasticity (*Plato*).
+- **Philosophy ($\Phi$)** — Epistemology, continental ontology, and modal logic (*Socrates*).
 - **AI Research ($\Lambda$)** — Sub-quadratic attention, mechanistic interpretability, and entropy-guided inference (*Claude Shannon*).
 - **Psychoanalysis ($\Delta$)** — Lacanian topology, the algorithmic unconscious, and desire graphs (*Sigmund Freud*).
+- **Finance (↗)** — Money habits, compounding, and risk literacy (*Penny*, an original fictional tortoise guide).
+
+The **Money Garden** introduces the Finance section with a six-minute article, *Give Your Money Time: A Beginner’s Guide to Compounding*. It includes three reading depths, five linked educational sources from the CFPB and SEC’s Investor.gov, a simple-versus-compound growth experiment, and a knowledge check. Examples are hypothetical and use currency-neutral units. The article is general education, not a personal investment recommendation.
 
 ### 2. Three-Level Cognitive Depth Reader (`<CognitiveReader />`)
 Rather than static long-form pages, every monograph can be read across three calibrated epistemic depths:
@@ -35,9 +38,9 @@ Interactive peer annotation and commentary on every monograph:
 - Anchor comments to a specific reading depth (`L1`, `L2`, or `L3`), endorse insights, and post threaded replies.
 
 ### 5. Illustrated Thinkers & Living Atlas
-- **Illustrated Thinker Portraits (`<NotionMascot />`)** — Seven original editorial portraits shared across the garden and reader.
+- **Illustrated Portraits (`<NotionMascot />`)** — Seven original thinker portraits and Penny, the Finance guide, shared across the garden and reader.
 - **Classical Symposium & Dialectical Salon (`<SynapseGraph2D />`)** — Interactive 2D conceptual map connecting monographs across disciplines.
-- **Living Atlas (`<LivingAtlas />`)** — An animated sketchbook connects five thinkers and their subjects. Select a portrait to change the reading invitation, then explore the subject. Includes pause/resume, reduced-motion support, and off-screen suspension.
+- **Living Atlas (`<LivingAtlas />`)** — An animated sketchbook connects six subject guides. Select a portrait to change the reading invitation, then explore the subject. Includes pause/resume, reduced-motion support, and off-screen suspension.
 
 ### 6. Dual-Layer Database Persistence (Cloud Firestore + Server Store)
 All newly created monographs, customized blogs, and dialectical comments are automatically persisted across sessions:
@@ -77,7 +80,8 @@ npm run dev
 ### 4. Verify Security Rules & Build
 ```bash
 npx eslint firestore.rules
-npx tsx --test firestore.rules.test.ts
+node --import tsx --test src/utils/rules.test.ts firestore.rules.test.ts
+npm run lint
 npm run build
 ```
 
@@ -93,3 +97,5 @@ GITHUB_PAGES=true npm run build
 ```
 
 This publishes the frontend. GitHub Pages does not run `server.ts` or its `/api/` endpoints. Server-backed features need a separately hosted API, and Firebase sign-in needs the Pages hostname allowed in Firebase Authentication. Keep server credentials out of the static build.
+
+Finance publishing uses the `finance` pillar and `compound` sandbox values in `firestore.rules`. When using Cloud Firestore writes, deploy this updated rules file to the existing Firebase project through its normal rules deployment process. GitHub Pages deployment does not publish Firebase rules.

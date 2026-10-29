@@ -1,6 +1,6 @@
 import React, { useId } from "react";
 
-interface NureoplasticLogoProps {
+interface NeuroplasticLogoProps {
   /**
    * "mark": Compact square/rounded emblem for navbar, footer, and brand lockup
    * "scene": Full wide editorial emblem illustration with dusk arch, botanicals, and contemplative figures
@@ -12,12 +12,12 @@ interface NureoplasticLogoProps {
 }
 
 /**
- * Custom SVG Brand Logo & Editorial Mind-Weave Emblem for Nureoplastic.
+ * Custom SVG Brand Logo & Editorial Mind-Weave Emblem for Neuroplastic.
  * Inspired by the sculpted human profile head filled with interwoven colourful
  * neuroplastic ribbons (ochre gold, coral rose, sky cyan, soft lavender, warm cream)
  * set against a slate-indigo dusk horizon.
  */
-export const NureoplasticLogo: React.FC<NureoplasticLogoProps> = ({
+export const NeuroplasticLogo: React.FC<NeuroplasticLogoProps> = ({
   variant = "mark",
   size = 44,
   className = "",
@@ -40,7 +40,7 @@ export const NureoplasticLogo: React.FC<NureoplasticLogoProps> = ({
           viewBox="0 0 640 320"
           className="w-full h-auto block"
           role="img"
-          aria-label="Nureoplastic — Interwoven Mind & Cognitive Horizon Emblem"
+          aria-label="Neuroplastic — Interwoven Mind & Cognitive Horizon Emblem"
         >
           <defs>
             {/* Subtle diagonal hatch pattern matching the reference backdrop */}
@@ -280,13 +280,13 @@ export const NureoplasticLogo: React.FC<NureoplasticLogoProps> = ({
       className={`relative rounded-xl bg-[#363B4E] border-2 border-[#191919] shadow-[0_3px_0_0_#191919] flex items-center justify-center overflow-hidden select-none shrink-0 ${
         onClick ? "cursor-pointer hover:translate-y-[-1px] transition-transform" : ""
       } ${className}`}
-      title="Nureoplastic — Interwoven Cognitive Studio"
+      title="Neuroplastic — Interwoven Cognitive Studio"
     >
       <svg
         viewBox="0 0 120 120"
         className="w-full h-full block"
         role="img"
-        aria-label="Nureoplastic Logo"
+        aria-label="Neuroplastic Logo"
       >
         <defs>
           <clipPath id={headClipId}>
