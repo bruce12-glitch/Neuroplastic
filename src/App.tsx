@@ -58,10 +58,20 @@ export default function App() {
   const cloudCommentIdsRef = useRef<Set<string>>(new Set());
 
   // Navigation & View state
-  const [activeEssayId, setActiveEssayId] = useState<string | null>(null);
+  const [activeEssayId, setActiveEssayId] = useState<string | null>(() =>
+    new URLSearchParams(window.location.search).get("essay")
+  );
   const [selectedPillar, setSelectedPillar] = useState<string>("all");
   const [searchFilter, setSearchFilter] = useState<string>("");
   const [heroViewMode, setHeroViewMode] = useState<"symposium" | "atlas">("symposium");
+
+  useEffect(() => {
+    const restoreEssayFromLocation = () => {
+      setActiveEssayId(new URLSearchParams(window.location.search).get("essay"));
+    };
+    window.addEventListener("popstate", restoreEssayFromLocation);
+    return () => window.removeEventListener("popstate", restoreEssayFromLocation);
+  }, []);
 
   // Custom & Updated Blogs State
   const [customEssays, setCustomEssays] = useState<EssayItem[]>(() => {
@@ -264,13 +274,25 @@ export default function App() {
   }, [allEssays, selectedPillar, searchFilter]);
 
   const activeEssay = useMemo(() => {
-    return allEssays.find((e) => e.id === activeEssayId) || null;
+    return allEssays.find((e) => e.id === activeEssayId)
+      || allEssays.find((e) => e.slug === activeEssayId)
+      || null;
   }, [allEssays, activeEssayId]);
+
+  const navigateToEssay = (essay: EssayItem | null) => {
+    const url = new URL(window.location.href);
+    if (essay) url.searchParams.set("essay", essay.slug);
+    else url.searchParams.delete("essay");
+    url.hash = "";
+    if (url.href !== window.location.href) window.history.pushState(null, "", url);
+    setActiveEssayId(essay?.id ?? null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleSelectEssay = (id: string) => {
     audio.playClick();
-    setActiveEssayId(id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const essay = allEssays.find((item) => item.id === id);
+    if (essay) navigateToEssay(essay);
   };
 
   const handleSignInAndSync = async () => {
@@ -304,7 +326,7 @@ export default function App() {
       return [savedEssay, ...prev];
     });
     setTotalXP((prev) => prev + 30);
-    setActiveEssayId(savedEssay.id);
+    navigateToEssay(savedEssay);
 
     // 2. Persist to Server Database (/api/db/blogs)
     fetch("/api/db/blogs", {
@@ -331,8 +353,8 @@ export default function App() {
   const handleDeleteCustomEssay = async (essayId: string) => {
     audio.playClick();
     setCustomEssays((prev) => prev.filter((e) => e.id !== essayId));
-    if (activeEssayId === essayId) {
-      setActiveEssayId(null);
+    if (activeEssay?.id === essayId) {
+      navigateToEssay(null);
     }
 
     fetch(`/api/db/blogs/${encodeURIComponent(essayId)}`, {
@@ -469,10 +491,11 @@ export default function App() {
     return (
       <>
         <CognitiveReader
+          key={activeEssay.id}
           essay={activeEssay}
           onBack={() => {
             audio.playClick();
-            setActiveEssayId(null);
+            navigateToEssay(null);
           }}
           onEditEssay={(essayToEdit) => {
             setEditingEssay(essayToEdit);
@@ -789,7 +812,7 @@ export default function App() {
                       <span className="text-[#5A5955] font-normal">
                         {essay.readingTimeMinutes} MIN
                       </span>
-                      {essay.isCustom && (
+                      {(essay.isCustom || essay.format === "original") && (
                         <>
                           <span className="text-[#5A5955]">·</span>
                           <span className="text-[#439C00] font-bold">ORIGINAL</span>
@@ -808,8 +831,10 @@ export default function App() {
                         <MessageSquareQuote className="w-3.5 h-3.5" />
                         <span>{essayCommentCount}</span>
                       </span>
-                      <span>·</span>
-                      <span className="font-bold text-[#191919]">+{essay.xpReward} XP</span>
+                      {essay.xpReward > 0 && <>
+                        <span>·</span>
+                        <span className="font-bold text-[#191919]">+{essay.xpReward} XP</span>
+                      </>}
                     </div>
                   </div>
 
