@@ -50,7 +50,7 @@ const FIELD_TEMPLATES: Record<PillarId, Partial<CustomBlogDraft>> = {
       },
     ],
     formalEquationLabel: "Network Contagion Resilience Index",
-    formalEquation: "R(\\mathcal{G}) = 1 - \\frac{\\lambda_{\\max}(A)}{\\sum_{i} k_i \\cdot \\sigma_{\\text{modular}}(i)}",
+    formalEquation: "Resilience(G) = 1 − [ Coupling λ_max(A) ÷ ∑ (k_i · ModularBuffer_i) ]",
     formalExplanation:
       "Measures structural survival of a multi-polar network when modularity dampens the spectral radius of adjacency matrix A.",
   },
@@ -74,7 +74,7 @@ const FIELD_TEMPLATES: Record<PillarId, Partial<CustomBlogDraft>> = {
       },
     ],
     formalEquationLabel: "Curiosity-Driven Plasticity Update",
-    formalEquation: "\\Delta w_{ij} = \\eta \\cdot \\left| D_{\\text{KL}}(P_{\\text{posterior}} \\parallel P_{\\text{prior}}) \\right| \\cdot \\delta_{\\text{dopamine}}",
+    formalEquation: "Δw_ij = η · | D_KL( P_posterior ‖ P_prior ) | · δ_dopamine",
     formalExplanation:
       "Synaptic weight modification scales with the Kullback-Leibler divergence of surprise modulated by tonic dopaminergic gating.",
   },
@@ -98,7 +98,7 @@ const FIELD_TEMPLATES: Record<PillarId, Partial<CustomBlogDraft>> = {
       },
     ],
     formalEquationLabel: "Existential Grounding Metric",
-    formalEquation: "\\mathcal{G}(s) = \\int_{\\Omega} \\text{Risk}_{\\text{embodied}}(s, \\omega) \\cdot \\mathcal{I}_{\\text{semantic}}(s) \\, d\\omega",
+    formalEquation: "Grounding(s) = ∫ Risk_embodied(s, ω) · Information_semantic(s) dω",
     formalExplanation:
       "Ontological weight G(s) of statement s is the product of semantic information and embodied existential stake.",
   },
@@ -122,7 +122,7 @@ const FIELD_TEMPLATES: Record<PillarId, Partial<CustomBlogDraft>> = {
       },
     ],
     formalEquationLabel: "Sparse Autoencoder Reconstruction Loss",
-    formalEquation: "\\mathcal{L}(x) = \\| x - \\hat{x} \\|_2^2 + \\lambda \\| f(x) \\|_1",
+    formalEquation: "Loss(x) = ‖ x − x_reconstructed ‖₂² + λ · ‖ f(x) ‖₁",
     formalExplanation:
       "Balances faithful residual stream reconstruction with L1 sparsity penalty on latent feature activations f(x).",
   },
@@ -146,7 +146,7 @@ const FIELD_TEMPLATES: Record<PillarId, Partial<CustomBlogDraft>> = {
       },
     ],
     formalEquationLabel: "Lacanian Transference Projection",
-    formalEquation: "\\mathcal{T}(\\text{Ego} \\to \\mathcal{A}) = \\langle \\text{Signifier}_{\\text{user}}, \\mathcal{M}_{\\text{mirror}}(\\text{objet } a) \\rangle",
+    formalEquation: "Transference(Ego → Other) = ⟨ Signifier_user , Mirror(objet petit a) ⟩",
     formalExplanation:
       "Models imaginary transference as the inner product between the user's signifier chain and the algorithmic reflection of objet petit a.",
   },
@@ -189,7 +189,7 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
   // Level 3 Formalism
   const [formalEquationLabel, setFormalEquationLabel] = useState("Epistemic State Transition");
   const [formalEquation, setFormalEquation] = useState(
-    "\\Phi(t+1) = \\Phi(t) - \\eta \\nabla \\mathcal{F}_{\\text{free-energy}}(\\Phi)"
+    "Φ(t + 1) = Φ(t) − η · ∇FreeEnergy(Φ)"
   );
   const [formalExplanation, setFormalExplanation] = useState(
     "Models how a conceptual paradigm updates its internal parameters when confronted with high-surprise empirical evidence."
