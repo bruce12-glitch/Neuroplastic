@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+/* Native-size cursors, inspired by the supplied dark arrow and soft blue halo. */
+@media (hover: hover) and (pointer: fine) and (forced-colors: none) {
+  :root {
+    --neuroplastic-cursor-arrow: url("./assets/cursors/glow-arrow.svg") 11 6, auto;
+    --neuroplastic-cursor-hand: url("./assets/cursors/glow-hand.svg") 15 6, pointer;
+  }
+
+  body {
+    cursor: var(--neuroplastic-cursor-arrow);
+  }
+
+  :is(button, a[href], summary, [role="button"], .cursor-pointer, input[type="range"], input[type="button"], input[type="submit"], input[type="reset"]):not(:disabled):not([aria-disabled="true"]) {
+    cursor: var(--neuroplastic-cursor-hand);
+  }
+
+  :is(textarea, input:not([type="range"]):not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="file"]), [contenteditable="true"], [contenteditable=""]):not(:disabled):not([aria-disabled="true"]) {
+    cursor: text;
+  }
+}
+
 @layer base {
   :root {
     --bg-canvas: #FBF9F5;
