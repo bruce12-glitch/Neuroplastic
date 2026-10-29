@@ -14,7 +14,6 @@ import { SynapseGraph2D } from "./components/SynapseGraph2D.tsx";
 import { ThreeSynapseScene } from "./components/ThreeSynapseScene.tsx";
 import { CognitiveReader } from "./components/CognitiveReader.tsx";
 import { SynapseVaultDrawer, VaultItem } from "./components/SynapseVaultDrawer.tsx";
-import { AISynthesisModal } from "./components/AISynthesisModal.tsx";
 import { BlogCreatorModal } from "./components/BlogCreatorModal.tsx";
 import {
   auth,
@@ -34,7 +33,6 @@ import {
 } from "./firebase.ts";
 import {
   Search,
-  Sparkles,
   Volume2,
   VolumeX,
   Bookmark,
@@ -137,7 +135,6 @@ export default function App() {
   });
 
   const [isVaultOpen, setIsVaultOpen] = useState<boolean>(false);
-  const [isAIModalOpen, setIsAIModalOpen] = useState<boolean>(false);
 
   // 1. Track Firebase Auth state
   useEffect(() => {
@@ -241,18 +238,6 @@ export default function App() {
     );
     return [...purelyNewCustom, ...mergedBuiltIns];
   }, [customEssays]);
-
-  // Keyboard shortcut for ⌘K
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setIsAIModalOpen((open) => !open);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
 
   // Sync state to local storage
   useEffect(() => {
@@ -555,9 +540,9 @@ export default function App() {
             </div>
           </div>
 
-          {/* Right Action Controls (Streak pill removed) */}
+          {/* Right Action Controls */}
           <div className="flex items-center gap-2">
-            {/* Primary Write / Customize Blog Button */}
+            {/* Primary Write Blog Button */}
             <button
               onClick={() => {
                 audio.playClick();
@@ -567,7 +552,7 @@ export default function App() {
               className="duo-btn duo-btn-phil text-xs font-ui font-extrabold px-3.5 py-2 rounded-xl flex items-center gap-1.5"
             >
               <PenTool className="w-3.5 h-3.5" />
-              <span>Write / Customize Blog</span>
+              <span>Write Blog</span>
             </button>
 
             {/* Cloud Firestore Google Auth Sync Button */}
@@ -609,19 +594,6 @@ export default function App() {
               <Bookmark className="w-3.5 h-3.5 text-[#191919]" />
               <span className="hidden sm:inline">Vault</span>
               <span className="font-code text-[11px] text-[#5A5955]">({vaultItems.length})</span>
-            </button>
-
-            {/* AI Synthesizer Trigger */}
-            <button
-              onClick={() => {
-                audio.playClick();
-                setIsAIModalOpen(true);
-              }}
-              className="duo-btn text-xs font-ui font-extrabold px-3 py-2 rounded-xl bg-[#FFF9E0] text-[#191919] flex items-center gap-1.5"
-              title="Open Epistemic AI Synthesizer (⌘K)"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#D6A600]" />
-              <span className="hidden md:inline">Synthesize</span>
             </button>
 
             {/* Audio Mute Switch */}
@@ -881,20 +853,6 @@ export default function App() {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        audio.playClick();
-                        setEditingEssay(essay);
-                        setIsCreatorOpen(true);
-                      }}
-                      className="text-xs font-ui font-bold text-[#5A5955] hover:text-[#191919] px-2 py-1 rounded-lg hover:bg-[#EFECE6]"
-                      title="Customize or Edit this Blog in Database"
-                    >
-                      Customize
-                    </button>
-
                     <span className="text-xs font-ui font-black text-[#191919] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                       <span>Read Monograph</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -937,16 +895,6 @@ export default function App() {
             <button
               onClick={() => {
                 audio.playClick();
-                setIsAIModalOpen(true);
-              }}
-              className="hover:text-[#191919] hover:underline"
-            >
-              AI Epistemic Synthesis
-            </button>
-            <span>·</span>
-            <button
-              onClick={() => {
-                audio.playClick();
                 setIsVaultOpen(true);
               }}
               className="hover:text-[#191919] hover:underline"
@@ -963,13 +911,6 @@ export default function App() {
         onClose={() => setIsVaultOpen(false)}
         vaultItems={vaultItems}
         onDeleteItem={handleDeleteVaultItem}
-      />
-
-      {/* AI Epistemic Synthesis & Search Modal */}
-      <AISynthesisModal
-        isOpen={isAIModalOpen}
-        onClose={() => setIsAIModalOpen(false)}
-        onPlayClick={() => audio.playClick()}
       />
 
       {/* Interactive Blog Creator & Customizer Studio Modal */}
