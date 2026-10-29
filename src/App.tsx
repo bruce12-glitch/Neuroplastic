@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
   ESSAYS,
   INITIAL_COMMENTS,
@@ -17,6 +17,22 @@ import { AISynthesisModal } from "./components/AISynthesisModal.tsx";
 import { BlogCreatorModal } from "./components/BlogCreatorModal.tsx";
 import { calculateCognitiveRank } from "./utils/rules.ts";
 import {
+  auth,
+  onAuthStateChanged,
+  signInScholarWithGoogle,
+  signOutScholar,
+  saveBlogToFirestore,
+  deleteBlogFromFirestore,
+  subscribeToPublicBlogs,
+  saveCommentToFirestore,
+  upvoteCommentInFirestore,
+  subscribeToPublicComments,
+  saveVaultNoteToFirestore,
+  deleteVaultNoteFromFirestore,
+  subscribeToUserVault,
+  User,
+} from "./firebase.ts";
+import {
   Flame,
   Search,
   Sparkles,
@@ -28,10 +44,21 @@ import {
   Box,
   PenTool,
   MessageSquareQuote,
+  Database,
+  LogIn,
+  LogOut,
+  CheckCircle2,
 } from "lucide-react";
 
 export default function App() {
   const audio = useTactileAudio();
+
+  // Firebase Auth & Cloud Firestore Sync State
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isAuthReady, setIsAuthReady] = useState<boolean>(false);
+  const [dbSyncStatus, setDbSyncStatus] = useState<"synced" | "saving" | "local">("synced");
+  const cloudBlogIdsRef = useRef<Set<string>>(new Set());
+  const cloudCommentIdsRef = useRef<Set<string>>(new Set());
 
   // Navigation & View state
   const [activeEssayId, setActiveEssayId] = useState<string | null>(null);
@@ -39,7 +66,7 @@ export default function App() {
   const [searchFilter, setSearchFilter] = useState<string>("");
   const [heroViewMode, setHeroViewMode] = useState<"2d" | "3d">("2d");
 
-  // Custom & Customized Essays State (persisted in localStorage)
+  // Custom & Updated Blogs State
   const [customEssays, setCustomEssays] = useState<EssayItem[]>(() => {
     try {
       const stored = localStorage.getItem("nureo_custom_essays");
@@ -53,7 +80,7 @@ export default function App() {
   const [isCreatorOpen, setIsCreatorOpen] = useState<boolean>(false);
   const [editingEssay, setEditingEssay] = useState<EssayItem | null>(null);
 
-  // Interactive Comments State (persisted in localStorage)
+  // Interactive Comments State
   const [comments, setComments] = useState<EssayComment[]>(() => {
     try {
       const stored = localStorage.getItem("nureo_comments");
@@ -124,7 +151,100 @@ export default function App() {
   const [isVaultOpen, setIsVaultOpen] = useState<boolean>(false);
   const [isAIModalOpen, setIsAIModalOpen] = useState<boolean>(false);
 
-  // Merge built-in ESSAYS with any user-created or user-customized essays
+  // 1. Track Firebase Auth state
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+      setIsAuthReady(true);
+    });
+    return () => unsub();
+  }, []);
+
+  // 2. Load from Server DB on initial mount so any previously saved blogs are available immediately
+  useEffect(() => {
+    fetch("/api/db/blogs")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.blogs && Array.isArray(data.blogs) && data.blogs.length > 0) {
+          setCustomEssays((prev) => {
+            const map = new Map(prev.map((e) => [e.id, e]));
+            for (const b of data.blogs) {
+              map.set(b.id, b);
+            }
+            return Array.from(map.values());
+          });
+        }
+        if (data?.comments && Array.isArray(data.comments) && data.comments.length > 0) {
+          setComments((prev) => {
+            const map = new Map(prev.map((c) => [c.id, c]));
+            for (const c of data.comments) {
+              map.set(c.id, c);
+            }
+            return Array.from(map.values());
+          });
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // 3. Subscribe to Cloud Firestore real-time collections once Auth is ready
+  useEffect(() => {
+    if (!isAuthReady) return;
+
+    const unsubBlogs = subscribeToPublicBlogs((cloudEssays, cloudIds) => {
+      cloudBlogIdsRef.current = cloudIds;
+      if (cloudEssays.length > 0) {
+        setCustomEssays((prev) => {
+          const map = new Map(prev.map((e) => [e.id, e]));
+          for (const ce of cloudEssays) {
+            map.set(ce.id, ce);
+          }
+          return Array.from(map.values());
+        });
+      }
+      setDbSyncStatus("synced");
+    });
+
+    const unsubComments = subscribeToPublicComments((cloudComments, cloudIds) => {
+      cloudCommentIdsRef.current = cloudIds;
+      if (cloudComments.length > 0) {
+        setComments((prev) => {
+          const map = new Map(prev.map((c) => [c.id, c]));
+          for (const cc of cloudComments) {
+            const existing = map.get(cc.id);
+            map.set(cc.id, {
+              ...cc,
+              replies: existing?.replies || cc.replies || [],
+            });
+          }
+          return Array.from(map.values());
+        });
+      }
+    });
+
+    let unsubVault: (() => void) | undefined;
+    if (currentUser) {
+      unsubVault = subscribeToUserVault(currentUser.uid, (cloudVault) => {
+        if (cloudVault.length > 0) {
+          setVaultItems((prev) => {
+            const map = new Map(prev.map((v) => [v.id, v]));
+            for (const cv of cloudVault) {
+              map.set(cv.id, cv);
+            }
+            return Array.from(map.values());
+          });
+        }
+      });
+    }
+
+    return () => {
+      unsubBlogs();
+      unsubComments();
+      if (unsubVault) unsubVault();
+    };
+  }, [isAuthReady, currentUser]);
+
+  // Merge built-in ESSAYS with any user-created or user-customized essays from Database
   const allEssays = useMemo(() => {
     const customMap = new Map(customEssays.map((e) => [e.id, e]));
     const mergedBuiltIns = ESSAYS.map((builtIn) => customMap.get(builtIn.id) || builtIn);
@@ -182,8 +302,29 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSaveCustomEssay = (savedEssay: EssayItem) => {
+  const handleSignInAndSync = async () => {
+    audio.playClick();
+    try {
+      const user = await signInScholarWithGoogle();
+      if (user && customEssays.length > 0) {
+        setDbSyncStatus("saving");
+        for (const essay of customEssays) {
+          const isExisting = cloudBlogIdsRef.current.has(essay.id);
+          await saveBlogToFirestore(essay, user.uid, isExisting);
+          cloudBlogIdsRef.current.add(essay.id);
+        }
+        setDbSyncStatus("synced");
+      }
+    } catch (err) {
+      console.error("Google Sign-In cancelled or failed:", err);
+    }
+  };
+
+  const handleSaveCustomEssay = async (savedEssay: EssayItem) => {
     audio.playSuccessChord();
+    setDbSyncStatus("saving");
+
+    // 1. Update React state immediately
     setCustomEssays((prev) => {
       const exists = prev.some((e) => e.id === savedEssay.id);
       if (exists) {
@@ -193,17 +334,49 @@ export default function App() {
     });
     setTotalXP((prev) => prev + 30);
     setActiveEssayId(savedEssay.id);
+
+    // 2. Persist to Server Database (/api/db/blogs)
+    fetch("/api/db/blogs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ essay: savedEssay }),
+    }).catch(() => {});
+
+    // 3. Persist to Cloud Firestore (/blogs/{blogId}) if authenticated
+    if (currentUser) {
+      try {
+        const isExisting = cloudBlogIdsRef.current.has(savedEssay.id);
+        await saveBlogToFirestore(savedEssay, currentUser.uid, isExisting);
+        cloudBlogIdsRef.current.add(savedEssay.id);
+        setDbSyncStatus("synced");
+      } catch {
+        setDbSyncStatus("local");
+      }
+    } else {
+      setDbSyncStatus("synced");
+    }
   };
 
-  const handleDeleteCustomEssay = (essayId: string) => {
+  const handleDeleteCustomEssay = async (essayId: string) => {
     audio.playClick();
     setCustomEssays((prev) => prev.filter((e) => e.id !== essayId));
     if (activeEssayId === essayId) {
       setActiveEssayId(null);
     }
+
+    fetch(`/api/db/blogs/${encodeURIComponent(essayId)}`, {
+      method: "DELETE",
+    }).catch(() => {});
+
+    if (currentUser && cloudBlogIdsRef.current.has(essayId)) {
+      try {
+        await deleteBlogFromFirestore(essayId);
+        cloudBlogIdsRef.current.delete(essayId);
+      } catch {}
+    }
   };
 
-  const handleAddComment = (
+  const handleAddComment = async (
     newComment: Omit<EssayComment, "id" | "createdAt" | "upvotes" | "replies">
   ) => {
     const commentObj: EssayComment = {
@@ -215,13 +388,26 @@ export default function App() {
     };
     setComments((prev) => [commentObj, ...prev]);
     setTotalXP((prev) => prev + 15);
+
+    fetch("/api/db/comments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ comment: commentObj }),
+    }).catch(() => {});
+
+    if (currentUser) {
+      try {
+        await saveCommentToFirestore(commentObj, currentUser.uid);
+        cloudCommentIdsRef.current.add(commentObj.id);
+      } catch {}
+    }
   };
 
   const handleReplyComment = (commentId: string, author: string, role: string, body: string) => {
     setComments((prev) =>
       prev.map((c) => {
         if (c.id !== commentId) return c;
-        return {
+        const updated = {
           ...c,
           replies: [
             ...(c.replies || []),
@@ -234,17 +420,40 @@ export default function App() {
             },
           ],
         };
+        fetch("/api/db/comments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ comment: updated }),
+        }).catch(() => {});
+        return updated;
       })
     );
   };
 
-  const handleUpvoteComment = (commentId: string) => {
+  const handleUpvoteComment = async (commentId: string) => {
+    let nextVotes = 1;
     setComments((prev) =>
-      prev.map((c) => (c.id === commentId ? { ...c, upvotes: c.upvotes + 1 } : c))
+      prev.map((c) => {
+        if (c.id !== commentId) return c;
+        nextVotes = c.upvotes + 1;
+        const updated = { ...c, upvotes: nextVotes };
+        fetch("/api/db/comments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ comment: updated }),
+        }).catch(() => {});
+        return updated;
+      })
     );
+
+    if (currentUser && cloudCommentIdsRef.current.has(commentId)) {
+      try {
+        await upvoteCommentInFirestore(commentId, nextVotes);
+      } catch {}
+    }
   };
 
-  const handleSaveToVault = (item: {
+  const handleSaveToVault = async (item: {
     text: string;
     pillar: string;
     essayTitle: string;
@@ -259,11 +468,22 @@ export default function App() {
       createdAt: new Date().toISOString(),
     };
     setVaultItems((prev) => [newItem, ...prev]);
+
+    if (currentUser) {
+      try {
+        await saveVaultNoteToFirestore(newItem, currentUser.uid);
+      } catch {}
+    }
   };
 
-  const handleDeleteVaultItem = (id: string) => {
+  const handleDeleteVaultItem = async (id: string) => {
     audio.playClick();
     setVaultItems((prev) => prev.filter((item) => item.id !== id));
+    if (currentUser) {
+      try {
+        await deleteVaultNoteFromFirestore(id, currentUser.uid);
+      } catch {}
+    }
   };
 
   const handleCompleteMastery = (essayId: string, xp: number) => {
@@ -355,8 +575,9 @@ export default function App() {
                 <span className="font-display font-bold text-xl tracking-tight text-[#191919]">
                   Nureoplastic
                 </span>
-                <span className="text-[10px] font-code uppercase tracking-widest text-[#5A5955]">
-                  EDITION III
+                <span className="text-[10px] font-code font-bold px-1.5 py-0.5 rounded bg-[#ECF9E0] border border-[#439C00] text-[#439C00] flex items-center gap-1">
+                  <Database className="w-2.5 h-2.5" />
+                  <span>{dbSyncStatus === "saving" ? "SAVING..." : "DB ACTIVE"}</span>
                 </span>
               </div>
               <p className="hidden md:block text-[11px] font-ui text-[#5A5955] -mt-0.5">
@@ -379,6 +600,33 @@ export default function App() {
               <PenTool className="w-3.5 h-3.5" />
               <span>Write / Customize Blog</span>
             </button>
+
+            {/* Cloud Firestore Google Auth Sync Button */}
+            {currentUser ? (
+              <button
+                onClick={() => {
+                  audio.playClick();
+                  signOutScholar();
+                }}
+                className="duo-btn text-xs font-ui font-extrabold px-3 py-2 rounded-xl bg-[#ECF9E0] text-[#191919] flex items-center gap-1.5"
+                title={`Signed in as ${currentUser.displayName || currentUser.email} — Click to sign out`}
+              >
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#439C00]" />
+                <span className="hidden lg:inline">
+                  {currentUser.displayName?.split(" ")[0] || "Cloud Synced"}
+                </span>
+                <LogOut className="w-3 h-3 text-[#5A5955]" />
+              </button>
+            ) : (
+              <button
+                onClick={handleSignInAndSync}
+                className="duo-btn text-xs font-ui font-extrabold px-3 py-2 rounded-xl bg-white text-[#191919] flex items-center gap-1.5"
+                title="Sign in with Google to sync blogs across devices via Cloud Firestore"
+              >
+                <LogIn className="w-3.5 h-3.5 text-[#1CB0F6]" />
+                <span className="hidden lg:inline">Cloud Sync</span>
+              </button>
+            )}
 
             {/* Streak Button */}
             <button
@@ -485,7 +733,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Hero Section: Editorial Proposition & Interactive Topology Stage */}
+      {/* Hero Section: Editorial Proposition & Interactive Symposium Stage */}
       <section className="max-w-7xl mx-auto px-4 lg:px-8 pt-8 pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: High-Craft Editorial Typography */}
@@ -504,7 +752,7 @@ export default function App() {
               <strong className="text-[#191919] font-semibold">Psychology</strong>,{" "}
               <strong className="text-[#191919] font-semibold">Philosophy</strong>,{" "}
               <strong className="text-[#191919] font-semibold">AI Research</strong>, and{" "}
-              <strong className="text-[#191919] font-semibold">Psychoanalysis</strong> through live mathematical sandboxes and scholarly discourse.
+              <strong className="text-[#191919] font-semibold">Psychoanalysis</strong> through live mathematical sandboxes, database-persisted monographs, and scholarly discourse.
             </p>
 
             {/* Search Input */}
@@ -512,7 +760,7 @@ export default function App() {
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5A5955]" />
               <input
                 type="text"
-                placeholder="Search essays, thinkers, or concepts (e.g. 'Lacan', 'entropy', 'polycrisis')..."
+                placeholder="Search essays, thinkers, or concepts (e.g. 'Socrates', 'Lacan', 'entropy')..."
                 value={searchFilter}
                 onChange={(e) => setSearchFilter(e.target.value)}
                 className="w-full text-xs sm:text-sm font-ui pl-10 pr-4 py-3 rounded-2xl border-2 border-[#191919] bg-white shadow-[0_4px_0_0_#191919] focus:outline-none"
@@ -617,7 +865,7 @@ export default function App() {
           </div>
 
           <div className="text-xs font-code text-[#5A5955]">
-            {filteredEssays.length} MONOGRAPHS AVAILABLE
+            {filteredEssays.length} MONOGRAPHS IN DATABASE
           </div>
         </div>
       </section>
@@ -640,7 +888,7 @@ export default function App() {
                 }`}
               >
                 <div>
-                  {/* Clean Editorial Metadata Line (Zero Pill-Soup Discipline) */}
+                  {/* Clean Editorial Metadata Line */}
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-[#E2E0DC] text-[11px] font-code">
                     <div className="flex flex-wrap items-center gap-1.5 text-[#191919] font-bold uppercase tracking-wider">
                       <span
@@ -657,7 +905,7 @@ export default function App() {
                       {essay.isCustom && (
                         <>
                           <span className="text-[#5A5955]">·</span>
-                          <span className="text-[#9B42D6] font-bold">CUSTOM MONOGRAPH</span>
+                          <span className="text-[#439C00] font-bold">DB STORED</span>
                         </>
                       )}
                       {isMastered && (
@@ -678,7 +926,7 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Mascot & Visual Stage */}
+                  {/* Classical Thinker Medallion Stage */}
                   <div
                     className="my-3 flex items-center justify-between px-5 py-3 rounded-2xl border-2 border-[#191919]"
                     style={{ backgroundColor: meta.tintColor }}
@@ -694,7 +942,7 @@ export default function App() {
                     <NotionMascot
                       variant={meta.mascot}
                       mood="curious"
-                      size={isFeatured ? 76 : 66}
+                      size={isFeatured ? 92 : 82}
                       interactiveEyes={false}
                     />
                   </div>
@@ -729,7 +977,7 @@ export default function App() {
                         setIsCreatorOpen(true);
                       }}
                       className="text-xs font-ui font-bold text-[#5A5955] hover:text-[#191919] px-2 py-1 rounded-lg hover:bg-[#EFECE6]"
-                      title="Customize or Edit this Blog"
+                      title="Customize or Edit this Blog in Database"
                     >
                       Customize
                     </button>
@@ -750,13 +998,13 @@ export default function App() {
       <footer className="border-t-2 border-[#191919] bg-white py-10 px-4 lg:px-8 mt-12">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <NotionMascot variant="celebrating" mood="excited" size={48} interactiveEyes={false} />
+            <NotionMascot variant="celebrating" mood="excited" size={56} interactiveEyes={false} />
             <div>
               <div className="font-display font-bold text-base text-[#191919]">
                 Nureoplastic Interactive Monograph Studio
               </div>
               <p className="text-xs font-ui text-[#5A5955]">
-                World View · Psychology · Philosophy · AI Research · Psychoanalysis
+                Backed by Cloud Firestore &amp; Persistent Monograph Storage · 5 Intellectual Domains
               </p>
             </div>
           </div>
