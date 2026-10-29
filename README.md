@@ -32,10 +32,10 @@ Interactive peer annotation and commentary on every monograph:
 - Categorize contributions by dialectical stance: **Synthesis**, **Counter-Thesis**, **Axiom Extension**, or **Field Note**.
 - Anchor comments to a specific reading depth (`L1`, `L2`, or `L3`), endorse insights, and post threaded replies.
 
-### 5. Classical Thinker Medallions & Philosophical Orrery
-- **Classical Thinker Portrait Medallions (`<NotionMascot />`)** — Hand-crafted SVG portrait medallions inspired by Socrates, Plato, Aristotle, Freud, and Shannon.
+### 5. Illustrated Thinkers & Living Atlas
+- **Illustrated Thinker Portraits (`<NotionMascot />`)** — Seven original editorial portraits shared across the garden and reader.
 - **Classical Symposium & Dialectical Salon (`<SynapseGraph2D />`)** — Interactive 2D conceptual map connecting monographs across disciplines.
-- **3D Brass Armillary Orrery (`<ThreeSynapseScene />`)** — Interactive Three.js philosophical orrery visualizing cross-domain conceptual orbits.
+- **Living Atlas (`<LivingAtlas />`)** — An animated sketchbook connects five thinkers and their subjects. Select a portrait to change the reading invitation, then explore the subject. Includes pause/resume, reduced-motion support, and off-screen suspension.
 
 ### 6. Dual-Layer Database Persistence (Cloud Firestore + Server Store)
 All newly created monographs, customized blogs, and dialectical comments are automatically persisted across sessions:
@@ -47,7 +47,7 @@ All newly created monographs, customized blogs, and dialectical comments are aut
 ## Tech Stack
 
 - **Frontend**: React 19, TypeScript, Tailwind CSS v4, Lucide Icons
-- **3D Visualization**: Three.js (`<ThreeSynapseScene />`)
+- **Illustration & Motion**: Native SVG and CSS (`<LivingAtlas />`)
 - **Backend & API**: Node.js, Express (`server.ts`), `@google/genai` for server-side epistemic synthesis & Google Search grounding
 - **Database & Security**: Firebase Cloud Firestore (`firebase`), `@firebase/eslint-plugin-security-rules`
 

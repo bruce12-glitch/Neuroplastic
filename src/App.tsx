@@ -11,7 +11,7 @@ import { useTactileAudio } from "./hooks/useTactileAudio.ts";
 import { NotionMascot } from "./components/NotionMascot.tsx";
 import { NureoplasticLogo } from "./components/NureoplasticLogo.tsx";
 import { SynapseGraph2D } from "./components/SynapseGraph2D.tsx";
-import { ThreeSynapseScene } from "./components/ThreeSynapseScene.tsx";
+import { LivingAtlas } from "./components/LivingAtlas.tsx";
 import { CognitiveReader } from "./components/CognitiveReader.tsx";
 import { SynapseVaultDrawer, VaultItem } from "./components/SynapseVaultDrawer.tsx";
 import { BlogCreatorModal } from "./components/BlogCreatorModal.tsx";
@@ -38,7 +38,7 @@ import {
   Bookmark,
   ArrowRight,
   Layers,
-  Box,
+  Waypoints,
   PenTool,
   MessageSquareQuote,
   LogIn,
@@ -60,7 +60,7 @@ export default function App() {
   const [activeEssayId, setActiveEssayId] = useState<string | null>(null);
   const [selectedPillar, setSelectedPillar] = useState<string>("all");
   const [searchFilter, setSearchFilter] = useState<string>("");
-  const [heroViewMode, setHeroViewMode] = useState<"2d" | "3d">("2d");
+  const [heroViewMode, setHeroViewMode] = useState<"symposium" | "atlas">("atlas");
 
   // Custom & Updated Blogs State
   const [customEssays, setCustomEssays] = useState<EssayItem[]>(() => {
@@ -516,7 +516,7 @@ export default function App() {
     <div className="min-h-screen bg-[#F7F6F3] text-[#191919] font-ui antialiased flex flex-col">
       {/* Top Institutional & Tactile Command Bar */}
       <header className="sticky top-0 z-40 bg-[#F7F6F3]/95 backdrop-blur-xs border-b-2 border-[#191919] px-4 lg:px-8 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap xl:flex-nowrap items-center justify-between gap-3 xl:gap-4">
           {/* Brand Identity with Sculpted Woven-Mind Logo */}
           <div className="flex items-center gap-3.5">
             <NureoplasticLogo
@@ -541,7 +541,7 @@ export default function App() {
           </div>
 
           {/* Right Action Controls */}
-          <div className="flex items-center gap-2">
+          <div className="flex w-full xl:w-auto flex-wrap items-center justify-between xl:justify-start gap-2">
             {/* Primary Write Blog Button */}
             <button
               onClick={() => {
@@ -552,7 +552,8 @@ export default function App() {
               className="duo-btn duo-btn-phil text-xs font-ui font-extrabold px-3.5 py-2 rounded-xl flex items-center gap-1.5"
             >
               <PenTool className="w-3.5 h-3.5" />
-              <span>Write Blog</span>
+              <span className="hidden sm:inline">Write Blog</span>
+              <span className="sm:hidden">Write</span>
             </button>
 
             {/* Cloud Firestore Google Auth Sync Button */}
@@ -654,14 +655,15 @@ export default function App() {
 
             {/* Stage Mode & Authoring CTA */}
             <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" role="group" aria-label="Choose an illustration">
                 <button
                   onClick={() => {
                     audio.playToggle();
-                    setHeroViewMode("2d");
+                    setHeroViewMode("symposium");
                   }}
-                  className={`duo-btn text-xs font-ui font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 ${
-                    heroViewMode === "2d" ? "bg-[#191919] text-white" : "bg-white text-[#191919]"
+                  aria-pressed={heroViewMode === "symposium"}
+                  className={`duo-btn min-h-11 text-xs font-ui font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 ${
+                    heroViewMode === "symposium" ? "bg-[#191919] text-white" : "bg-white text-[#191919]"
                   }`}
                 >
                   <Layers className="w-3.5 h-3.5" />
@@ -671,16 +673,17 @@ export default function App() {
                 <button
                   onClick={() => {
                     audio.playToggle();
-                    setHeroViewMode("3d");
+                    setHeroViewMode("atlas");
                   }}
-                  className={`duo-btn text-xs font-ui font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 ${
-                    heroViewMode === "3d"
-                      ? "bg-[#1CB0F6] text-white duo-btn-ai"
+                  aria-pressed={heroViewMode === "atlas"}
+                  className={`duo-btn min-h-11 text-xs font-ui font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 ${
+                    heroViewMode === "atlas"
+                      ? "bg-[#5645d4] text-white"
                       : "bg-white text-[#191919]"
                   }`}
                 >
-                  <Box className="w-3.5 h-3.5" />
-                  <span>3D Brass Orrery</span>
+                  <Waypoints className="w-3.5 h-3.5" />
+                  <span>Living Atlas</span>
                 </button>
               </div>
 
@@ -698,23 +701,22 @@ export default function App() {
             </div>
           </div>
 
-          {/* Right Column: Interactive Classical Symposium or 3D Brass Orrery */}
+          {/* Illustrated subject atlas and the classical thinker gallery. */}
           <div className="lg:col-span-7 min-w-0 min-h-[460px]">
-            {heroViewMode === "2d" ? (
+            {heroViewMode === "symposium" ? (
               <SynapseGraph2D
                 essays={allEssays}
                 onSelectEssay={handleSelectEssay}
                 masteredEssays={masteredEssays}
               />
             ) : (
-              <ThreeSynapseScene
-                onSelectNode={(name) => {
-                  audio.playClick();
-                  if (name.includes("Philosophy")) handleSelectEssay("directionless-philosopher");
-                  else if (name.includes("AI")) handleSelectEssay("entropy-pruning");
-                  else if (name.includes("Psychology")) handleSelectEssay("attractor-escape");
-                  else if (name.includes("Psychoanalysis")) handleSelectEssay("algorithmic-unconscious");
-                  else if (name.includes("World View")) handleSelectEssay("polycrisis-cartography");
+              <LivingAtlas
+                onSelectPillar={(pillar) => {
+                  const essay = allEssays.find((item) => item.pillar === pillar);
+                  if (essay) {
+                    audio.playClick();
+                    handleSelectEssay(essay.id);
+                  }
                 }}
                 activePillarFilter={selectedPillar}
               />
