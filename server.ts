@@ -1,6 +1,7 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
+import fs from "fs";
 import dotenv from "dotenv";
 import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 
@@ -10,6 +11,83 @@ const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json({ limit: "10mb" }));
+
+// Persistent Server-Side JSON Database Store (Complements Cloud Firestore)
+const DB_FILE_PATH = path.resolve(process.cwd(), "db_store.json");
+
+interface ServerDbStore {
+  blogs: any[];
+  comments: any[];
+}
+
+function readDbStore(): ServerDbStore {
+  try {
+    if (fs.existsSync(DB_FILE_PATH)) {
+      const raw = fs.readFileSync(DB_FILE_PATH, "utf8");
+      const parsed = JSON.parse(raw);
+      return {
+        blogs: Array.isArray(parsed.blogs) ? parsed.blogs : [],
+        comments: Array.isArray(parsed.comments) ? parsed.comments : [],
+      };
+    }
+  } catch (err) {
+    console.error("Failed to read db_store.json:", err);
+  }
+  return { blogs: [], comments: [] };
+}
+
+function writeDbStore(store: ServerDbStore): void {
+  try {
+    fs.writeFileSync(DB_FILE_PATH, JSON.stringify(store, null, 2), "utf8");
+  } catch (err) {
+    console.error("Failed to write db_store.json:", err);
+  }
+}
+
+app.get("/api/db/blogs", (_req, res) => {
+  const store = readDbStore();
+  res.json({ blogs: store.blogs, comments: store.comments });
+});
+
+app.post("/api/db/blogs", (req, res) => {
+  const { essay } = req.body;
+  if (!essay || !essay.id || !essay.title) {
+    return res.status(400).json({ error: "Valid essay object is required" });
+  }
+  const store = readDbStore();
+  const exists = store.blogs.some((b) => b.id === essay.id);
+  if (exists) {
+    store.blogs = store.blogs.map((b) => (b.id === essay.id ? essay : b));
+  } else {
+    store.blogs = [essay, ...store.blogs];
+  }
+  writeDbStore(store);
+  return res.json({ ok: true, blogs: store.blogs });
+});
+
+app.delete("/api/db/blogs/:id", (req, res) => {
+  const { id } = req.params;
+  const store = readDbStore();
+  store.blogs = store.blogs.filter((b) => b.id !== id);
+  writeDbStore(store);
+  return res.json({ ok: true, blogs: store.blogs });
+});
+
+app.post("/api/db/comments", (req, res) => {
+  const { comment } = req.body;
+  if (!comment || !comment.id) {
+    return res.status(400).json({ error: "Valid comment object is required" });
+  }
+  const store = readDbStore();
+  const exists = store.comments.some((c) => c.id === comment.id);
+  if (exists) {
+    store.comments = store.comments.map((c) => (c.id === comment.id ? comment : c));
+  } else {
+    store.comments = [comment, ...store.comments];
+  }
+  writeDbStore(store);
+  return res.json({ ok: true, comments: store.comments });
+});
 
 // Initialize GoogleGenAI client (Server-Side ONLY)
 const ai = new GoogleGenAI({
@@ -47,7 +125,6 @@ app.post("/api/ai/search-grounded", async (req, res) => {
     });
 
     const text = response.text || "No synthesis generated.";
-    // Extract search grounding metadata if available
     const groundingMetadata = response.candidates?.[0]?.groundingMetadata;
 
     return res.json({
@@ -76,7 +153,9 @@ app.post("/api/ai/synthesize", async (req, res) => {
       });
     }
 
-    const userPrompt = prompt || `Synthesize a profound dialectical bridge connecting:
+    const userPrompt =
+      prompt ||
+      `Synthesize a profound dialectical bridge connecting:
 1. "${conceptA || "Epistemic Solipsism in Philosophy"}"
 2. "${conceptB || "Entropy Context Pruning in AI Transformers"}"
 
