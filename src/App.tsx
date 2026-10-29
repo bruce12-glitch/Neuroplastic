@@ -327,7 +327,7 @@ export default function App() {
     <div className="min-h-screen bg-[#F7F6F3] text-[#191919] font-ui antialiased flex flex-col">
       {/* Top Institutional & Tactile Command Bar */}
       <header className="sticky top-0 z-40 bg-[#F7F6F3]/95 backdrop-blur-xs border-b-2 border-[#191919] px-4 lg:px-8 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 sm:gap-4">
           {/* Brand Identity */}
           <div className="flex items-center gap-3">
             <div
@@ -366,7 +366,7 @@ export default function App() {
           </div>
 
           {/* Right Action Controls */}
-          <div className="flex items-center gap-2">
+          <div className="flex w-full sm:w-auto items-center justify-between sm:justify-start gap-2">
             {/* Primary Write / Customize Blog Button */}
             <button
               onClick={() => {
@@ -377,7 +377,8 @@ export default function App() {
               className="duo-btn duo-btn-phil text-xs font-ui font-extrabold px-3.5 py-2 rounded-xl flex items-center gap-1.5"
             >
               <PenTool className="w-3.5 h-3.5" />
-              <span>Write / Customize Blog</span>
+              <span className="hidden sm:inline">Write / Customize Blog</span>
+              <span className="sm:hidden">Write</span>
             </button>
 
             {/* Streak Button */}
@@ -566,7 +567,7 @@ export default function App() {
           </div>
 
           {/* Right Column: Interactive Classical Symposium or 3D Brass Orrery */}
-          <div className="lg:col-span-7 h-[430px] sm:h-[460px]">
+          <div className={`lg:col-span-7 min-w-0 ${heroViewMode === "3d" ? "h-[430px] sm:h-[460px]" : ""}`}>
             {heroViewMode === "2d" ? (
               <SynapseGraph2D
                 essays={allEssays}
