@@ -1,0 +1,828 @@
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  ESSAYS,
+  INITIAL_COMMENTS,
+  PILLAR_METADATA,
+  EssayItem,
+  EssayComment,
+  PillarId,
+} from "./data/essays.ts";
+import { useTactileAudio } from "./hooks/useTactileAudio.ts";
+import { NotionMascot } from "./components/NotionMascot.tsx";
+import { SynapseGraph2D } from "./components/SynapseGraph2D.tsx";
+import { ThreeSynapseScene } from "./components/ThreeSynapseScene.tsx";
+import { CognitiveReader } from "./components/CognitiveReader.tsx";
+import { SynapseVaultDrawer, VaultItem } from "./components/SynapseVaultDrawer.tsx";
+import { AISynthesisModal } from "./components/AISynthesisModal.tsx";
+import { BlogCreatorModal } from "./components/BlogCreatorModal.tsx";
+import { calculateCognitiveRank } from "./utils/rules.ts";
+import {
+  Flame,
+  Search,
+  Sparkles,
+  Volume2,
+  VolumeX,
+  Bookmark,
+  ArrowRight,
+  Layers,
+  Box,
+  PenTool,
+  MessageSquareQuote,
+} from "lucide-react";
+
+export default function App() {
+  const audio = useTactileAudio();
+
+  // Navigation & View state
+  const [activeEssayId, setActiveEssayId] = useState<string | null>(null);
+  const [selectedPillar, setSelectedPillar] = useState<string>("all");
+  const [searchFilter, setSearchFilter] = useState<string>("");
+  const [heroViewMode, setHeroViewMode] = useState<"2d" | "3d">("2d");
+
+  // Custom & Customized Essays State (persisted in localStorage)
+  const [customEssays, setCustomEssays] = useState<EssayItem[]>(() => {
+    try {
+      const stored = localStorage.getItem("nureo_custom_essays");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Blog Creator / Customizer Modal State
+  const [isCreatorOpen, setIsCreatorOpen] = useState<boolean>(false);
+  const [editingEssay, setEditingEssay] = useState<EssayItem | null>(null);
+
+  // Interactive Comments State (persisted in localStorage)
+  const [comments, setComments] = useState<EssayComment[]>(() => {
+    try {
+      const stored = localStorage.getItem("nureo_comments");
+      return stored ? JSON.parse(stored) : INITIAL_COMMENTS;
+    } catch {
+      return INITIAL_COMMENTS;
+    }
+  });
+
+  // Streak & XP Progress State
+  const [totalXP, setTotalXP] = useState<number>(() => {
+    try {
+      return parseInt(localStorage.getItem("nureo_xp") || "120", 10);
+    } catch {
+      return 120;
+    }
+  });
+
+  const [streakDays, setStreakDays] = useState<number>(() => {
+    try {
+      return parseInt(localStorage.getItem("nureo_streak") || "5", 10);
+    } catch {
+      return 5;
+    }
+  });
+
+  const [showStreakModal, setShowStreakModal] = useState<boolean>(false);
+
+  // Mastered Essays
+  const [masteredEssays, setMasteredEssays] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem("nureo_mastered");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Synapse Vault items
+  const [vaultItems, setVaultItems] = useState<VaultItem[]>(() => {
+    try {
+      const stored = localStorage.getItem("nureo_vault");
+      return stored
+        ? JSON.parse(stored)
+        : [
+            {
+              id: "init-1",
+              text: "Attention mechanisms do not discriminate between semantic conviction and mere syntactical fluency.",
+              pillar: "ai",
+              essayTitle: "Entropy-Guided Context Pruning",
+              userNote: "Thermodynamic pruning removes the noise while preserving the proposition.",
+              createdAt: "2026-10-28T12:00:00Z",
+            },
+            {
+              id: "init-2",
+              text: "We do not confess our symptoms to the algorithm to be cured of them; we prompt the machine so our symptoms can be rendered in higher resolution.",
+              pillar: "psychoanalysis",
+              essayTitle: "The Algorithmic Unconscious & Digital Transference",
+              userNote: "Lacanian mirror stage applied to transformer sycophancy.",
+              createdAt: "2026-10-28T14:30:00Z",
+            },
+          ];
+    } catch {
+      return [];
+    }
+  });
+
+  const [isVaultOpen, setIsVaultOpen] = useState<boolean>(false);
+  const [isAIModalOpen, setIsAIModalOpen] = useState<boolean>(false);
+
+  // Merge built-in ESSAYS with any user-created or user-customized essays
+  const allEssays = useMemo(() => {
+    const customMap = new Map(customEssays.map((e) => [e.id, e]));
+    const mergedBuiltIns = ESSAYS.map((builtIn) => customMap.get(builtIn.id) || builtIn);
+    const purelyNewCustom = customEssays.filter(
+      (ce) => !ESSAYS.some((b) => b.id === ce.id)
+    );
+    return [...purelyNewCustom, ...mergedBuiltIns];
+  }, [customEssays]);
+
+  // Keyboard shortcut for ⌘K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsAIModalOpen((open) => !open);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Sync state to local storage
+  useEffect(() => {
+    try {
+      localStorage.setItem("nureo_xp", totalXP.toString());
+      localStorage.setItem("nureo_streak", streakDays.toString());
+      localStorage.setItem("nureo_mastered", JSON.stringify(masteredEssays));
+      localStorage.setItem("nureo_vault", JSON.stringify(vaultItems));
+      localStorage.setItem("nureo_custom_essays", JSON.stringify(customEssays));
+      localStorage.setItem("nureo_comments", JSON.stringify(comments));
+    } catch {}
+  }, [totalXP, streakDays, masteredEssays, vaultItems, customEssays, comments]);
+
+  const rankInfo = useMemo(() => calculateCognitiveRank(totalXP), [totalXP]);
+
+  // Filtered essays
+  const filteredEssays = useMemo(() => {
+    return allEssays.filter((item) => {
+      const matchesPillar = selectedPillar === "all" || item.pillar === selectedPillar;
+      const matchesSearch =
+        item.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        item.subtitle.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        item.tags.some((t) => t.toLowerCase().includes(searchFilter.toLowerCase()));
+      return matchesPillar && matchesSearch;
+    });
+  }, [allEssays, selectedPillar, searchFilter]);
+
+  const activeEssay = useMemo(() => {
+    return allEssays.find((e) => e.id === activeEssayId) || null;
+  }, [allEssays, activeEssayId]);
+
+  const handleSelectEssay = (id: string) => {
+    audio.playClick();
+    setActiveEssayId(id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSaveCustomEssay = (savedEssay: EssayItem) => {
+    audio.playSuccessChord();
+    setCustomEssays((prev) => {
+      const exists = prev.some((e) => e.id === savedEssay.id);
+      if (exists) {
+        return prev.map((e) => (e.id === savedEssay.id ? savedEssay : e));
+      }
+      return [savedEssay, ...prev];
+    });
+    setTotalXP((prev) => prev + 30);
+    setActiveEssayId(savedEssay.id);
+  };
+
+  const handleDeleteCustomEssay = (essayId: string) => {
+    audio.playClick();
+    setCustomEssays((prev) => prev.filter((e) => e.id !== essayId));
+    if (activeEssayId === essayId) {
+      setActiveEssayId(null);
+    }
+  };
+
+  const handleAddComment = (
+    newComment: Omit<EssayComment, "id" | "createdAt" | "upvotes" | "replies">
+  ) => {
+    const commentObj: EssayComment = {
+      ...newComment,
+      id: `cmt-${Date.now()}`,
+      createdAt: "Just now",
+      upvotes: 1,
+      replies: [],
+    };
+    setComments((prev) => [commentObj, ...prev]);
+    setTotalXP((prev) => prev + 15);
+  };
+
+  const handleReplyComment = (commentId: string, author: string, role: string, body: string) => {
+    setComments((prev) =>
+      prev.map((c) => {
+        if (c.id !== commentId) return c;
+        return {
+          ...c,
+          replies: [
+            ...(c.replies || []),
+            {
+              id: `rep-${Date.now()}`,
+              author,
+              role,
+              body,
+              createdAt: "Just now",
+            },
+          ],
+        };
+      })
+    );
+  };
+
+  const handleUpvoteComment = (commentId: string) => {
+    setComments((prev) =>
+      prev.map((c) => (c.id === commentId ? { ...c, upvotes: c.upvotes + 1 } : c))
+    );
+  };
+
+  const handleSaveToVault = (item: {
+    text: string;
+    pillar: string;
+    essayTitle: string;
+    userNote?: string;
+  }) => {
+    const newItem: VaultItem = {
+      id: `vault-${Date.now()}`,
+      text: item.text,
+      pillar: item.pillar,
+      essayTitle: item.essayTitle,
+      userNote: item.userNote,
+      createdAt: new Date().toISOString(),
+    };
+    setVaultItems((prev) => [newItem, ...prev]);
+  };
+
+  const handleDeleteVaultItem = (id: string) => {
+    audio.playClick();
+    setVaultItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleCompleteMastery = (essayId: string, xp: number) => {
+    if (!masteredEssays.includes(essayId)) {
+      setMasteredEssays((prev) => [...prev, essayId]);
+      setTotalXP((prev) => prev + xp);
+      setStreakDays((s) => s + 1);
+    }
+  };
+
+  // If viewing an essay in the Cognitive Reader:
+  if (activeEssay) {
+    return (
+      <>
+        <CognitiveReader
+          essay={activeEssay}
+          onBack={() => {
+            audio.playClick();
+            setActiveEssayId(null);
+          }}
+          onEditEssay={(essayToEdit) => {
+            setEditingEssay(essayToEdit);
+            setIsCreatorOpen(true);
+          }}
+          onSaveToVault={handleSaveToVault}
+          onCompleteMastery={handleCompleteMastery}
+          isMastered={masteredEssays.includes(activeEssay.id)}
+          savedAnnotationIds={vaultItems.map((v) => v.id)}
+          comments={comments}
+          onAddComment={handleAddComment}
+          onReplyComment={handleReplyComment}
+          onUpvoteComment={handleUpvoteComment}
+          audio={audio}
+        />
+
+        <BlogCreatorModal
+          isOpen={isCreatorOpen}
+          onClose={() => {
+            setIsCreatorOpen(false);
+            setEditingEssay(null);
+          }}
+          onSaveEssay={handleSaveCustomEssay}
+          onDeleteEssay={handleDeleteCustomEssay}
+          initialEssay={editingEssay}
+          onPlayClick={() => audio.playClick()}
+        />
+      </>
+    );
+  }
+
+  const pillarList: { id: "all" | PillarId; label: string; symbol?: string; btnClass?: string }[] = [
+    { id: "all", label: `All Synapses (${allEssays.length})` },
+    { id: "worldview", label: "World View", symbol: "Ω", btnClass: "duo-btn-world" },
+    { id: "psychology", label: "Psychology", symbol: "Ψ", btnClass: "duo-btn-bio" },
+    { id: "philosophy", label: "Philosophy", symbol: "Φ", btnClass: "duo-btn-phil" },
+    { id: "ai", label: "AI Research", symbol: "λ", btnClass: "duo-btn-ai" },
+    { id: "psychoanalysis", label: "Psychoanalysis", symbol: "Δ", btnClass: "duo-btn-psycho" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#F7F6F3] text-[#191919] font-ui antialiased flex flex-col">
+      {/* Top Institutional & Tactile Command Bar */}
+      <header className="sticky top-0 z-40 bg-[#F7F6F3]/95 backdrop-blur-xs border-b-2 border-[#191919] px-4 lg:px-8 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          {/* Brand Identity */}
+          <div className="flex items-center gap-3">
+            <div
+              onClick={() => audio.playClick()}
+              className="w-10 h-10 rounded-xl bg-white border-2 border-[#191919] shadow-[0_3px_0_0_#191919] flex items-center justify-center cursor-pointer group hover:translate-y-[-1px] transition-transform"
+              title="Nureoplastic — Cognitive Knowledge Garden"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 2C8 2 6 5 6 8C6 9.5 7 11 8 12C7 13 6 14.5 6 16C6 19 8 22 12 22C16 22 18 19 18 16C18 14.5 17 13 16 12C17 11 18 9.5 18 8C18 5 16 2 12 2Z"
+                  stroke="#191919"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  fill="#FFC800"
+                />
+                <circle cx="9" cy="9" r="1.5" fill="#191919" />
+                <circle cx="15" cy="9" r="1.5" fill="#191919" />
+                <path d="M12 12V16" stroke="#191919" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="12" cy="19" r="1.5" fill="#1CB0F6" />
+              </svg>
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-display font-bold text-xl tracking-tight text-[#191919]">
+                  Nureoplastic
+                </span>
+                <span className="text-[10px] font-code uppercase tracking-widest text-[#5A5955]">
+                  EDITION III
+                </span>
+              </div>
+              <p className="hidden md:block text-[11px] font-ui text-[#5A5955] -mt-0.5">
+                World View · Psychology · Philosophy · AI Research · Psychoanalysis
+              </p>
+            </div>
+          </div>
+
+          {/* Right Action Controls */}
+          <div className="flex items-center gap-2">
+            {/* Primary Write / Customize Blog Button */}
+            <button
+              onClick={() => {
+                audio.playClick();
+                setEditingEssay(null);
+                setIsCreatorOpen(true);
+              }}
+              className="duo-btn duo-btn-phil text-xs font-ui font-extrabold px-3.5 py-2 rounded-xl flex items-center gap-1.5"
+            >
+              <PenTool className="w-3.5 h-3.5" />
+              <span>Write / Customize Blog</span>
+            </button>
+
+            {/* Streak Button */}
+            <button
+              onClick={() => {
+                audio.playClick();
+                setShowStreakModal(!showStreakModal);
+              }}
+              className="duo-btn duo-btn-streak text-xs font-ui font-extrabold px-3 py-2 rounded-xl flex items-center gap-1"
+              title="Cognitive Exploration Streak"
+            >
+              <Flame className="w-3.5 h-3.5 fill-[#191919]" />
+              <span className="font-code">{streakDays}d</span>
+            </button>
+
+            {/* Synapse Vault Trigger */}
+            <button
+              onClick={() => {
+                audio.playClick();
+                setIsVaultOpen(true);
+              }}
+              className="duo-btn text-xs font-ui font-extrabold px-3 py-2 rounded-xl bg-white text-[#191919] flex items-center gap-1.5"
+              title="Open Synapse Vault"
+            >
+              <Bookmark className="w-3.5 h-3.5 text-[#191919]" />
+              <span className="hidden sm:inline">Vault</span>
+              <span className="font-code text-[11px] text-[#5A5955]">({vaultItems.length})</span>
+            </button>
+
+            {/* AI Synthesizer Trigger */}
+            <button
+              onClick={() => {
+                audio.playClick();
+                setIsAIModalOpen(true);
+              }}
+              className="duo-btn text-xs font-ui font-extrabold px-3 py-2 rounded-xl bg-[#FFF9E0] text-[#191919] flex items-center gap-1.5"
+              title="Open Epistemic AI Synthesizer (⌘K)"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#D6A600]" />
+              <span className="hidden md:inline">Synthesize</span>
+            </button>
+
+            {/* Audio Mute Switch */}
+            <button
+              onClick={audio.toggleMute}
+              className="duo-btn p-2 rounded-xl bg-white text-[#191919]"
+              title={audio.isMuted ? "Unmute procedural Web Audio sounds" : "Mute sounds"}
+            >
+              {audio.isMuted ? (
+                <VolumeX className="w-4 h-4 text-[#FF4B4B]" />
+              ) : (
+                <Volume2 className="w-4 h-4 text-[#58CC02]" />
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Streak Modal */}
+      {showStreakModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#191919]/40 backdrop-blur-xs">
+          <div className="bg-white border-2 border-[#191919] rounded-3xl p-6 max-w-sm w-full shadow-[0_10px_0_0_#191919] animate-in fade-in zoom-in-95">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#FFC800] border-2 border-[#191919] flex items-center justify-center shadow-[0_3px_0_0_#D6A600]">
+                <Flame className="w-6 h-6 text-[#191919]" />
+              </div>
+              <div>
+                <h4 className="font-display font-bold text-lg text-[#191919]">
+                  {streakDays}-Day Synapse Streak
+                </h4>
+                <p className="text-xs font-code text-[#5A5955]">
+                  {totalXP} XP · {rankInfo.rankName}
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs font-ui text-[#191919] mb-4 leading-relaxed">
+              Publish custom monographs, verify mathematical proofs, and contribute dialectical commentary to advance your epistemic rank.
+            </p>
+
+            <div className="grid grid-cols-7 gap-1.5 text-center my-4">
+              {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
+                <div key={i} className="flex flex-col items-center gap-1">
+                  <span className="text-[10px] font-code font-bold text-[#5A5955]">{day}</span>
+                  <div
+                    className={`w-8 h-8 rounded-xl border-2 border-[#191919] flex items-center justify-center text-xs font-black ${
+                      i < streakDays
+                        ? "bg-[#FFC800] text-[#191919] shadow-[0_2px_0_0_#D6A600]"
+                        : "bg-[#EFECE6] text-[#A4A097]"
+                    }`}
+                  >
+                    {i < streakDays ? "✓" : ""}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setShowStreakModal(false)}
+              className="w-full duo-btn duo-btn-streak text-xs font-ui font-extrabold py-2.5 rounded-xl mt-2"
+            >
+              Continue Inquiry
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hero Section: Editorial Proposition & Interactive Topology Stage */}
+      <section className="max-w-7xl mx-auto px-4 lg:px-8 pt-8 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Left Column: High-Craft Editorial Typography */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="text-xs font-code font-bold uppercase tracking-widest text-[#5A5955]">
+              INTERACTIVE DIGITAL GARDEN · FIVE INTELLECTUAL DOMAINS
+            </div>
+
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-[54px] font-bold text-[#191919] leading-[1.06] tracking-tight">
+              Where World View, Psyche &amp; Neural Architecture Converge.
+            </h1>
+
+            <p className="text-base font-editorial text-[#5A5955] leading-relaxed">
+              An interactive monograph studio and cognitive reader exploring{" "}
+              <strong className="text-[#191919] font-semibold">World View</strong>,{" "}
+              <strong className="text-[#191919] font-semibold">Psychology</strong>,{" "}
+              <strong className="text-[#191919] font-semibold">Philosophy</strong>,{" "}
+              <strong className="text-[#191919] font-semibold">AI Research</strong>, and{" "}
+              <strong className="text-[#191919] font-semibold">Psychoanalysis</strong> through live mathematical sandboxes and scholarly discourse.
+            </p>
+
+            {/* Search Input */}
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5A5955]" />
+              <input
+                type="text"
+                placeholder="Search essays, thinkers, or concepts (e.g. 'Lacan', 'entropy', 'polycrisis')..."
+                value={searchFilter}
+                onChange={(e) => setSearchFilter(e.target.value)}
+                className="w-full text-xs sm:text-sm font-ui pl-10 pr-4 py-3 rounded-2xl border-2 border-[#191919] bg-white shadow-[0_4px_0_0_#191919] focus:outline-none"
+              />
+            </div>
+
+            {/* Stage Mode & Authoring CTA */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    audio.playToggle();
+                    setHeroViewMode("2d");
+                  }}
+                  className={`duo-btn text-xs font-ui font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 ${
+                    heroViewMode === "2d" ? "bg-[#191919] text-white" : "bg-white text-[#191919]"
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Classical Symposium</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    audio.playToggle();
+                    setHeroViewMode("3d");
+                  }}
+                  className={`duo-btn text-xs font-ui font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 ${
+                    heroViewMode === "3d"
+                      ? "bg-[#1CB0F6] text-white duo-btn-ai"
+                      : "bg-white text-[#191919]"
+                  }`}
+                >
+                  <Box className="w-3.5 h-3.5" />
+                  <span>3D Brass Orrery</span>
+                </button>
+              </div>
+
+              <button
+                onClick={() => {
+                  audio.playClick();
+                  setEditingEssay(null);
+                  setIsCreatorOpen(true);
+                }}
+                className="duo-btn duo-btn-streak text-xs font-ui font-extrabold px-3.5 py-1.5 rounded-xl flex items-center gap-1.5"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span>+ Publish Own Blog</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Interactive Classical Symposium or 3D Brass Orrery */}
+          <div className="lg:col-span-7 h-[430px] sm:h-[460px]">
+            {heroViewMode === "2d" ? (
+              <SynapseGraph2D
+                essays={allEssays}
+                onSelectEssay={handleSelectEssay}
+                masteredEssays={masteredEssays}
+              />
+            ) : (
+              <ThreeSynapseScene
+                onSelectNode={(name) => {
+                  audio.playClick();
+                  if (name.includes("Philosophy")) handleSelectEssay("directionless-philosopher");
+                  else if (name.includes("AI")) handleSelectEssay("entropy-pruning");
+                  else if (name.includes("Psychology")) handleSelectEssay("attractor-escape");
+                  else if (name.includes("Psychoanalysis")) handleSelectEssay("algorithmic-unconscious");
+                  else if (name.includes("World View")) handleSelectEssay("polycrisis-cartography");
+                }}
+                activePillarFilter={selectedPillar}
+              />
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 5-Field Domain Filter Bar */}
+      <section className="max-w-7xl mx-auto px-4 lg:px-8 pb-4 w-full">
+        <div className="p-3 bg-white border-2 border-[#191919] shadow-[0_4px_0_0_#191919] rounded-2xl flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            {pillarList.map((item) => {
+              const isSelected = selectedPillar === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    audio.playToggle();
+                    setSelectedPillar(item.id);
+                  }}
+                  className={`duo-btn text-xs font-ui font-extrabold px-3.5 py-2 rounded-xl flex items-center gap-1.5 transition-all ${
+                    isSelected
+                      ? item.btnClass || "bg-[#191919] text-white"
+                      : "bg-[#F7F6F3] text-[#191919] hover:bg-[#EFECE6]"
+                  }`}
+                >
+                  {item.symbol && <span className="font-code font-bold">{item.symbol}</span>}
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="text-xs font-code text-[#5A5955]">
+            {filteredEssays.length} MONOGRAPHS AVAILABLE
+          </div>
+        </div>
+      </section>
+
+      {/* Editorial Bento Essay Grid */}
+      <section className="max-w-7xl mx-auto px-4 lg:px-8 py-8 flex-1 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredEssays.map((essay, index) => {
+            const isFeatured = index === 0 && selectedPillar === "all" && !searchFilter;
+            const isMastered = masteredEssays.includes(essay.id);
+            const meta = PILLAR_METADATA[essay.pillar] || PILLAR_METADATA.philosophy;
+            const essayCommentCount = comments.filter((c) => c.essayId === essay.id).length;
+
+            return (
+              <article
+                key={essay.id}
+                onClick={() => handleSelectEssay(essay.id)}
+                className={`group bg-white border-2 border-[#191919] shadow-[0_6px_0_0_#191919] hover:translate-y-[-2px] hover:shadow-[0_8px_0_0_#191919] rounded-3xl p-6 transition-all duration-150 cursor-pointer flex flex-col justify-between ${
+                  isFeatured ? "md:col-span-2 lg:col-span-2" : "col-span-1"
+                }`}
+              >
+                <div>
+                  {/* Clean Editorial Metadata Line (Zero Pill-Soup Discipline) */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-[#E2E0DC] text-[11px] font-code">
+                    <div className="flex flex-wrap items-center gap-1.5 text-[#191919] font-bold uppercase tracking-wider">
+                      <span
+                        className="w-2.5 h-2.5 rounded-xs border border-[#191919] inline-block"
+                        style={{ backgroundColor: meta.surfaceColor }}
+                      />
+                      <span>
+                        {meta.symbol} {essay.pillarLabel}
+                      </span>
+                      <span className="text-[#5A5955]">·</span>
+                      <span className="text-[#5A5955] font-normal">
+                        {essay.readingTimeMinutes} MIN
+                      </span>
+                      {essay.isCustom && (
+                        <>
+                          <span className="text-[#5A5955]">·</span>
+                          <span className="text-[#9B42D6] font-bold">CUSTOM MONOGRAPH</span>
+                        </>
+                      )}
+                      {isMastered && (
+                        <>
+                          <span className="text-[#5A5955]">·</span>
+                          <span className="text-[#439C00] font-bold">✓ MASTERED</span>
+                        </>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[#5A5955]">
+                      <span className="flex items-center gap-1" title="Dialectical Discourse Count">
+                        <MessageSquareQuote className="w-3.5 h-3.5" />
+                        <span>{essayCommentCount}</span>
+                      </span>
+                      <span>·</span>
+                      <span className="font-bold text-[#191919]">+{essay.xpReward} XP</span>
+                    </div>
+                  </div>
+
+                  {/* Mascot & Visual Stage */}
+                  <div
+                    className="my-3 flex items-center justify-between px-5 py-3 rounded-2xl border-2 border-[#191919]"
+                    style={{ backgroundColor: meta.tintColor }}
+                  >
+                    <div className="space-y-1 pr-3">
+                      <span className="text-[10px] font-code font-bold uppercase tracking-widest text-[#5A5955] block">
+                        {meta.description}
+                      </span>
+                      <div className="text-xs font-ui font-bold text-[#191919]">
+                        By {essay.author || "Nureoplastic Editorial"} · {essay.publishedDate}
+                      </div>
+                    </div>
+                    <NotionMascot
+                      variant={meta.mascot}
+                      mood="curious"
+                      size={isFeatured ? 76 : 66}
+                      interactiveEyes={false}
+                    />
+                  </div>
+
+                  {/* Title & Thesis */}
+                  <h3
+                    className={`font-display ${
+                      isFeatured ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl"
+                    } font-bold text-[#191919] group-hover:underline decoration-2 underline-offset-4 leading-snug mt-4 mb-2.5`}
+                  >
+                    {essay.title}
+                  </h3>
+
+                  <p className="font-editorial text-sm sm:text-base text-[#5A5955] leading-relaxed line-clamp-3 mb-5">
+                    {essay.subtitle}
+                  </p>
+                </div>
+
+                {/* Card Footer */}
+                <div className="pt-4 border-t border-[#E2E0DC] flex items-center justify-between gap-2">
+                  <div className="text-[11px] font-code text-[#5A5955] truncate">
+                    {essay.tags.map((t) => `#${t}`).join(" · ")}
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        audio.playClick();
+                        setEditingEssay(essay);
+                        setIsCreatorOpen(true);
+                      }}
+                      className="text-xs font-ui font-bold text-[#5A5955] hover:text-[#191919] px-2 py-1 rounded-lg hover:bg-[#EFECE6]"
+                      title="Customize or Edit this Blog"
+                    >
+                      Customize
+                    </button>
+
+                    <span className="text-xs font-ui font-black text-[#191919] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      <span>Read Monograph</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Editorial Footer */}
+      <footer className="border-t-2 border-[#191919] bg-white py-10 px-4 lg:px-8 mt-12">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <NotionMascot variant="celebrating" mood="excited" size={48} interactiveEyes={false} />
+            <div>
+              <div className="font-display font-bold text-base text-[#191919]">
+                Nureoplastic Interactive Monograph Studio
+              </div>
+              <p className="text-xs font-ui text-[#5A5955]">
+                World View · Psychology · Philosophy · AI Research · Psychoanalysis
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 text-xs font-ui font-bold text-[#5A5955]">
+            <button
+              onClick={() => {
+                audio.playClick();
+                setEditingEssay(null);
+                setIsCreatorOpen(true);
+              }}
+              className="hover:text-[#191919] hover:underline"
+            >
+              Publish Custom Monograph
+            </button>
+            <span>·</span>
+            <button
+              onClick={() => {
+                audio.playClick();
+                setIsAIModalOpen(true);
+              }}
+              className="hover:text-[#191919] hover:underline"
+            >
+              AI Epistemic Synthesis
+            </button>
+            <span>·</span>
+            <button
+              onClick={() => {
+                audio.playClick();
+                setIsVaultOpen(true);
+              }}
+              className="hover:text-[#191919] hover:underline"
+            >
+              Synapse Vault ({vaultItems.length})
+            </button>
+          </div>
+        </div>
+      </footer>
+
+      {/* Slide-Over Synapse Vault Drawer */}
+      <SynapseVaultDrawer
+        isOpen={isVaultOpen}
+        onClose={() => setIsVaultOpen(false)}
+        vaultItems={vaultItems}
+        onDeleteItem={handleDeleteVaultItem}
+      />
+
+      {/* AI Epistemic Synthesis & Search Modal */}
+      <AISynthesisModal
+        isOpen={isAIModalOpen}
+        onClose={() => setIsAIModalOpen(false)}
+        onPlayClick={() => audio.playClick()}
+      />
+
+      {/* Interactive Blog Creator & Customizer Studio Modal */}
+      <BlogCreatorModal
+        isOpen={isCreatorOpen}
+        onClose={() => {
+          setIsCreatorOpen(false);
+          setEditingEssay(null);
+        }}
+        onSaveEssay={handleSaveCustomEssay}
+        onDeleteEssay={handleDeleteCustomEssay}
+        initialEssay={editingEssay}
+        onPlayClick={() => audio.playClick()}
+      />
+    </div>
+  );
+}
