@@ -9,13 +9,12 @@ import {
 } from "./data/essays.ts";
 import { useTactileAudio } from "./hooks/useTactileAudio.ts";
 import { NotionMascot } from "./components/NotionMascot.tsx";
+import { NureoplasticLogo } from "./components/NureoplasticLogo.tsx";
 import { SynapseGraph2D } from "./components/SynapseGraph2D.tsx";
 import { LivingAtlas } from "./components/LivingAtlas.tsx";
 import { CognitiveReader } from "./components/CognitiveReader.tsx";
 import { SynapseVaultDrawer, VaultItem } from "./components/SynapseVaultDrawer.tsx";
-import { AISynthesisModal } from "./components/AISynthesisModal.tsx";
 import { BlogCreatorModal } from "./components/BlogCreatorModal.tsx";
-import { calculateCognitiveRank } from "./utils/rules.ts";
 import {
   auth,
   onAuthStateChanged,
@@ -33,9 +32,7 @@ import {
   User,
 } from "./firebase.ts";
 import {
-  Flame,
   Search,
-  Sparkles,
   Volume2,
   VolumeX,
   Bookmark,
@@ -44,7 +41,6 @@ import {
   Waypoints,
   PenTool,
   MessageSquareQuote,
-  Database,
   LogIn,
   LogOut,
   CheckCircle2,
@@ -90,7 +86,7 @@ export default function App() {
     }
   });
 
-  // Streak & XP Progress State
+  // XP Progress State
   const [totalXP, setTotalXP] = useState<number>(() => {
     try {
       return parseInt(localStorage.getItem("nureo_xp") || "120", 10);
@@ -98,16 +94,6 @@ export default function App() {
       return 120;
     }
   });
-
-  const [streakDays, setStreakDays] = useState<number>(() => {
-    try {
-      return parseInt(localStorage.getItem("nureo_streak") || "5", 10);
-    } catch {
-      return 5;
-    }
-  });
-
-  const [showStreakModal, setShowStreakModal] = useState<boolean>(false);
 
   // Mastered Essays
   const [masteredEssays, setMasteredEssays] = useState<string[]>(() => {
@@ -149,7 +135,6 @@ export default function App() {
   });
 
   const [isVaultOpen, setIsVaultOpen] = useState<boolean>(false);
-  const [isAIModalOpen, setIsAIModalOpen] = useState<boolean>(false);
 
   // 1. Track Firebase Auth state
   useEffect(() => {
@@ -254,31 +239,16 @@ export default function App() {
     return [...purelyNewCustom, ...mergedBuiltIns];
   }, [customEssays]);
 
-  // Keyboard shortcut for ⌘K
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setIsAIModalOpen((open) => !open);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
   // Sync state to local storage
   useEffect(() => {
     try {
       localStorage.setItem("nureo_xp", totalXP.toString());
-      localStorage.setItem("nureo_streak", streakDays.toString());
       localStorage.setItem("nureo_mastered", JSON.stringify(masteredEssays));
       localStorage.setItem("nureo_vault", JSON.stringify(vaultItems));
       localStorage.setItem("nureo_custom_essays", JSON.stringify(customEssays));
       localStorage.setItem("nureo_comments", JSON.stringify(comments));
     } catch {}
-  }, [totalXP, streakDays, masteredEssays, vaultItems, customEssays, comments]);
-
-  const rankInfo = useMemo(() => calculateCognitiveRank(totalXP), [totalXP]);
+  }, [totalXP, masteredEssays, vaultItems, customEssays, comments]);
 
   // Filtered essays
   const filteredEssays = useMemo(() => {
@@ -490,7 +460,6 @@ export default function App() {
     if (!masteredEssays.includes(essayId)) {
       setMasteredEssays((prev) => [...prev, essayId]);
       setTotalXP((prev) => prev + xp);
-      setStreakDays((s) => s + 1);
     }
   };
 
@@ -548,36 +517,21 @@ export default function App() {
       {/* Top Institutional & Tactile Command Bar */}
       <header className="sticky top-0 z-40 bg-[#F7F6F3]/95 backdrop-blur-xs border-b-2 border-[#191919] px-4 lg:px-8 py-3">
         <div className="max-w-7xl mx-auto flex flex-wrap xl:flex-nowrap items-center justify-between gap-3 xl:gap-4">
-          {/* Brand Identity */}
-          <div className="flex items-center gap-3">
-            <div
+          {/* Brand Identity with Sculpted Woven-Mind Logo */}
+          <div className="flex items-center gap-3.5">
+            <NureoplasticLogo
+              variant="mark"
+              size={44}
               onClick={() => audio.playClick()}
-              className="w-10 h-10 rounded-xl bg-white border-2 border-[#191919] shadow-[0_3px_0_0_#191919] flex items-center justify-center cursor-pointer group hover:translate-y-[-1px] transition-transform"
-              title="Nureoplastic — Cognitive Knowledge Garden"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 2C8 2 6 5 6 8C6 9.5 7 11 8 12C7 13 6 14.5 6 16C6 19 8 22 12 22C16 22 18 19 18 16C18 14.5 17 13 16 12C17 11 18 9.5 18 8C18 5 16 2 12 2Z"
-                  stroke="#191919"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  fill="#FFC800"
-                />
-                <circle cx="9" cy="9" r="1.5" fill="#191919" />
-                <circle cx="15" cy="9" r="1.5" fill="#191919" />
-                <path d="M12 12V16" stroke="#191919" strokeWidth="2" strokeLinecap="round" />
-                <circle cx="12" cy="19" r="1.5" fill="#1CB0F6" />
-              </svg>
-            </div>
+            />
 
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-display font-bold text-xl tracking-tight text-[#191919]">
                   Nureoplastic
                 </span>
-                <span className="text-[10px] font-code font-bold px-1.5 py-0.5 rounded bg-[#ECF9E0] border border-[#439C00] text-[#439C00] flex items-center gap-1">
-                  <Database className="w-2.5 h-2.5" />
-                  <span>{dbSyncStatus === "saving" ? "SAVING..." : "DB ACTIVE"}</span>
+                <span className="text-[11px] font-code text-[#5A5955]">
+                  · {dbSyncStatus === "saving" ? "Syncing..." : "Database Active"}
                 </span>
               </div>
               <p className="hidden md:block text-[11px] font-ui text-[#5A5955] -mt-0.5">
@@ -588,7 +542,7 @@ export default function App() {
 
           {/* Right Action Controls */}
           <div className="flex w-full xl:w-auto flex-wrap items-center justify-between xl:justify-start gap-2">
-            {/* Primary Write / Customize Blog Button */}
+            {/* Primary Write Blog Button */}
             <button
               onClick={() => {
                 audio.playClick();
@@ -598,7 +552,7 @@ export default function App() {
               className="duo-btn duo-btn-phil text-xs font-ui font-extrabold px-3.5 py-2 rounded-xl flex items-center gap-1.5"
             >
               <PenTool className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Write / Customize Blog</span>
+              <span className="hidden sm:inline">Write Blog</span>
               <span className="sm:hidden">Write</span>
             </button>
 
@@ -629,19 +583,6 @@ export default function App() {
               </button>
             )}
 
-            {/* Streak Button */}
-            <button
-              onClick={() => {
-                audio.playClick();
-                setShowStreakModal(!showStreakModal);
-              }}
-              className="duo-btn duo-btn-streak text-xs font-ui font-extrabold px-3 py-2 rounded-xl flex items-center gap-1"
-              title="Cognitive Exploration Streak"
-            >
-              <Flame className="w-3.5 h-3.5 fill-[#191919]" />
-              <span className="font-code">{streakDays}d</span>
-            </button>
-
             {/* Synapse Vault Trigger */}
             <button
               onClick={() => {
@@ -654,19 +595,6 @@ export default function App() {
               <Bookmark className="w-3.5 h-3.5 text-[#191919]" />
               <span className="hidden sm:inline">Vault</span>
               <span className="font-code text-[11px] text-[#5A5955]">({vaultItems.length})</span>
-            </button>
-
-            {/* AI Synthesizer Trigger */}
-            <button
-              onClick={() => {
-                audio.playClick();
-                setIsAIModalOpen(true);
-              }}
-              className="duo-btn text-xs font-ui font-extrabold px-3 py-2 rounded-xl bg-[#FFF9E0] text-[#191919] flex items-center gap-1.5"
-              title="Open Epistemic AI Synthesizer (⌘K)"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#D6A600]" />
-              <span className="hidden md:inline">Synthesize</span>
             </button>
 
             {/* Audio Mute Switch */}
@@ -685,67 +613,24 @@ export default function App() {
         </div>
       </header>
 
-      {/* Streak Modal */}
-      {showStreakModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#191919]/40 backdrop-blur-xs">
-          <div className="bg-white border-2 border-[#191919] rounded-3xl p-6 max-w-sm w-full shadow-[0_10px_0_0_#191919] animate-in fade-in zoom-in-95">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-2xl bg-[#FFC800] border-2 border-[#191919] flex items-center justify-center shadow-[0_3px_0_0_#D6A600]">
-                <Flame className="w-6 h-6 text-[#191919]" />
-              </div>
-              <div>
-                <h4 className="font-display font-bold text-lg text-[#191919]">
-                  {streakDays}-Day Synapse Streak
-                </h4>
-                <p className="text-xs font-code text-[#5A5955]">
-                  {totalXP} XP · {rankInfo.rankName}
-                </p>
-              </div>
-            </div>
-
-            <p className="text-xs font-ui text-[#191919] mb-4 leading-relaxed">
-              Publish custom monographs, verify mathematical proofs, and contribute dialectical commentary to advance your epistemic rank.
-            </p>
-
-            <div className="grid grid-cols-7 gap-1.5 text-center my-4">
-              {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
-                <div key={i} className="flex flex-col items-center gap-1">
-                  <span className="text-[10px] font-code font-bold text-[#5A5955]">{day}</span>
-                  <div
-                    className={`w-8 h-8 rounded-xl border-2 border-[#191919] flex items-center justify-center text-xs font-black ${
-                      i < streakDays
-                        ? "bg-[#FFC800] text-[#191919] shadow-[0_2px_0_0_#D6A600]"
-                        : "bg-[#EFECE6] text-[#A4A097]"
-                    }`}
-                  >
-                    {i < streakDays ? "✓" : ""}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <button
-              onClick={() => setShowStreakModal(false)}
-              className="w-full duo-btn duo-btn-streak text-xs font-ui font-extrabold py-2.5 rounded-xl mt-2"
-            >
-              Continue Inquiry
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Hero Section: Editorial Proposition & Interactive Symposium Stage */}
+      {/* Hero Section: Editorial Proposition, Interwoven Mind Brand Emblem & Symposium Stage */}
       <section className="max-w-7xl mx-auto px-4 lg:px-8 pt-8 pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Left Column: High-Craft Editorial Typography */}
+          {/* Left Column: High-Craft Editorial Typography & Woven-Mind Emblem */}
           <div className="lg:col-span-5 space-y-5">
             <div className="text-xs font-code font-bold uppercase tracking-widest text-[#5A5955]">
               INTERACTIVE DIGITAL GARDEN · FIVE INTELLECTUAL DOMAINS
             </div>
 
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-[54px] font-bold text-[#191919] leading-[1.06] tracking-tight">
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-[50px] font-bold text-[#191919] leading-[1.06] tracking-tight">
               Where World View, Psyche &amp; Neural Architecture Converge.
             </h1>
+
+            {/* Signature Nureoplastic Interwoven Mind Horizon Emblem */}
+            <NureoplasticLogo
+              variant="scene"
+              onClick={() => audio.playClick()}
+            />
 
             <p className="text-base font-editorial text-[#5A5955] leading-relaxed">
               An interactive monograph studio and cognitive reader exploring{" "}
@@ -970,20 +855,6 @@ export default function App() {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        audio.playClick();
-                        setEditingEssay(essay);
-                        setIsCreatorOpen(true);
-                      }}
-                      className="text-xs font-ui font-bold text-[#5A5955] hover:text-[#191919] px-2 py-1 rounded-lg hover:bg-[#EFECE6]"
-                      title="Customize or Edit this Blog in Database"
-                    >
-                      Customize
-                    </button>
-
                     <span className="text-xs font-ui font-black text-[#191919] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                       <span>Read Monograph</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -999,8 +870,8 @@ export default function App() {
       {/* Editorial Footer */}
       <footer className="border-t-2 border-[#191919] bg-white py-10 px-4 lg:px-8 mt-12">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <NotionMascot variant="celebrating" mood="excited" size={56} interactiveEyes={false} />
+          <div className="flex items-center gap-3.5">
+            <NureoplasticLogo variant="mark" size={48} onClick={() => audio.playClick()} />
             <div>
               <div className="font-display font-bold text-base text-[#191919]">
                 Nureoplastic Interactive Monograph Studio
@@ -1026,16 +897,6 @@ export default function App() {
             <button
               onClick={() => {
                 audio.playClick();
-                setIsAIModalOpen(true);
-              }}
-              className="hover:text-[#191919] hover:underline"
-            >
-              AI Epistemic Synthesis
-            </button>
-            <span>·</span>
-            <button
-              onClick={() => {
-                audio.playClick();
                 setIsVaultOpen(true);
               }}
               className="hover:text-[#191919] hover:underline"
@@ -1052,13 +913,6 @@ export default function App() {
         onClose={() => setIsVaultOpen(false)}
         vaultItems={vaultItems}
         onDeleteItem={handleDeleteVaultItem}
-      />
-
-      {/* AI Epistemic Synthesis & Search Modal */}
-      <AISynthesisModal
-        isOpen={isAIModalOpen}
-        onClose={() => setIsAIModalOpen(false)}
-        onPlayClick={() => audio.playClick()}
       />
 
       {/* Interactive Blog Creator & Customizer Studio Modal */}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { EssayItem, EssayComment, PILLAR_METADATA } from "../data/essays.ts";
 import { NotionMascot } from "./NotionMascot.tsx";
+import { NureoplasticLogo } from "./NureoplasticLogo.tsx";
 import { SocraticMarginCallout } from "./SocraticMarginCallout.tsx";
 import { EntropyPruningSandbox } from "./sandboxes/EntropyPruningSandbox.tsx";
 import { EpistemicHorizonSandbox } from "./sandboxes/EpistemicHorizonSandbox.tsx";
@@ -236,14 +237,17 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
       {/* Sticky Top Reader Bar */}
       <div className="sticky top-0 z-30 bg-[#F7F6F3]/95 backdrop-blur-xs border-b-2 border-[#191919] px-4 py-3 text-[#191919]">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
-          {/* Back button */}
-          <button
-            onClick={onBack}
-            className="duo-btn text-xs font-ui font-extrabold px-3 py-1.5 rounded-xl bg-white text-[#191919] flex items-center gap-1.5 shrink-0"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Digital Garden</span>
-          </button>
+          {/* Brand Mark & Back button */}
+          <div className="flex items-center gap-2 shrink-0">
+            <NureoplasticLogo variant="mark" size={36} onClick={onBack} />
+            <button
+              onClick={onBack}
+              className="duo-btn text-xs font-ui font-extrabold px-3 py-1.5 rounded-xl bg-white text-[#191919] flex items-center gap-1.5 shrink-0"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Digital Garden</span>
+            </button>
+          </div>
 
           {/* Progress Bar with Specular Highlight */}
           <div className="flex-1 max-w-md">
@@ -267,17 +271,19 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
 
           {/* Right HUD Controls */}
           <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => {
-                audio.playClick();
-                onEditEssay(essay);
-              }}
-              className="duo-btn text-xs font-ui font-extrabold px-3 py-1.5 rounded-xl bg-[#FFF9E0] text-[#191919] flex items-center gap-1.5"
-              title="Customize or Edit this Monograph"
-            >
-              <PenTool className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Customize Blog</span>
-            </button>
+            {essay.isCustom && (
+              <button
+                onClick={() => {
+                  audio.playClick();
+                  onEditEssay(essay);
+                }}
+                className="duo-btn text-xs font-ui font-extrabold px-3 py-1.5 rounded-xl bg-white text-[#191919] flex items-center gap-1.5"
+                title="Edit this Monograph"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Edit Monograph</span>
+              </button>
+            )}
 
             <button
               onClick={() => {
