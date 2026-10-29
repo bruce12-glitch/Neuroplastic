@@ -8,6 +8,7 @@ import { EntropyPruningSandbox } from "./sandboxes/EntropyPruningSandbox.tsx";
 import { EpistemicHorizonSandbox } from "./sandboxes/EpistemicHorizonSandbox.tsx";
 import { AttractorBasinSandbox } from "./sandboxes/AttractorBasinSandbox.tsx";
 import { DialecticalComments } from "./DialecticalComments.tsx";
+import { HumanMathDerivation } from "./HumanMathDerivation.tsx";
 import {
   ArrowLeft,
   Bookmark,
@@ -670,51 +671,14 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
           </article>
         )}
 
-        {/* --- LEVEL 3: FIRST-PRINCIPLES & MATH --- */}
+        {/* --- LEVEL 3: HUMAN-READABLE FORMALISMS & CONCEPTUAL MECHANICS --- */}
         {depthLevel === 3 && (
-          <article className="space-y-8 text-[#191919] animate-in fade-in duration-200">
-            <div className="p-6 bg-white border-2 border-[#191919] shadow-[0_4px_0_0_#191919] rounded-2xl">
-              <div className="text-[11px] font-code font-bold uppercase tracking-widest text-[#1185BA] mb-2">
-                FORMAL AXIOMATIZATION & PROOFS
-              </div>
-              <h3 className="font-display font-bold text-2xl text-[#191919] mb-4">
-                {essay.content.level3.formalProofTitle}
-              </h3>
-
-              <div className="space-y-4">
-                {essay.content.level3.latexFormulas.map((item, fIdx) => (
-                  <div
-                    key={fIdx}
-                    className="p-4 bg-[#F7F6F3] border-2 border-[#191919] rounded-xl"
-                  >
-                    <div className="text-xs font-ui font-bold text-[#1185BA] mb-1.5">
-                      {item.label}
-                    </div>
-                    <div className="p-3.5 bg-white rounded-lg border border-[#E2E0DC] font-code text-sm font-bold text-[#191919] overflow-x-auto text-center my-2">
-                      {item.formula}
-                    </div>
-                    <p className="text-xs font-ui text-[#5A5955] leading-relaxed">
-                      {item.explanation}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="p-6 bg-[#E5F6FD] border-2 border-[#191919] shadow-[0_4px_0_0_#1185BA] rounded-2xl">
-              <h4 className="font-ui font-black text-sm text-[#1185BA] uppercase tracking-wider mb-3">
-                Step-by-Step Architectural Derivation
-              </h4>
-              <ol className="space-y-2.5">
-                {essay.content.level3.architecturalProof.map((step, sIdx) => (
-                  <li key={sIdx} className="text-xs font-code text-[#191919] flex items-start gap-2.5">
-                    <span className="font-bold text-[#1185BA] shrink-0">[{sIdx + 1}]</span>
-                    <span>{step}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </article>
+          <HumanMathDerivation
+            formalProofTitle={essay.content.level3.formalProofTitle}
+            latexFormulas={essay.content.level3.latexFormulas}
+            architecturalProof={essay.content.level3.architecturalProof}
+            accentColor={meta.surfaceColor}
+          />
         )}
 
         {/* Inline Interactive Concept Sandbox */}
