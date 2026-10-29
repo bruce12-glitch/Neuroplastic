@@ -1,0 +1,275 @@
+{
+  "entities": {
+    "BlogMonograph": {
+      "title": "BlogMonograph",
+      "description": "A user-created or customized interactive blog monograph stored in Cloud Firestore.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the monograph.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorUid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the creator/editor.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Headline title of the monograph.",
+          "minLength": 4,
+          "maxLength": 300
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Dialectical thesis subtitle.",
+          "minLength": 8,
+          "maxLength": 600
+        },
+        "author": {
+          "type": "string",
+          "description": "Display name of the scholar author.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "pillar": {
+          "type": "string",
+          "description": "Core intellectual domain.",
+          "enum": ["worldview", "psychology", "philosophy", "ai", "psychoanalysis"]
+        },
+        "pillarLabel": {
+          "type": "string",
+          "description": "Human-readable domain label.",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "sandboxType": {
+          "type": "string",
+          "description": "Interactive simulation type.",
+          "enum": ["entropy", "epistemic", "attractor"]
+        },
+        "readingTimeMinutes": {
+          "type": "number",
+          "description": "Estimated reading time in minutes."
+        },
+        "xpReward": {
+          "type": "number",
+          "description": "Insight XP reward upon mastery."
+        },
+        "publishedDate": {
+          "type": "string",
+          "description": "Formatted publication date string.",
+          "minLength": 3,
+          "maxLength": 60
+        },
+        "tags": {
+          "type": "array",
+          "description": "Up to 10 conceptual tags."
+        },
+        "isPublic": {
+          "type": "boolean",
+          "description": "Whether the monograph is publicly readable in the garden."
+        },
+        "payload": {
+          "type": "object",
+          "description": "Structured 3-level content and mastery quiz map."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when last updated."
+        }
+      },
+      "required": [
+        "id",
+        "authorUid",
+        "title",
+        "subtitle",
+        "author",
+        "pillar",
+        "pillarLabel",
+        "sandboxType",
+        "readingTimeMinutes",
+        "xpReward",
+        "publishedDate",
+        "tags",
+        "isPublic",
+        "payload",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DiscourseComment": {
+      "title": "DiscourseComment",
+      "description": "A scholarly comment or critique anchored to an essay.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Comment identifier.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "essayId": {
+          "type": "string",
+          "description": "ID of the parent essay monograph.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorUid": {
+          "type": "string",
+          "description": "UID of the comment author.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "author": {
+          "type": "string",
+          "description": "Display name of the comment author.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "role": {
+          "type": "string",
+          "description": "Academic or disciplinary role of the author.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "stance": {
+          "type": "string",
+          "description": "Epistemic stance of the contribution.",
+          "enum": ["synthesis", "antithesis", "empirical", "inquiry"]
+        },
+        "body": {
+          "type": "string",
+          "description": "Main commentary text.",
+          "minLength": 2,
+          "maxLength": 4000
+        },
+        "quotedPassage": {
+          "type": "string",
+          "description": "Optional quoted excerpt from the monograph.",
+          "minLength": 0,
+          "maxLength": 1500
+        },
+        "upvotes": {
+          "type": "number",
+          "description": "Resonance upvote counter."
+        },
+        "isPublic": {
+          "type": "boolean",
+          "description": "Whether the comment is visible to public readers."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "id",
+        "essayId",
+        "authorUid",
+        "author",
+        "role",
+        "stance",
+        "body",
+        "quotedPassage",
+        "upvotes",
+        "isPublic",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "VaultNote": {
+      "title": "VaultNote",
+      "description": "A private quote highlight saved to a user's Synapse Vault.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Vault note ID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner Firebase Auth UID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "text": {
+          "type": "string",
+          "description": "Highlighted passage text.",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "pillar": {
+          "type": "string",
+          "description": "Domain identifier.",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "essayTitle": {
+          "type": "string",
+          "description": "Title of source monograph.",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "userNote": {
+          "type": "string",
+          "description": "Optional personal annotation.",
+          "minLength": 0,
+          "maxLength": 1500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "text",
+        "pillar",
+        "essayTitle",
+        "userNote",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/blogs/{blogId}": {
+      "schema": { "$ref": "#/entities/BlogMonograph" },
+      "description": "Stores custom and user-updated interactive blog monographs."
+    },
+    "/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/DiscourseComment" },
+      "description": "Stores dialectical discourse comments on monographs."
+    },
+    "/users/{userId}/vault/{vaultId}": {
+      "schema": { "$ref": "#/entities/VaultNote" },
+      "description": "Stores private quote highlights in each user's Synapse Vault."
+    }
+  }
+}
