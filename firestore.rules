@@ -1,0 +1,235 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net: Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Hardened Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && (
+        request.auth.token.email_verified == true ||
+        request.auth.token.firebase.sign_in_provider == 'google.com'
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validation Blueprint: BlogMonograph (/blogs/{blogId})
+    function isValidBlog(data) {
+      return data.keys().hasAll([
+          'id', 'authorUid', 'title', 'subtitle', 'author',
+          'pillar', 'pillarLabel', 'sandboxType', 'readingTimeMinutes',
+          'xpReward', 'publishedDate', 'tags', 'isPublic', 'payload',
+          'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'id', 'authorUid', 'title', 'subtitle', 'author',
+          'pillar', 'pillarLabel', 'sandboxType', 'readingTimeMinutes',
+          'xpReward', 'publishedDate', 'tags', 'isPublic', 'payload',
+          'createdAt', 'updatedAt'
+        ]) &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 128 && data.id.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128 && data.authorUid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.authorUid == request.auth.uid &&
+        data.title is string && data.title.size() >= 4 && data.title.size() <= 300 &&
+        data.subtitle is string && data.subtitle.size() >= 8 && data.subtitle.size() <= 600 &&
+        data.author is string && data.author.size() >= 1 && data.author.size() <= 120 &&
+        data.pillar is string && data.pillar.size() <= 30 && data.pillar in ['worldview', 'psychology', 'philosophy', 'ai', 'psychoanalysis'] &&
+        data.pillarLabel is string && data.pillarLabel.size() >= 2 && data.pillarLabel.size() <= 60 &&
+        data.sandboxType is string && data.sandboxType.size() <= 30 && data.sandboxType in ['entropy', 'epistemic', 'attractor'] &&
+        data.readingTimeMinutes is number && data.readingTimeMinutes >= 1 && data.readingTimeMinutes <= 180 &&
+        data.xpReward is number && data.xpReward >= 0 && data.xpReward <= 500 &&
+        data.publishedDate is string && data.publishedDate.size() >= 3 && data.publishedDate.size() <= 60 &&
+        data.tags is list && data.tags.size() >= 1 && data.tags.size() <= 10 && data.tags[0] is string && data.tags[0].size() <= 50 &&
+        data.isPublic is bool &&
+        data.payload is map && data.payload.size() <= 20 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    // Validation Blueprint: DiscourseComment (/comments/{commentId})
+    function isValidComment(data) {
+      return data.keys().hasAll([
+          'id', 'essayId', 'authorUid', 'author', 'role',
+          'stance', 'body', 'quotedPassage', 'upvotes',
+          'isPublic', 'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'id', 'essayId', 'authorUid', 'author', 'role',
+          'stance', 'body', 'quotedPassage', 'upvotes',
+          'isPublic', 'createdAt', 'updatedAt'
+        ]) &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 128 && data.id.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.essayId is string && data.essayId.size() >= 1 && data.essayId.size() <= 128 && data.essayId.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128 && data.authorUid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.author is string && data.author.size() >= 1 && data.author.size() <= 100 &&
+        data.role is string && data.role.size() >= 1 && data.role.size() <= 100 &&
+        data.stance is string && data.stance.size() <= 30 && data.stance in ['synthesis', 'antithesis', 'empirical', 'inquiry'] &&
+        data.body is string && data.body.size() >= 2 && data.body.size() <= 4000 &&
+        data.quotedPassage is string && data.quotedPassage.size() <= 1500 &&
+        data.upvotes is int && data.upvotes >= 0 && data.upvotes <= 1000000 &&
+        data.isPublic is bool &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    // Validation Blueprint: VaultNote (/users/{userId}/vault/{vaultId})
+    function isValidVaultNote(data) {
+      return data.keys().hasAll([
+          'id', 'userId', 'text', 'pillar', 'essayTitle', 'userNote', 'createdAt'
+        ]) &&
+        data.keys().hasOnly([
+          'id', 'userId', 'text', 'pillar', 'essayTitle', 'userNote', 'createdAt'
+        ]) &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 128 && data.id.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 && data.userId.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.userId == request.auth.uid &&
+        data.text is string && data.text.size() >= 1 && data.text.size() <= 2000 &&
+        data.pillar is string && data.pillar.size() >= 2 && data.pillar.size() <= 60 &&
+        data.essayTitle is string && data.essayTitle.size() >= 1 && data.essayTitle.size() <= 300 &&
+        data.userNote is string && data.userNote.size() <= 1500 &&
+        data.createdAt is timestamp;
+    }
+
+    // Connection validation probe path
+    match /test/{docId} {
+      allow get: if isValidId(docId) && docId == 'connection';
+    }
+
+    // Collection: /blogs/{blogId}
+    match /blogs/{blogId} {
+      allow get: if isValidId(blogId) && (
+        existing().isPublic == true ||
+        (isSignedIn() && existing().authorUid == request.auth.uid)
+      );
+
+      allow list: if existing().isPublic == true || (
+        isSignedIn() && existing().authorUid == request.auth.uid
+      );
+
+      allow create: if isVerifiedUser() &&
+        isValidId(blogId) &&
+        isValidBlog(incoming()) &&
+        incoming().id == blogId &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if isVerifiedUser() &&
+        isValidId(blogId) &&
+        isValidBlog(incoming()) &&
+        existing().authorUid == request.auth.uid &&
+        incoming().id == existing().id &&
+        incoming().authorUid == existing().authorUid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'title', 'subtitle', 'author', 'pillar', 'pillarLabel',
+          'sandboxType', 'readingTimeMinutes', 'xpReward', 'publishedDate',
+          'tags', 'isPublic', 'payload', 'updatedAt'
+        ]);
+
+      allow delete: if isVerifiedUser() &&
+        isValidId(blogId) &&
+        existing().authorUid == request.auth.uid;
+    }
+
+    // Collection: /comments/{commentId}
+    match /comments/{commentId} {
+      allow get: if isValidId(commentId) && (
+        existing().isPublic == true ||
+        (isSignedIn() && existing().authorUid == request.auth.uid)
+      );
+
+      allow list: if existing().isPublic == true || (
+        isSignedIn() && existing().authorUid == request.auth.uid
+      );
+
+      allow create: if isVerifiedUser() &&
+        isValidId(commentId) &&
+        isValidComment(incoming()) &&
+        incoming().id == commentId &&
+        incoming().authorUid == request.auth.uid &&
+        incoming().upvotes == 1 &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if isVerifiedUser() &&
+        isValidId(commentId) &&
+        isValidComment(incoming()) &&
+        incoming().id == existing().id &&
+        incoming().essayId == existing().essayId &&
+        incoming().authorUid == existing().authorUid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time && (
+          (
+            existing().authorUid == request.auth.uid &&
+            incoming().upvotes == existing().upvotes &&
+            incoming().diff(existing()).affectedKeys().hasOnly(['body', 'stance', 'quotedPassage', 'updatedAt'])
+          ) ||
+          (
+            incoming().upvotes == existing().upvotes + 1 &&
+            incoming().diff(existing()).affectedKeys().hasOnly(['upvotes', 'updatedAt'])
+          )
+        );
+
+      allow delete: if isVerifiedUser() &&
+        isValidId(commentId) &&
+        existing().authorUid == request.auth.uid;
+    }
+
+    // Collection: /users/{userId}/vault/{vaultId}
+    match /users/{userId}/vault/{vaultId} {
+      allow get: if isVerifiedUser() &&
+        isValidId(userId) &&
+        isValidId(vaultId) &&
+        request.auth.uid == userId &&
+        existing().userId == request.auth.uid;
+
+      allow list: if isVerifiedUser() &&
+        request.auth.uid == userId &&
+        existing().userId == request.auth.uid;
+
+      allow create: if isVerifiedUser() &&
+        isValidId(userId) &&
+        isValidId(vaultId) &&
+        request.auth.uid == userId &&
+        isValidVaultNote(incoming()) &&
+        incoming().id == vaultId &&
+        incoming().createdAt == request.time;
+
+      allow update: if isVerifiedUser() &&
+        isValidId(userId) &&
+        isValidId(vaultId) &&
+        request.auth.uid == userId &&
+        isValidVaultNote(incoming()) &&
+        existing().userId == request.auth.uid &&
+        incoming().id == existing().id &&
+        incoming().userId == existing().userId &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['userNote']);
+
+      allow delete: if isVerifiedUser() &&
+        isValidId(userId) &&
+        isValidId(vaultId) &&
+        request.auth.uid == userId &&
+        existing().userId == request.auth.uid;
+    }
+  }
+}
