@@ -257,7 +257,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Nureoplastic server running on http://localhost:${PORT}`);
+    console.log(`Neuroplastic server running on http://localhost:${PORT}`);
   });
 }
 

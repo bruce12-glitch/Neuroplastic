@@ -1,4 +1,4 @@
-# Nureoplastic Firestore Security Specification (Phase 0 TDD)
+# Neuroplastic Firestore Security Specification (Phase 0 TDD)
 
 ## 1. Data Invariants
 1. **Identity Integrity (`BlogMonograph`)**: A blog document at `/blogs/{blogId}` can only be created or updated if `authorUid == request.auth.uid`, `request.auth.token.email_verified == true`, and `blogId` matches `^[a-zA-Z0-9_\-]+$`.

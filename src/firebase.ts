@@ -142,6 +142,8 @@ export async function saveBlogToFirestore(
       prerequisites: essay.prerequisites || ["First-Principles Inquiry"],
       content: essay.content,
       masteryQuiz: essay.masteryQuiz,
+      ...(essay.sources ? { sources: essay.sources } : {}),
+      ...(essay.editorialNote ? { editorialNote: essay.editorialNote } : {}),
     },
     ...(isExistingInCloud ? {} : { createdAt: serverTimestamp() }),
     updatedAt: serverTimestamp(),
@@ -202,6 +204,8 @@ export function mapFirestoreDocToEssay(data: Record<string, any>): EssayItem {
       hint: "Review Level 1.",
     },
     sandboxType: data.sandboxType || "epistemic",
+    ...(Array.isArray(payload.sources) ? { sources: payload.sources } : {}),
+    ...(typeof payload.editorialNote === "string" ? { editorialNote: payload.editorialNote } : {}),
   };
 }
 

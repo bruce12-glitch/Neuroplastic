@@ -12,6 +12,40 @@ import {
   TokenItem,
 } from "./rules.ts";
 import { INITIAL_COMMENTS } from "../data/essays.ts";
+import { calculateCompoundGrowth } from "./finance.ts";
+
+test("compounding reproduces the article's worked example without rounding each year", () => {
+  const result = calculateCompoundGrowth(1000, 5, 10);
+  assert.ok(Math.abs(result.balance - 1628.894626777442) < 1e-8);
+  assert.equal(result.simpleBalance, 1500);
+  assert.ok(Math.abs(result.compoundBonus - 128.894626777442) < 1e-8);
+  assert.equal(result.points[1].compound, 1050);
+  assert.equal(result.points[2].compound, 1102.5);
+});
+
+test("zero interest stays flat, and the first year has no compounding bonus", () => {
+  const flat = calculateCompoundGrowth(2400, 0, 30);
+  assert.equal(flat.balance, 2400);
+  assert.equal(flat.compoundBonus, 0);
+  assert.ok(flat.points.every((point) => point.compound === 2400 && point.simple === 2400));
+  assert.equal(calculateCompoundGrowth(1000, 5, 1).compoundBonus, 0);
+});
+
+test("the publishing builder creates Finance essays with the compounding experiment", () => {
+  const result = buildCustomEssay({
+    title: "Time and the Money Goal",
+    subtitle: "A beginner-friendly explanation of the assumptions behind compound growth.",
+    author: "Finance Editor",
+    pillar: "finance",
+    tags: ["Money basics"],
+    sandboxType: "compound",
+    tldrBullets: ["A constant-rate example illustrates arithmetic, not a forecast."],
+    sections: [{ heading: "Start with the assumptions", body: "Compare simple and compound interest before drawing a conclusion." }],
+  });
+  assert.equal(result.valid, true);
+  assert.equal(result.essay?.pillarLabel, "Finance");
+  assert.equal(result.essay?.sandboxType, "compound");
+});
 
 test("calculateEntropyPruning prunes high entropy syntactic noise at elevated tau", () => {
   const sampleTokens: TokenItem[] = [

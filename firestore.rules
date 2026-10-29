@@ -51,9 +51,9 @@ service cloud.firestore {
         data.title is string && data.title.size() >= 4 && data.title.size() <= 300 &&
         data.subtitle is string && data.subtitle.size() >= 8 && data.subtitle.size() <= 600 &&
         data.author is string && data.author.size() >= 1 && data.author.size() <= 120 &&
-        data.pillar is string && data.pillar.size() <= 30 && data.pillar in ['worldview', 'psychology', 'philosophy', 'ai', 'psychoanalysis'] &&
+        data.pillar is string && data.pillar.size() <= 30 && data.pillar in ['worldview', 'psychology', 'philosophy', 'ai', 'psychoanalysis', 'finance'] &&
         data.pillarLabel is string && data.pillarLabel.size() >= 2 && data.pillarLabel.size() <= 60 &&
-        data.sandboxType is string && data.sandboxType.size() <= 30 && data.sandboxType in ['entropy', 'epistemic', 'attractor'] &&
+        data.sandboxType is string && data.sandboxType.size() <= 30 && data.sandboxType in ['entropy', 'epistemic', 'attractor', 'compound'] &&
         data.readingTimeMinutes is number && data.readingTimeMinutes >= 1 && data.readingTimeMinutes <= 180 &&
         data.xpReward is number && data.xpReward >= 0 && data.xpReward <= 500 &&
         data.publishedDate is string && data.publishedDate.size() >= 3 && data.publishedDate.size() <= 60 &&

@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 
 export type MascotVariant =
   | "philosopher" | "architect" | "observer" | "analyst"
-  | "cartographer" | "critic" | "celebrating";
+  | "cartographer" | "critic" | "celebrating" | "steward";
 export type MascotMood = "neutral" | "curious" | "excited" | "thinking" | "oops";
 
 interface NotionMascotProps {
@@ -29,6 +29,12 @@ interface ThinkerPortrait {
 
 /** Original editorial portraits. Questions are product prompts, not historical quotations. */
 export const THINKER_PORTRAITS: Record<MascotVariant, ThinkerPortrait> = {
+  steward: {
+    name: "Penny", asset: "penny", color: "#426545", paper: "#eaf4e8",
+    role: "Small steps. A steadier future.",
+    question: "What could a little patience make possible?",
+    alt: "Penny, an original tortoise guide with round glasses, a notebook, and a sprouting gold coin.",
+  },
   philosopher: {
     name: "Socrates", asset: "socrates", color: "#75609b", paper: "#eee8f5",
     role: "The art of a better question",
