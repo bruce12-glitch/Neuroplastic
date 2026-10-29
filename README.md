@@ -37,8 +37,8 @@ Interactive peer annotation and commentary on every monograph:
 - Categorize contributions by dialectical stance: **Synthesis**, **Counter-Thesis**, **Axiom Extension**, or **Field Note**.
 - Anchor comments to a specific reading depth (`L1`, `L2`, or `L3`), endorse insights, and post threaded replies.
 
-### 5. Illustrated Thinkers & Living Atlas
-- **Illustrated Portraits (`<NotionMascot />`)** — Eight original portraits, including Charlie Munger as the Finance guide, shared across the garden and reader.
+### 5. 3D Portraits & Living Atlas
+- **3D Portraits (`<NotionMascot />`)** — Eight original sculpted character renders, including Charlie Munger as the Finance guide, shared across the garden and reader. Soft studio lighting, transparent backgrounds, and subtle pointer tilt give the cast a consistent dimensional finish. See [the collection and generation prompts](docs/design/mascots-3d.md).
 - **Classical Symposium & Dialectical Salon (`<SynapseGraph2D />`)** — Interactive 2D conceptual map connecting monographs across disciplines.
 - **Living Atlas (`<LivingAtlas />`)** — An animated sketchbook connects six subject guides. Select a portrait to change the reading invitation, then explore the subject. Includes pause/resume, reduced-motion support, and off-screen suspension.
 
@@ -52,7 +52,7 @@ All newly created monographs, customized blogs, and dialectical comments are aut
 ## Tech Stack
 
 - **Frontend**: React 19, TypeScript, Tailwind CSS v4, Lucide Icons
-- **Illustration & Motion**: Native SVG and CSS (`<LivingAtlas />`)
+- **Illustration & Motion**: Transparent 3D-rendered WebP portraits, native SVG, and CSS (`<LivingAtlas />`)
 - **Backend & API**: Node.js, Express (`server.ts`), `@google/genai` for server-side epistemic synthesis & Google Search grounding
 - **Database & Security**: Firebase Cloud Firestore (`firebase`), `@firebase/eslint-plugin-security-rules`
 

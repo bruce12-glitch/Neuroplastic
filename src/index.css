@@ -220,7 +220,7 @@
   background: #B4AEA2;
 }
 
-/* Notion-inspired illustration surfaces, scoped to the thinker gallery. */
+/* Sculpted portraits on the existing editorial surfaces. */
 .notion-mascot {
   position: relative;
   display: inline-flex;
@@ -230,15 +230,20 @@
   vertical-align: middle;
   user-select: none;
   perspective: 600px;
+  transform-style: preserve-3d;
 }
 .notion-mascot__art {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transform: rotateY(var(--mascot-turn, 0deg)) rotateX(var(--mascot-lean, 0deg));
+  transform: rotateY(var(--mascot-turn, 0deg)) rotateX(var(--mascot-lean, 0deg)) translateZ(var(--mascot-depth, 0px));
   transform-origin: 50% 82%;
-  transition: transform 220ms ease;
+  filter: drop-shadow(0 4px 3px #37352f20);
+  transition: transform 240ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .notion-mascot[data-interactive="true"]:hover { --mascot-depth: 10px; }
 }
 .notion-mascot[data-mood="thinking"] .notion-mascot__art { rotate: -3deg; }
 .notion-mascot[data-mood="oops"] .notion-mascot__art { rotate: 3deg; }
