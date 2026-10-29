@@ -366,6 +366,19 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
     // Keep attribution and source context when editing a sourced built-in essay.
     if (initialEssay?.sources) result.essay.sources = initialEssay.sources;
     if (initialEssay?.editorialNote) result.essay.editorialNote = initialEssay.editorialNote;
+    if (initialEssay?.format) {
+      result.essay.format = initialEssay.format;
+      result.essay.xpReward = initialEssay.xpReward;
+    }
+    // Retain a quotation's credit when its text is unchanged, even if sections move.
+    for (const section of result.essay.content.level2.sections) {
+      const originalQuote = initialEssay?.content.level2.sections.find(
+        (original) => original.pullQuote && original.pullQuote === section.pullQuote
+      );
+      if (originalQuote?.pullQuoteAttribution) {
+        section.pullQuoteAttribution = originalQuote.pullQuoteAttribution;
+      }
+    }
 
     // Preserve existing socraticAnnotations if customizing a built-in essay
     if (initialEssay && Object.keys(initialEssay.socraticAnnotations).length > 0) {

@@ -117,6 +117,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
   audio,
 }) => {
   const [depthLevel, setDepthLevel] = useState<1 | 2 | 3>(2);
+  const isOriginalEssay = essay.format === "original";
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [activeAnnotationId, setActiveAnnotationId] = useState<string | null>(null);
 
@@ -376,9 +377,9 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
               )}
             </div>
 
-            <span className="text-xs font-code font-bold text-[#D6A600]">
+            {essay.xpReward > 0 && <span className="text-xs font-code font-bold text-[#D6A600]">
               +{essay.xpReward} XP
-            </span>
+            </span>}
           </div>
 
           <h1 className="font-display text-3xl sm:text-5xl font-bold leading-[1.08] tracking-tight mb-4">
@@ -484,7 +485,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
         </section>
 
         {/* 3-Level "Cognitive Plasticity" Depth Slider */}
-        <section className="mb-10 p-2.5 bg-white text-[#191919] border-2 border-[#191919] shadow-[0_4px_0_0_#191919] rounded-2xl">
+        {!isOriginalEssay && <section className="mb-10 p-2.5 bg-white text-[#191919] border-2 border-[#191919] shadow-[0_4px_0_0_#191919] rounded-2xl">
           <div className="flex items-center justify-between px-2 mb-2">
             <span className="text-xs font-ui font-extrabold text-[#191919]">
               Cognitive Plasticity Depth Slider
@@ -528,10 +529,10 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
               <span>🧮 Level 3: Formalisms & Math</span>
             </button>
           </div>
-        </section>
+        </section>}
 
         {/* --- LEVEL 1: 30s SYNAPSE --- */}
-        {depthLevel === 1 && (
+        {!isOriginalEssay && depthLevel === 1 && (
           <article className="space-y-8 text-[#191919] animate-in fade-in duration-200">
             <div className="p-6 bg-white border-2 border-[#191919] shadow-[0_4px_0_0_#191919] rounded-2xl">
               <h3 className="font-display font-bold text-xl text-[#191919] mb-4">
@@ -582,7 +583,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
         )}
 
         {/* --- LEVEL 2: DIALECTICAL ESSAY (Enhanced Readability, Drop-caps, Pull Quotes) --- */}
-        {depthLevel === 2 && (
+        {(isOriginalEssay || depthLevel === 2) && (
           <article
             className={`font-editorial ${FONT_SIZE_MAP[fontSize].className} ${LINE_SPACING_MAP[lineSpacing].className} space-y-10 animate-in fade-in duration-200 max-w-[65ch] mx-auto`}
           >
@@ -664,9 +665,31 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
                 {/* Centered Editorial Pull Quote (Anti-Slop Rule: no thick left borders; uses centered serif + top/bottom hairline rules) */}
                 {section.pullQuote && (
                   <figure className="my-10 py-6 border-y border-current/25 text-center px-4 sm:px-8">
-                    <blockquote className="font-display italic text-xl sm:text-2xl leading-snug">
-                      “{section.pullQuote}”
+                    <blockquote className="font-display italic text-xl sm:text-2xl leading-relaxed space-y-5">
+                      {section.pullQuote.split(/\n\n+/).map((paragraph, quoteIndex, paragraphs) => (
+                        <p key={quoteIndex}>
+                          {quoteIndex === 0 && "“"}{paragraph}{quoteIndex === paragraphs.length - 1 && "”"}
+                        </p>
+                      ))}
                     </blockquote>
+                    {section.pullQuoteAttribution && (
+                      <figcaption className="mt-5 font-ui text-sm leading-relaxed not-italic">
+                        <span className="font-bold">
+                          — {section.pullQuoteAttribution.authorUrl ? (
+                            <a href={section.pullQuoteAttribution.authorUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
+                              {section.pullQuoteAttribution.author}<span className="sr-only"> (opens in a new tab)</span>
+                            </a>
+                          ) : section.pullQuoteAttribution.author}
+                        </span>
+                        <span className="block mt-2 text-xs">
+                          {section.pullQuoteAttribution.sourceUrl ? (
+                            <a href={section.pullQuoteAttribution.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
+                              {section.pullQuoteAttribution.source}<span className="sr-only"> (opens in a new tab)</span>
+                            </a>
+                          ) : section.pullQuoteAttribution.source}
+                        </span>
+                      </figcaption>
+                    )}
                   </figure>
                 )}
               </div>
@@ -675,7 +698,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
         )}
 
         {/* --- LEVEL 3: HUMAN-READABLE FORMALISMS & CONCEPTUAL MECHANICS --- */}
-        {depthLevel === 3 && (
+        {!isOriginalEssay && depthLevel === 3 && (
           <HumanMathDerivation
             formalProofTitle={essay.content.level3.formalProofTitle}
             latexFormulas={essay.content.level3.latexFormulas}
@@ -704,7 +727,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
         )}
 
         {/* Inline Interactive Concept Sandbox */}
-        <section className="my-14 text-[#191919]">
+        {!isOriginalEssay && <section className="my-14 text-[#191919]">
           <div className="text-center mb-4">
             <span className="text-[11px] font-code font-bold uppercase tracking-widest text-[#5A5955]">
               INTERACTIVE VERIFICATION SANDBOX
@@ -727,10 +750,10 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
               onSuccessEscape={() => audio.playSuccessChord()}
             />
           )}
-        </section>
+        </section>}
 
         {/* End-of-Essay "Neuro-Lock" Mastery Challenge Card */}
-        <section className={`mt-14 pt-8 border-t-2 border-[#191919] text-[#191919] ${essay.pillar === "finance" ? "finance-quiz" : ""}`}>
+        {!isOriginalEssay && <section className={`mt-14 pt-8 border-t-2 border-[#191919] text-[#191919] ${essay.pillar === "finance" ? "finance-quiz" : ""}`}>
           <div className="border-2 border-[#191919] shadow-[0_8px_0_0_#191919] rounded-3xl bg-white p-6 sm:p-8">
             <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-[#E2E0DC]">
               <div className="flex items-center gap-3">
@@ -843,7 +866,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
               </div>
             )}
           </div>
-        </section>
+        </section>}
 
         {/* Interactive Dialectical Discourse & Peer Commentary Section */}
         <div id="discourse-section" className="text-[#191919]">

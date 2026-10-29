@@ -1,5 +1,6 @@
 import { SocraticAnnotation } from "../components/SocraticMarginCallout.tsx";
 import { FINANCE_ESSAY } from "./financeEssay.ts";
+import { DREAMING_SOVEREIGN_ESSAY } from "./dreamingSovereignEssay.ts";
 
 export type PillarId = "philosophy" | "ai" | "psychology" | "psychoanalysis" | "worldview" | "finance";
 
@@ -36,6 +37,12 @@ export interface EssayLevelContent {
       heading: string;
       paragraphs: string[];
       pullQuote?: string;
+      pullQuoteAttribution?: {
+        author: string;
+        authorUrl?: string;
+        source: string;
+        sourceUrl?: string;
+      };
       annotationId?: string;
     }[];
   };
@@ -69,6 +76,7 @@ export interface EssayItem {
   subtitle: string;
   author?: string;
   isCustom?: boolean;
+  format?: "original";
   pillar: PillarId;
   pillarLabel: string;
   readingTimeMinutes: number;
@@ -229,6 +237,7 @@ export const INITIAL_COMMENTS: EssayComment[] = [
 ];
 
 export const ESSAYS: EssayItem[] = [
+  DREAMING_SOVEREIGN_ESSAY,
   {
     id: "entropy-pruning",
     slug: "entropy-guided-context-pruning",
