@@ -30,10 +30,10 @@ interface ThinkerPortrait {
 /** Original editorial portraits. Questions are product prompts, not historical quotations. */
 export const THINKER_PORTRAITS: Record<MascotVariant, ThinkerPortrait> = {
   steward: {
-    name: "Penny", asset: "penny", color: "#426545", paper: "#eaf4e8",
-    role: "Small steps. A steadier future.",
-    question: "What could a little patience make possible?",
-    alt: "Penny, an original tortoise guide with round glasses, a notebook, and a sprouting gold coin.",
+    name: "Charlie Munger", asset: "charlie-munger", color: "#426545", paper: "#eaf4e8",
+    role: "A patient approach to money",
+    question: "Which assumptions deserve a closer look?",
+    alt: "Charlie Munger with swept white hair, dark rectangular glasses, a navy suit, and a cream notebook.",
   },
   philosopher: {
     name: "Socrates", asset: "socrates", color: "#75609b", paper: "#eee8f5",

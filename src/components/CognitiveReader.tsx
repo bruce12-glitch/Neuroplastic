@@ -742,7 +742,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
                     NEURO-LOCK CONCEPT VERIFICATION
                   </span>
                   <h3 className="font-display font-bold text-xl text-[#191919]">
-                    {essay.pillar === "finance" ? "Penny’s Knowledge Check" : "Dialectical Mastery Check"}
+                    {essay.pillar === "finance" ? "Finance Knowledge Check" : "Dialectical Mastery Check"}
                   </h3>
                 </div>
               </div>

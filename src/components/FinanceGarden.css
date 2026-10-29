@@ -51,8 +51,9 @@
   outline-offset: 4px;
 }
 .finance-garden__guide { display: flex; gap: 20px; align-items: center; min-width: 0; }
-.finance-garden__penny { position: relative; flex: 0 0 160px; isolation: isolate; }
-.finance-garden__penny::before { content: ""; position: absolute; z-index: -1; inset: 10% 0 0; border-radius: 50% 50% 12px 12px; background: #e0ead7; }
+.finance-garden__mascot { position: relative; flex: 0 0 160px; isolation: isolate; }
+.finance-garden__mascot::before { content: ""; position: absolute; z-index: -1; inset: 10% 0 24px; border-radius: 50% 50% 12px 12px; background: #e0ead7; }
+.finance-garden__name { display: block; text-align: center; margin-top: 6px; color: #426545; font-size: 11px; font-weight: 600; }
 .finance-garden__guide-copy { min-width: 0; }
 .finance-garden__guide-copy h3 { font-size: 21px; font-weight: 600; line-height: 1.3; margin: 8px 0 14px; }
 .finance-garden__path { display: grid; gap: 10px; font-size: 12px; }
@@ -92,14 +93,16 @@
 .essay-sources small { display: block; font-size: 11px; color: #5d5b54; }
 .finance-quiz button:focus-visible { outline: 3px solid #5645d4; outline-offset: 4px; }
 .finance-quiz button[data-result="correct"] { background: #a5ed6e; color: #111; box-shadow: 0 4px 0 #426545; }
+.finance-quiz button[data-result="correct"]:disabled { opacity: 1; }
+.finance-quiz button[data-result="correct"] > span { color: #36583b; }
 .finance-quiz button[data-result="retry"] { background: #ffefec; color: #7d2820; box-shadow: 0 4px 0 #a64636; }
 .finance-quiz button { min-height: 44px; }
 .finance-quiz strong, .finance-quiz .text-\[\#439C00\] { color: #36583b; }
 @media (max-width: 1023px) {
   .finance-garden { gap: 24px; padding: 24px; }
   .finance-garden__guide { gap: 12px; }
-  .finance-garden__penny { flex-basis: 115px; }
-  .finance-garden__penny .notion-mascot { width: 115px !important; height: 115px !important; }
+  .finance-garden__mascot { flex-basis: 115px; }
+  .finance-garden__mascot .notion-mascot { width: 115px !important; height: 115px !important; }
 }
 @media (max-width: 639px) {
   .finance-garden { grid-template-columns: 1fr; gap: 24px; padding: 24px 20px; }

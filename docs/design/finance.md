@@ -6,7 +6,7 @@ The Finance section combines a quiet editorial layout with a short learning loop
 
 - Notion Design: warm charcoal, flat cream and mint surfaces, hairlines, a purple primary action, 8px buttons, and 12px cards.
 - Duolingo Design: visible numbered learning steps, lime feedback with dark text, brief action-led copy, and explicit correct/retry feedback.
-- Mascot: Penny is an original fictional tortoise with glasses, a notebook, and a sprouting coin. It is a patient learning companion, not a financial adviser or historical figure.
+- Mascot: Charlie Munger is the user-selected Finance guide. An original hand-drawn portrait follows the supplied reference's swept white hair, dark rectangular glasses, navy suit, and rust tie. The Finance article remains authored by Neuroplastic Editorial; interface prompts and examples are not presented as Munger quotations or personal recommendations.
 
 Existing site typography and the current Classical Symposium default are preserved. Narrow screens stack the finance panel and use a three-column subject selector. Controls have 44px minimum targets, visible keyboard focus, and reduced-motion equivalents. Quiz confetti observes the system motion preference.
 
@@ -16,7 +16,7 @@ Existing site typography and the current Classical Symposium default are preserv
 
 The experiment uses one initial deposit and annual compounding at a constant hypothetical rate. It excludes additional deposits, withdrawals, fees, taxes, inflation, and volatility. It compares compound and simple interest in currency-neutral units. The article separately explains inflation and fees and does not recommend an investment product or promise returns.
 
-`public/mascots/penny.webp` was generated with the built-in image-generation tool and encoded to WebP while preserving transparency. The complete prompt is recorded in `finance-mascot-prompt.json`.
+`public/mascots/charlie-munger.webp` was generated with the built-in image-generation tool using the user's portrait reference, then encoded to WebP while preserving transparency. The complete prompt is recorded in `finance-mascot-prompt.json`.
 
 ## Compatibility
 

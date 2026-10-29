@@ -15,7 +15,7 @@ Every monograph in Neuroplastic is indexed under one of six fields of inquiry, p
 - **Philosophy ($\Phi$)** — Epistemology, continental ontology, and modal logic (*Socrates*).
 - **AI Research ($\Lambda$)** — Sub-quadratic attention, mechanistic interpretability, and entropy-guided inference (*Claude Shannon*).
 - **Psychoanalysis ($\Delta$)** — Lacanian topology, the algorithmic unconscious, and desire graphs (*Sigmund Freud*).
-- **Finance (↗)** — Money habits, compounding, and risk literacy (*Penny*, an original fictional tortoise guide).
+- **Finance (↗)** — Money habits, compounding, and risk literacy (*Charlie Munger*, illustrated from the supplied portrait reference).
 
 The **Money Garden** introduces the Finance section with a six-minute article, *Give Your Money Time: A Beginner’s Guide to Compounding*. It includes three reading depths, five linked educational sources from the CFPB and SEC’s Investor.gov, a simple-versus-compound growth experiment, and a knowledge check. Examples are hypothetical and use currency-neutral units. The article is general education, not a personal investment recommendation.
 
@@ -38,7 +38,7 @@ Interactive peer annotation and commentary on every monograph:
 - Anchor comments to a specific reading depth (`L1`, `L2`, or `L3`), endorse insights, and post threaded replies.
 
 ### 5. Illustrated Thinkers & Living Atlas
-- **Illustrated Portraits (`<NotionMascot />`)** — Seven original thinker portraits and Penny, the Finance guide, shared across the garden and reader.
+- **Illustrated Portraits (`<NotionMascot />`)** — Eight original portraits, including Charlie Munger as the Finance guide, shared across the garden and reader.
 - **Classical Symposium & Dialectical Salon (`<SynapseGraph2D />`)** — Interactive 2D conceptual map connecting monographs across disciplines.
 - **Living Atlas (`<LivingAtlas />`)** — An animated sketchbook connects six subject guides. Select a portrait to change the reading invitation, then explore the subject. Includes pause/resume, reduced-motion support, and off-screen suspension.
 

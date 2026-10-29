@@ -21,7 +21,7 @@ export function CompoundInterestSandbox() {
       <header className="compound-lab__header">
         <NotionMascot variant="steward" size={72} decorative interactive={false} />
         <div>
-          <span className="finance-garden__eyebrow">PENNY’S LITTLE EXPERIMENT</span>
+          <span className="finance-garden__eyebrow">THE COMPOUNDING EXPERIMENT</span>
           <h3 className="font-display">What changes when you give it time?</h3>
           <p>Move one slider. Compare simple and compound growth.</p>
         </div>

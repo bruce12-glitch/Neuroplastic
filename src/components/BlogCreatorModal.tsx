@@ -44,7 +44,7 @@ const FIELD_TEMPLATES: Record<PillarId, Partial<CustomBlogDraft>> = {
     formalEquation: "A = P × (1 + r)^n",
     formalExplanation: "P is one initial deposit, r a hypothetical fixed annual rate as a decimal, and n the number of years. A is the final balance before costs, tax, and inflation.",
     quizQuestion: "What does a constant-rate growth example tell us?",
-    quizScenario: "Penny draws a smooth compounding curve using one deposit and a fixed annual rate.",
+    quizScenario: "A reader draws a smooth compounding curve using one deposit and a fixed annual rate.",
     quizCorrectAnswer: "It illustrates growth under stated assumptions, rather than predicting an investment’s return.",
     quizWrongAnswer1: "Every investment grows smoothly at the illustrated rate.",
     quizWrongAnswer2: "A longer time horizon removes every possible risk.",
@@ -773,7 +773,7 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
                   {[
                     {
                       id: "compound" as const,
-                      title: "Penny’s Compounding Experiment",
+                      title: "Compounding Experiment",
                       desc: "Compare simple and compound growth with clearly labeled hypothetical assumptions.",
                     },
                     {
