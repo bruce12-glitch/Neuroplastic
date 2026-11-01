@@ -2,7 +2,9 @@
 
 **Live website:** [https://bruce12-glitch.github.io/Neuroplastic/](https://bruce12-glitch.github.io/Neuroplastic/)
 
-**Latest original Philosophy essay:** [The Dreaming Sovereign — On Descartes and the Solipsistic Void](https://bruce12-glitch.github.io/Neuroplastic/?essay=the-dreaming-sovereign)
+**Latest original Philosophy essay:** [The Internal Generative Mind — On Aquinas, Anselm, and the Dream Sovereign](https://bruce12-glitch.github.io/Neuroplastic/?essay=the-internal-generative-mind)
+
+**Previously:** [The Dreaming Sovereign — On Descartes and the Solipsistic Void](https://bruce12-glitch.github.io/Neuroplastic/?essay=the-dreaming-sovereign)
 
 **Neuroplastic** is an interactive digital garden, monograph publishing studio, and dialectical discourse platform built for cross-disciplinary inquiry across **World View**, **Psychology**, **Philosophy**, **AI Research**, **Psychoanalysis**, and **Finance**.
 
@@ -22,6 +24,8 @@ Every monograph in Neuroplastic is indexed under one of six fields of inquiry, p
 The **Money Garden** introduces the Finance section with a six-minute article, *Give Your Money Time: A Beginner’s Guide to Compounding*. It includes three reading depths, five linked educational sources from the CFPB and SEC’s Investor.gov, a simple-versus-compound growth experiment, and a knowledge check. Examples are hypothetical and use currency-neutral units. The article is general education, not a personal investment recommendation.
 
 **Original essays** preserve the author's full text in the editorial reader, with attributed quotations, reading controls, sources, and discussion. *The Dreaming Sovereign* is the site author's submitted Philosophy article; its Otto Rank passage is credited through Ernest Becker's *The Denial of Death*, chapter eight. Open any essay to obtain a shareable `?essay=<slug>` URL; refresh and browser history retain the selected article.
+
+**The Philosophy reading room** introduces *The Internal Generative Mind* with the supplied seated-reader illustration. The five-section essay includes seven references: Aquinas, Anselm, Plato, Hume, Descartes, and NASA. Separate reference notes link each section to numbered bibliography entries and distinguish the original arguments from the author's interpretation. A second supplied reader illustration accompanies Philosophy bibliographies. The existing 3D thinker portraits remain the subject guides.
 
 ### 2. Three-Level Cognitive Depth Reader (`<CognitiveReader />`)
 Rather than static long-form pages, every monograph can be read across three calibrated epistemic depths:
