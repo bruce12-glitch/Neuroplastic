@@ -1,0 +1,72 @@
+.philosophy-reading-room {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  overflow: hidden;
+  isolation: isolate;
+  border: 2px solid #191919;
+  border-radius: 20px;
+  background: #eee9f8;
+  box-shadow: 0 5px 0 #191919;
+  color: #37352f;
+}
+.philosophy-reading-room__copy { padding: 30px 36px; align-self: center; }
+.philosophy-reading-room__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5a447e;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.philosophy-reading-room h2 { margin: 12px 0 10px; font-size: clamp(28px, 3vw, 40px); line-height: 1.12; font-weight: 600; letter-spacing: -.6px; }
+.philosophy-reading-room__copy > p { max-width: 58ch; margin: 0; font-size: 14px; line-height: 1.7; color: #5d5765; }
+.philosophy-reading-room__footer { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
+.philosophy-reading-room__footer button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid #4534b3;
+  border-radius: 8px;
+  background: #5645d4;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+.philosophy-reading-room__footer button:hover { background: #4534b3; }
+.philosophy-reading-room__footer button:active { transform: translateY(1px); }
+.philosophy-reading-room__footer button:focus-visible { outline: 3px solid #5645d4; outline-offset: 4px; }
+.philosophy-reading-room__footer > span { color: #5d5765; font-size: 11px; }
+.philosophy-reading-room__illustration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 18px 20px;
+  border-left: 1px solid #ddd6ed;
+  background: #fff;
+}
+.philosophy-reading-room__illustration img { display: block; width: 230px; max-width: 100%; height: auto; }
+.philosophy-reading-room__illustration figcaption { color: #5d5765; font-size: 10px; line-height: 1.5; }
+@media (max-width: 767px) {
+  .philosophy-reading-room { grid-template-columns: minmax(0, 1fr) 210px; }
+  .philosophy-reading-room__copy { padding: 24px; }
+  .philosophy-reading-room__illustration { padding: 16px; }
+}
+@media (max-width: 539px) {
+  .philosophy-reading-room { grid-template-columns: 1fr; }
+  .philosophy-reading-room__copy { padding: 24px 20px; }
+  .philosophy-reading-room__illustration { flex-direction: row; gap: 20px; border-left: 0; border-top: 1px solid #ddd6ed; padding: 10px 20px; }
+  .philosophy-reading-room__illustration img { width: 150px; }
+  .philosophy-reading-room__illustration figcaption { max-width: 13ch; font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .philosophy-reading-room__footer button { transition: none; }
+}

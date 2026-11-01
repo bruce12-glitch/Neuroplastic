@@ -10,6 +10,7 @@ import { AttractorBasinSandbox } from "./sandboxes/AttractorBasinSandbox.tsx";
 import { CompoundInterestSandbox } from "./sandboxes/CompoundInterestSandbox.tsx";
 import { DialecticalComments } from "./DialecticalComments.tsx";
 import { HumanMathDerivation } from "./HumanMathDerivation.tsx";
+import { EssayReferenceNotes } from "./EssayReferenceNotes.tsx";
 import {
   ArrowLeft,
   Bookmark,
@@ -662,6 +663,8 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
                   );
                 })}
 
+                <EssayReferenceNotes section={section} sources={essay.sources} />
+
                 {/* Centered Editorial Pull Quote (Anti-Slop Rule: no thick left borders; uses centered serif + top/bottom hairline rules) */}
                 {section.pullQuote && (
                   <figure className="my-10 py-6 border-y border-current/25 text-center px-4 sm:px-8">
@@ -709,11 +712,16 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
 
         {essay.sources && essay.sources.length > 0 && (
           <section className="essay-sources" aria-labelledby="essay-sources-heading">
-            <h3 id="essay-sources-heading" className="font-display">Sources & further reading</h3>
+            <div className="essay-sources__header">
+              <h3 id="essay-sources-heading" className="font-display">Sources & further reading</h3>
+              {essay.pillar === "philosophy" && (
+                <img className="essay-sources__reader" src={`${import.meta.env.BASE_URL}mascots/readers/blue-reader.webp`} width={309} height={248} alt="" loading="lazy" decoding="async" />
+              )}
+            </div>
             {essay.editorialNote && <p>{essay.editorialNote}</p>}
             <ol>
               {essay.sources.map((source, index) => (
-                <li key={source.url}>
+                <li key={source.url} id={`essay-source-${index + 1}`} className="essay-source-entry" tabIndex={-1}>
                   <span>[{index + 1}]</span>
                   <div>
                     <a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}<span className="sr-only"> (opens in a new tab)</span></a>

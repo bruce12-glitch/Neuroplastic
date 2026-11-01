@@ -372,6 +372,11 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
     }
     // Retain a quotation's credit when its text is unchanged, even if sections move.
     for (const section of result.essay.content.level2.sections) {
+      const originalSection = initialEssay?.content.level2.sections.find(
+        (original) => original.heading === section.heading
+      );
+      if (originalSection?.references) section.references = originalSection.references;
+      if (originalSection?.referenceNote) section.referenceNote = originalSection.referenceNote;
       const originalQuote = initialEssay?.content.level2.sections.find(
         (original) => original.pullQuote && original.pullQuote === section.pullQuote
       );
