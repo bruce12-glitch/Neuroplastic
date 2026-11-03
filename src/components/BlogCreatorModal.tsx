@@ -243,7 +243,7 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
       setSections(
         initialEssay.content.level2.sections.map((s) => ({
           heading: s.heading,
-          body: s.paragraphs.join("\n\n"),
+          body: s.markdown ?? s.paragraphs.join("\n\n"),
           pullQuote: s.pullQuote || "",
         }))
       );
@@ -369,6 +369,12 @@ export const BlogCreatorModal: React.FC<BlogCreatorModalProps> = ({
     if (initialEssay?.format) {
       result.essay.format = initialEssay.format;
       result.essay.xpReward = initialEssay.xpReward;
+    }
+    // Keep rich author text in the existing body editor, including edited headings and lists.
+    if (initialEssay?.content.level2.sections.some((section) => section.markdown !== undefined)) {
+      result.essay.content.level2.sections.forEach((section, index) => {
+        section.markdown = sections[index].body.trim();
+      });
     }
     // Retain a quotation's credit when its text is unchanged, even if sections move.
     for (const section of result.essay.content.level2.sections) {

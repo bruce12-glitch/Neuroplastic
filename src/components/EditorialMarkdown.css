@@ -1,0 +1,17 @@
+.essay-markdown > * + * { margin-top: 1.2em; }
+.essay-markdown h3, .essay-markdown h4 { font-family: var(--font-display); font-weight: 700; line-height: 1.25; margin-top: 2em; }
+.essay-markdown h3 { font-size: 1.5rem; }
+.essay-markdown h4 { font-size: 1.25rem; }
+.essay-markdown ul, .essay-markdown ol { padding-left: 1.4em; }
+.essay-markdown ul { list-style: disc; }
+.essay-markdown ol { list-style: decimal; }
+.essay-markdown li + li { margin-top: .85em; }
+.essay-markdown li > p + p { margin-top: .6em; }
+.essay-markdown strong { font-weight: 700; }
+.essay-markdown em { font-style: italic; }
+.essay-markdown blockquote { padding: 1em 1.2em; border-block: 1px solid currentColor; font-style: italic; }
+.essay-markdown a { text-decoration: underline; text-underline-offset: 3px; }
+.essay-markdown a:focus-visible { outline: 3px solid #5645d4; outline-offset: 4px; border-radius: 3px; }
+.essay-meta-with-mascot > div:first-child { flex: 1; min-width: 0; }
+.essay-header-mascot { flex: 0 0 88px; text-align: center; }
+.essay-header-mascot figcaption { margin-top: 3px; font-family: var(--font-ui); font-size: 9px; line-height: 1.4; font-weight: 600; }

@@ -1,0 +1,106 @@
+import type { EssayItem } from "./essays.ts";
+
+/** Original author text, retaining its lists and emphasis. Notes are separate editorial context. */
+export const OEDIPAL_PROJECT_ESSAY: EssayItem = {
+  id: "oedipal-project",
+  slug: "the-oedipal-project",
+  title: "The Oedipal Project — Freud, Becker, and the Search for Immortality",
+  subtitle: "A reading of desire, guilt, and identification through Becker’s account of mortality and cultural heroism.",
+  author: "Neuroplastic",
+  format: "original",
+  pillar: "psychoanalysis",
+  pillarLabel: "Psychoanalysis",
+  readingTimeMinutes: 6,
+  xpReward: 0,
+  publishedDate: "Nov 3, 2026",
+  tags: ["Freud", "Ernest Becker", "Oedipus complex", "Mortality", "Symbolic immortality"],
+  prerequisites: [],
+  sandboxType: "epistemic",
+  socraticAnnotations: {},
+  content: {
+    level1: { bullets: [], mentalModelTable: [] },
+    level2: {
+      sections: [
+        {
+          heading: "1. The Classical Freudian Foundation: A Battle Over Instinct and Guilt",
+          paragraphs: [],
+          markdown: [
+            'Sigmund Freud named the complex after the Greek myth of Oedipus, the tragic king destined to unwittingly kill his father and marry his mother. In classical psychoanalysis, the Oedipus complex unfolds during the "phallic stage" of childhood development (typically between ages three and six).',
+            "- **The Desire:** The young child directs their earliest erotic, possessive urges toward the opposite-sex parent (most classically described by Freud as the son toward the mother). The mother is the child's primary source of warmth, sensory comfort, and gratification.",
+            "- **The Rivalry:** The child realizes that the father stands between him and complete possession of the mother. The father is an obstacle, a giant rival who claims the mother's bed and affection. The child harbors subconscious, hostile wishes to eliminate the father.",
+            '- **Castration Anxiety:** The child soon recognizes that the father is vastly more powerful. Observing physical anatomical differences between the sexes, the boy develops an unconscious terror that the father will punish his forbidden desires by mutilating his genitals—termed "castration anxiety."',
+            "- **Resolution and Identification:** Because the fear of punishment is too overwhelming, the child represses both his desire for the mother and his hatred of the father. To resolve the crisis, he adopts a survival strategy: **identification**. Instead of fighting the father, he decides to become *like* him. By internalizing the father's rules and moral authority, the child forms the **Superego** (the conscience) and defers romantic gratification to adulthood.",
+          ].join("\n\n"),
+          references: [1, 2, 5],
+          referenceNote: "This is a summary of Freud’s historical model. Identification is an unconscious process in that model, rather than a deliberate decision. Freud’s original treatment includes more than the simplified father–son pattern here; the APA entry also discusses the disputed universality of the classical account.",
+        },
+        {
+          heading: "2. Ernest Becker's Radical Shift: It Was Never About Sex; It Was About Death",
+          paragraphs: [],
+          markdown: [
+            "In *The Denial of Death*, Ernest Becker argues that Freud had a profound intuition but got trapped in literal biology. Becker, drawing heavily on psychoanalyst Norman O. Brown and philosopher Søren Kierkegaard, insists that human development is not driven primarily by sexual drives (libido), but by **ontological terror**—the panic of being a helpless, mortal creature.",
+            "Becker redefines the Oedipus complex not as a lustful desire to sleep with a parent, but as the child's earliest, desperate attempt to conquer vulnerability, physical decay, and mortality.",
+            "### Why the Mother? The Return to the Source of Life",
+            "To Becker, the child does not want physical incest. The child's desire to merge with the mother is symbolic:",
+            "- The mother is the source from which life emerged.",
+            "- To unite with the mother means returning to the safety of the womb—a state where vulnerability, coldness, hunger, and fear did not exist.",
+            '- Becker calls this an attempt to **defeat determinism**. If the child could "possess" the mother and give birth to himself, he would not be a mere dependent animal; he would be his own creator. This directly feeds into what Becker calls the *causa sui* project (the drive to be self-created).',
+            "### Why the Father? The Terror of Determinism and the Body",
+            "In Becker's view, the father is not merely a sexual rival; he represents cold reality, society, and the physical limits of existence.",
+            "- The father's presence shatters the child's fantasy that he is the center of the universe.",
+            '- The father forces the child to acknowledge: *"You did not make yourself. You came from my body and your mother\'s body. You are just a biological creature bound to rules and time."*',
+            '- Becker reinterprets "castration anxiety" not as a literal fear of losing an organ, but as **the horror of physical limitation**. The body is vulnerable; it can be injured, it can be disciplined, and ultimately, it will die.',
+          ].join("\n\n"),
+          references: [3, 4],
+          referenceNote: "In chapter III, Becker also places castration anxiety in confrontation with the mother and biological dependence, rather than only the father’s threats. His synthesis draws on Otto Rank as well as Brown. The imagined speeches in this essay are explanatory paraphrases, not quotations from Becker.",
+        },
+        {
+          heading: "3. The Oedipal Transition as Cultural Initiation",
+          paragraphs: [],
+          markdown: [
+            "Under Becker's existential lens, resolving the Oedipus complex is the exact moment a human being leaves the animal world and enters the human \"Hero System\":",
+            "- **Abandoning Physical Omnipotence:** The child realizes he cannot be an omnipotent, self-created god on physical terms. His physical body is small, weak, and perishable.",
+            '- **Adopting Symbolic Immortality:** If you cannot conquer nature in the flesh, you must conquer it in the mind. The child accepts the father and culture\'s rules in exchange for a new promise: *"If I obey society\'s script, study hard, achieve status, and build an honorable character, I will be a hero. My life will matter, and my name will outlive my body."*',
+          ].join("\n\n"),
+          references: [3, 4],
+          referenceNote: "The transition described here is a cultural-existential interpretation, rather than a single verified developmental event. A hero system gives a life symbolic value; symbolic immortality does not mean that achievements literally prevent death.",
+        },
+      ],
+    },
+    level3: { formalProofTitle: "", latexFormulas: [], architecturalProof: [] },
+  },
+  masteryQuiz: { question: "", scenario: "", options: [], hint: "" },
+  editorialNote: "This article compares historical theories of human motivation. Freud’s classical account and Becker’s reinterpretation should be read in their original contexts. Reference notes are editorial additions; imagined speech is the author’s illustrative wording.",
+  sources: [
+    {
+      title: "The Passing of the Œdipus Complex (1924)",
+      publisher: "Sigmund Freud · Freud Edition · The International Journal of Psycho-Analysis, volume V",
+      url: "https://www.freudedition.net/en/werke/passing-oedipus-complex/druckschrift-0",
+      note: "Section 1: Freud’s account of the phallic phase, castration anxiety, identification, and the formation of the super-ego. Also known in later translation as The Dissolution of the Oedipus Complex.",
+    },
+    {
+      title: "Group Psychology and the Analysis of the Ego, chapter VII — Identification",
+      publisher: "Sigmund Freud · Project Gutenberg · James Strachey translation (1922)",
+      url: "https://www.gutenberg.org/cache/epub/35877/pg35877-images.html",
+      note: "Section 1: identification, object attachment, and ambivalence in Freud’s original account.",
+    },
+    {
+      title: "The Denial of Death (1973), chapters I, III, and V",
+      publisher: "Ernest Becker · Free Press / Simon & Schuster",
+      url: "https://www.simonandschuster.com/books/The-Denial-of-Death/Ernest-Becker/9780684832401",
+      note: "Sections 2 and 3: consult chapter III’s Oedipal Project and Castration Complex discussions, chapter I on heroism, and chapter V on Kierkegaard. The link provides book information and a publisher excerpt, not the full chapters.",
+    },
+    {
+      title: "Becker’s Synthesis",
+      publisher: "Ernest Becker Foundation",
+      url: "https://www.ernestbecker.org/beckers-synthesis",
+      note: "Sections 2 and 3: an accessible introduction to Becker’s account of death anxiety, immortality projects, and cultural hero systems. A secondary guide to the original book.",
+    },
+    {
+      title: "Oedipus complex",
+      publisher: "APA Dictionary of Psychology",
+      url: "https://dictionary.apa.org/oedipus-complex",
+      note: "Section 1: terminology and context for the classical theory, including later modifications and challenges to its universality.",
+    },
+  ],
+};

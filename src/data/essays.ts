@@ -2,6 +2,7 @@ import { SocraticAnnotation } from "../components/SocraticMarginCallout.tsx";
 import { FINANCE_ESSAY } from "./financeEssay.ts";
 import { DREAMING_SOVEREIGN_ESSAY } from "./dreamingSovereignEssay.ts";
 import { GENERATIVE_MIND_ESSAY } from "./generativeMindEssay.ts";
+import { OEDIPAL_PROJECT_ESSAY } from "./oedipalProjectEssay.ts";
 
 export type PillarId = "philosophy" | "ai" | "psychology" | "psychoanalysis" | "worldview" | "finance";
 
@@ -37,6 +38,7 @@ export interface EssayLevelContent {
     sections: {
       heading: string;
       paragraphs: string[];
+      markdown?: string;
       pullQuote?: string;
       pullQuoteAttribution?: {
         author: string;
@@ -240,6 +242,7 @@ export const INITIAL_COMMENTS: EssayComment[] = [
 ];
 
 export const ESSAYS: EssayItem[] = [
+  OEDIPAL_PROJECT_ESSAY,
   GENERATIVE_MIND_ESSAY,
   DREAMING_SOVEREIGN_ESSAY,
   {
