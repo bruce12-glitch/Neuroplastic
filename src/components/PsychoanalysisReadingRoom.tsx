@@ -1,10 +1,11 @@
 import { ArrowRight, BookOpen } from "lucide-react";
-import type { EssayItem } from "../data/essays.ts";
-import { NotionMascot } from "./NotionMascot.tsx";
+import { PILLAR_METADATA, type EssayItem } from "../data/essays.ts";
+import { NotionMascot, THINKER_PORTRAITS } from "./NotionMascot.tsx";
 import "./PhilosophyReadingRoom.css";
 import "./PsychoanalysisReadingRoom.css";
 
 export function PsychoanalysisReadingRoom({ essay, onRead }: { essay: EssayItem; onRead: () => void }) {
+  const guideVariant = PILLAR_METADATA.psychoanalysis.mascot;
   return (
     <section className="philosophy-reading-room psychoanalysis-reading-room" aria-labelledby="psychoanalysis-reading-room-heading">
       <div className="philosophy-reading-room__copy">
@@ -22,8 +23,8 @@ export function PsychoanalysisReadingRoom({ essay, onRead }: { essay: EssayItem;
         </div>
       </div>
       <figure className="philosophy-reading-room__illustration psychoanalysis-reading-room__guide">
-        <NotionMascot variant="analyst" size={174} decorative interactiveEyes={false} />
-        <figcaption><strong>Sigmund Freud</strong><br />Illustrated subject guide</figcaption>
+        <NotionMascot variant={guideVariant} size={174} decorative interactiveEyes={false} />
+        <figcaption><strong>{THINKER_PORTRAITS[guideVariant].name}</strong><br />Illustrated subject guide</figcaption>
       </figure>
     </section>
   );

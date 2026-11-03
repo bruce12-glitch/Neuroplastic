@@ -17,10 +17,10 @@
 ### 1. Six Intellectual Domains
 Every monograph in Neuroplastic is indexed under one of six fields of inquiry, paired with a signature domain palette and illustrated guide:
 - **World View ($\Omega$)** — Geopolitics, macro-history, and polycrisis cartography (*Aristotle*).
-- **Psychology ($\Psi$)** — Cognitive dynamics, behavioral attractors, and neuroplasticity (*Plato*).
+- **Psychology ($\Psi$)** — Cognitive dynamics, behavioral attractors, and neuroplasticity (*Sigmund Freud*).
 - **Philosophy ($\Phi$)** — Epistemology, continental ontology, and modal logic (*Socrates*).
 - **AI Research ($\Lambda$)** — Sub-quadratic attention, mechanistic interpretability, and entropy-guided inference (*Claude Shannon*).
-- **Psychoanalysis ($\Delta$)** — Lacanian topology, the algorithmic unconscious, and desire graphs (*Sigmund Freud*).
+- **Psychoanalysis ($\Delta$)** — Lacanian topology, the algorithmic unconscious, and desire graphs (*Carl Jung*).
 - **Finance (↗)** — Money habits, compounding, and risk literacy (*Charlie Munger*, illustrated from the supplied portrait reference).
 
 The **Money Garden** introduces the Finance section with a six-minute article, *Give Your Money Time: A Beginner’s Guide to Compounding*. It includes three reading depths, five linked educational sources from the CFPB and SEC’s Investor.gov, a simple-versus-compound growth experiment, and a knowledge check. Examples are hypothetical and use currency-neutral units. The article is general education, not a personal investment recommendation.
@@ -29,7 +29,7 @@ The **Money Garden** introduces the Finance section with a six-minute article, *
 
 **The Philosophy reading room** introduces *The Internal Generative Mind* with the supplied seated-reader illustration. The five-section essay includes seven references: Aquinas, Anselm, Plato, Hume, Descartes, and NASA. Separate reference notes link each section to numbered bibliography entries and distinguish the original arguments from the author's interpretation. A second supplied reader illustration accompanies Philosophy bibliographies. The existing 3D thinker portraits remain the subject guides.
 
-**The Psychoanalysis reading room** introduces *The Oedipal Project* with Freud's 3D mascot and a rose reading card. The original three sections retain their bullet lists, subheadings, bold terms, and italics through CommonMark rendering. Five linked references and separate notes distinguish historical theory from the author's interpretation and illustrative speech. A supplied red-book reader accompanies the bibliography. The latest essay is featured under All and Psychoanalysis; the Philosophy reading card remains in its subject view.
+**The Psychoanalysis reading room** introduces *The Oedipal Project* with Carl Jung as its illustrated subject guide and a rose reading card. The original three sections retain their bullet lists, subheadings, bold terms, and italics through CommonMark rendering. Five linked references and separate notes distinguish historical theory from the author's interpretation and illustrative speech. A supplied red-book reader accompanies the bibliography. The latest essay is featured under All and Psychoanalysis; the Philosophy reading card remains in its subject view.
 
 ### 2. Three-Level Cognitive Depth Reader (`<CognitiveReader />`)
 Rather than static long-form pages, every monograph can be read across three calibrated epistemic depths:
@@ -50,7 +50,7 @@ Interactive peer annotation and commentary on every monograph:
 - Anchor comments to a specific reading depth (`L1`, `L2`, or `L3`), endorse insights, and post threaded replies.
 
 ### 5. 3D Portraits & Living Atlas
-- **3D Portraits (`<NotionMascot />`)** — Eight original sculpted character renders, including Charlie Munger as the Finance guide, shared across the garden and reader. Soft studio lighting, transparent backgrounds, and subtle pointer tilt give the cast a consistent dimensional finish. See [the collection and generation prompts](docs/design/mascots-3d.md).
+- **3D Portraits (`<NotionMascot />`)** — Eight active illustrated guides, including Sigmund Freud for Psychology, Carl Jung for Psychoanalysis, and Charlie Munger for Finance, shared across the garden and reader. Soft studio lighting, transparent backgrounds, and subtle pointer tilt give the cast a consistent dimensional finish. See [the collection and generation prompts](docs/design/mascots-3d.md).
 - **Classical Symposium & Dialectical Salon (`<SynapseGraph2D />`)** — Interactive 2D conceptual map connecting monographs across disciplines.
 - **Living Atlas (`<LivingAtlas />`)** — An animated sketchbook connects six subject guides. Select a portrait to change the reading invitation, then explore the subject. Includes pause/resume, reduced-motion support, and off-screen suspension.
 - **Desktop cursor** — A dark pointer with a thin white edge and soft cyan glow follows the supplied cursor reference. Buttons and links use a matching hand. Native text, precision, and disabled cursors remain available; touch and forced-colors modes use standard cursors.
