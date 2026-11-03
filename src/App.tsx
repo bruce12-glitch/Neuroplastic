@@ -12,6 +12,7 @@ import { NotionMascot } from "./components/NotionMascot.tsx";
 import { NeuroplasticLogo } from "./components/NeuroplasticLogo.tsx";
 import { FinanceGarden } from "./components/FinanceGarden.tsx";
 import { PhilosophyReadingRoom } from "./components/PhilosophyReadingRoom.tsx";
+import { PsychoanalysisReadingRoom } from "./components/PsychoanalysisReadingRoom.tsx";
 import { SynapseGraph2D } from "./components/SynapseGraph2D.tsx";
 import { LivingAtlas } from "./components/LivingAtlas.tsx";
 import { CognitiveReader } from "./components/CognitiveReader.tsx";
@@ -539,6 +540,7 @@ export default function App() {
   ];
   const financeGuide = allEssays.find((essay) => essay.id === "money-time-and-compounding");
   const philosophyFeature = allEssays.find((essay) => essay.id === "internal-generative-mind");
+  const psychoanalysisFeature = allEssays.find((essay) => essay.id === "oedipal-project");
 
   return (
     <div className="min-h-screen bg-[#F7F6F3] text-[#191919] font-ui antialiased flex flex-col">
@@ -772,7 +774,13 @@ export default function App() {
         </div>
       </section>
 
-      {philosophyFeature && !searchFilter && (selectedPillar === "all" || selectedPillar === "philosophy") && (
+      {psychoanalysisFeature && !searchFilter && (selectedPillar === "all" || selectedPillar === "psychoanalysis") && (
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 pt-4 w-full">
+          <PsychoanalysisReadingRoom essay={psychoanalysisFeature} onRead={() => handleSelectEssay(psychoanalysisFeature.id)} />
+        </div>
+      )}
+
+      {philosophyFeature && !searchFilter && (selectedPillar === "philosophy" || (selectedPillar === "all" && !psychoanalysisFeature)) && (
         <div className="max-w-7xl mx-auto px-4 lg:px-8 pt-4 w-full">
           <PhilosophyReadingRoom essay={philosophyFeature} onRead={() => handleSelectEssay(philosophyFeature.id)} />
         </div>

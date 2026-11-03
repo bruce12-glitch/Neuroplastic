@@ -11,6 +11,8 @@ import { CompoundInterestSandbox } from "./sandboxes/CompoundInterestSandbox.tsx
 import { DialecticalComments } from "./DialecticalComments.tsx";
 import { HumanMathDerivation } from "./HumanMathDerivation.tsx";
 import { EssayReferenceNotes } from "./EssayReferenceNotes.tsx";
+import { EditorialMarkdown } from "./EditorialMarkdown.tsx";
+import "./EditorialMarkdown.css";
 import {
   ArrowLeft,
   Bookmark,
@@ -352,7 +354,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
       <main className="max-w-3xl mx-auto px-4 sm:px-6 pt-10">
         {/* Anti-Slop Editorial Meta Header (Unboxed typographic hierarchy with · separators) */}
         <header className="mb-8 pb-8 border-b-2 border-[#191919]">
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div className={`flex flex-wrap items-center justify-between gap-2 mb-4 ${isOriginalEssay && essay.pillar === "psychoanalysis" ? "essay-meta-with-mascot" : ""}`}>
             <div className="text-xs font-code font-bold uppercase tracking-widest flex flex-wrap items-center gap-2">
               <span
                 className="px-2.5 py-0.5 rounded-md border border-[#191919] text-[#191919]"
@@ -378,6 +380,12 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
               )}
             </div>
 
+            {isOriginalEssay && essay.pillar === "psychoanalysis" && (
+              <figure className="essay-header-mascot">
+                <NotionMascot variant="analyst" size={88} decorative interactiveEyes={false} />
+                <figcaption>Sigmund Freud<br />Illustrated guide</figcaption>
+              </figure>
+            )}
             {essay.xpReward > 0 && <span className="text-xs font-code font-bold text-[#D6A600]">
               +{essay.xpReward} XP
             </span>}
@@ -615,7 +623,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
                   {section.heading}
                 </h2>
 
-                {section.paragraphs.map((para, pIdx) => {
+                {section.markdown ? <EditorialMarkdown>{section.markdown}</EditorialMarkdown> : section.paragraphs.map((para, pIdx) => {
                   const annotation = section.annotationId
                     ? essay.socraticAnnotations[section.annotationId]
                     : null;
@@ -716,6 +724,9 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
               <h3 id="essay-sources-heading" className="font-display">Sources & further reading</h3>
               {essay.pillar === "philosophy" && (
                 <img className="essay-sources__reader" src={`${import.meta.env.BASE_URL}mascots/readers/blue-reader.webp`} width={309} height={248} alt="" loading="lazy" decoding="async" />
+              )}
+              {essay.pillar === "psychoanalysis" && (
+                <img className="essay-sources__reader" src={`${import.meta.env.BASE_URL}mascots/readers/red-book-reader.webp`} width={316} height={240} alt="" loading="lazy" decoding="async" />
               )}
             </div>
             {essay.editorialNote && <p>{essay.editorialNote}</p>}

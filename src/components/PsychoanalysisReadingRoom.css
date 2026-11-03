@@ -1,0 +1,18 @@
+.psychoanalysis-reading-room { background: #fff0f3; }
+.psychoanalysis-reading-room .philosophy-reading-room__eyebrow { color: #8d354e; }
+.psychoanalysis-reading-room .philosophy-reading-room__copy > p,
+.psychoanalysis-reading-room .philosophy-reading-room__footer > span { color: #69545b; }
+.psychoanalysis-reading-room .philosophy-reading-room__footer button { background: #9b2d4b; border-color: #82243f; }
+.psychoanalysis-reading-room .philosophy-reading-room__footer button:hover { background: #82243f; }
+.psychoanalysis-reading-room .philosophy-reading-room__footer button:focus-visible { outline-color: #9b2d4b; }
+.psychoanalysis-reading-room__guide { background: #fff8f4; border-color: #edcfd7; }
+.psychoanalysis-reading-room__guide .notion-mascot__art { width: 100%; height: 100%; }
+.psychoanalysis-reading-room__guide figcaption { color: #69545b; }
+.psychoanalysis-reading-room__guide figcaption strong { font-size: 12px; }
+.psychoanalysis-reading-room__path { display: flex; flex-wrap: wrap; gap: 12px 20px; margin: 18px 0 0; padding: 0; list-style: none; font-size: 11px; font-weight: 600; }
+.psychoanalysis-reading-room__path li { display: inline-flex; align-items: center; gap: 7px; }
+.psychoanalysis-reading-room__path li > span { display: grid; place-items: center; width: 24px; height: 24px; background: #f5d8e2; border-radius: 7px; color: #82243f; font-size: 10px; }
+@media (max-width: 539px) {
+  .psychoanalysis-reading-room__guide .notion-mascot { width: 132px !important; height: 132px !important; flex-shrink: 0; }
+  .psychoanalysis-reading-room__guide figcaption { max-width: 16ch; }
+}

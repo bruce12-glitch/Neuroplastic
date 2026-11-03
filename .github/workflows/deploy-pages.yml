@@ -31,7 +31,7 @@ jobs:
       - name: Check TypeScript
         run: npm run lint
       - name: Run rules tests
-        run: node --import tsx --test src/utils/rules.test.ts firestore.rules.test.ts
+        run: node --import tsx --test src/utils/rules.test.ts src/components/EditorialMarkdown.test.tsx firestore.rules.test.ts
       - name: Lint Firestore rules
         run: npx eslint firestore.rules
       - name: Configure Pages
