@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { EssayItem, EssayComment, PILLAR_METADATA } from "../data/essays.ts";
-import { NotionMascot } from "./NotionMascot.tsx";
+import { NotionMascot, THINKER_PORTRAITS } from "./NotionMascot.tsx";
 import { NeuroplasticLogo } from "./NeuroplasticLogo.tsx";
 import { SocraticMarginCallout } from "./SocraticMarginCallout.tsx";
 import { EntropyPruningSandbox } from "./sandboxes/EntropyPruningSandbox.tsx";
@@ -382,8 +382,8 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
 
             {isOriginalEssay && essay.pillar === "psychoanalysis" && (
               <figure className="essay-header-mascot">
-                <NotionMascot variant="analyst" size={88} decorative interactiveEyes={false} />
-                <figcaption>Sigmund Freud<br />Illustrated guide</figcaption>
+                <NotionMascot variant={meta.mascot} size={88} decorative interactiveEyes={false} />
+                <figcaption>{THINKER_PORTRAITS[meta.mascot].name}<br />Illustrated guide</figcaption>
               </figure>
             )}
             {essay.xpReward > 0 && <span className="text-xs font-code font-bold text-[#D6A600]">

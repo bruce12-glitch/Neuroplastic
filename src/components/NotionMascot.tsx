@@ -48,10 +48,10 @@ export const THINKER_PORTRAITS: Record<MascotVariant, ThinkerPortrait> = {
     alt: "3D portrait of Aristotle in a terracotta sash, observing a leaf in his field notebook.",
   },
   observer: {
-    name: "Plato", asset: "3d/plato", color: "#54785d", paper: "#e8efe5",
-    role: "Beyond the familiar",
-    question: "Which patterns are hiding in plain sight?",
-    alt: "3D portrait of Plato with a long brown beard and a sage robe, considering a golden geometric form.",
+    name: "Sigmund Freud", asset: "3d/freud", color: "#54785d", paper: "#e8efe5",
+    role: "Noticing patterns of mind",
+    question: "What might be shaping this thought or habit?",
+    alt: "3D portrait of Sigmund Freud with silver hair, a full silver beard, round spectacles, and a cream notebook.",
   },
   architect: {
     name: "Claude Shannon", asset: "3d/shannon", color: "#4e7298", paper: "#e6edf5",
@@ -60,10 +60,10 @@ export const THINKER_PORTRAITS: Record<MascotVariant, ThinkerPortrait> = {
     alt: "3D portrait of Claude Shannon in a blue jacket, sharing a signal diagram on an index card.",
   },
   analyst: {
-    name: "Sigmund Freud", asset: "3d/freud", color: "#98616c", paper: "#f4e7ea",
-    role: "Listening beneath the surface",
-    question: "What might we notice if we pause and listen?",
-    alt: "3D portrait of Sigmund Freud with silver hair and round spectacles, listening with a notebook.",
+    name: "Carl Jung", asset: "3d/carl-jung", color: "#98616c", paper: "#f4e7ea",
+    role: "Exploring the inner world",
+    question: "What meanings do we bring to this experience?",
+    alt: "3D portrait of Carl Jung with swept white hair, a white moustache, round spectacles, and a charcoal suit, holding a notebook and pencil.",
   },
   critic: {
     name: "Diogenes", asset: "3d/diogenes", color: "#916e3e", paper: "#f2ebdf",

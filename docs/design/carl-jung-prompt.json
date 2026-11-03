@@ -1,0 +1,16 @@
+{
+  "method": "Built-in image_gen; transparent-background style-transfer variation; WebP quality 86, method 6.",
+  "date": "2026-11-03",
+  "subject": "Carl Jung",
+  "asset": "public/mascots/3d/carl-jung.webp",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "alphaPreserved": true,
+  "reference": {
+    "asset": "public/mascots/3d/freud.webp",
+    "role": "3D rendering style, lighting, material finish, proportions, and framing only; Jung identity specified by prompt."
+  },
+  "prompt": "Create a NEW Carl Gustav Jung portrait as a sibling to the supplied Freud portrait. Use the supplied image ONLY as the exact 3D rendering, lighting, material quality, proportions, framing, and transparent-cutout style reference. Replace the person's identity, clothes and pose to clearly depict CARL JUNG.\n\nJung is an elderly Swiss man with a broad friendly face, high wide forehead, thinning swept-back snowy white hair, a substantial neat white moustache, and a CLEAN-SHAVEN CHIN. Absolutely no full beard or chin beard. Small round thin wire-rim eyeglasses, soft thoughtful eyes, a warm intelligent half-smile. Recognizable Jung silhouette and facial structure, gently caricatured with an oversized expressive head matching the supplied cast. Dignified and approachable, not a generic grandfather.\n\nWaist-up portrait, complete shoulders and both hands inside the image, same scale as the reference. Charcoal-gray textured tweed suit, soft muted plum waistcoat, ivory shirt, understated dark tie. One hand holds a small cream notebook with a simple hand-drawn circle motif, the other loosely holds a pencil beside the notebook. Slight three-quarter view, upright relaxed posture. No pipe, no smoke. Beautiful sculpted 3D animated-film character quality, softly textured cloth, detailed silver hair, warm natural skin, restrained warm studio key light and subtle rim light, tactile clay-like finish, polished and expressive rather than photorealistic. Balanced silhouette readable as a small website mascot.\n\nSingle isolated character on a genuinely TRANSPARENT alpha background. No floor, scenery, backdrop, oval frame, ribbon, border, pedestal, cast shadow outside the silhouette, text, title, labels, logo, or watermark. Keep generous clean transparent margins around hair and hands. Square composition."
+}

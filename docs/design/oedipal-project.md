@@ -18,7 +18,7 @@ The article is an original reading of historical psychoanalytic and existential 
 
 ## Mascot design
 
-The feature uses a pale rose surface and the existing 3D Freud portrait. Three small numbered labels introduce desire and guilt, mortality, and cultural heroism. Freud also appears in the article metadata area, labelled as an illustrated guide.
+The feature uses a pale rose surface and a 3D subject guide. Three small numbered labels introduce desire and guilt, mortality, and cultural heroism. At initial publication Freud appeared in the feature and article metadata. The user's November 3 correction assigns Freud to Psychology and Carl Jung to Psychoanalysis, so both current guide positions now use Jung. This changes the illustrated guide, while the article continues to discuss Freud and Becker. See [the subject guide update](subject-guide-mapping.md).
 
 The supplied image(20261101-160139).png is encoded losslessly as public/mascots/readers/red-book-reader.webp, with its original 316 × 240 dimensions and pixels preserved. It accompanies the Psychoanalysis source header with empty alt text because it is decorative. The existing 3D subject guides and custom cursor are retained.
 
@@ -34,7 +34,7 @@ The reader uses pinned react-markdown 10.1.0. Raw HTML is disabled, permitted el
 
 TypeScript, 21 tests, Firestore rules lint, and the GitHub Pages production build passed. Two new tests cover semantic author formatting and unsafe markup/links. Server-render checks cover all twelve bullet points, both subheadings, the five reference targets, Freud and the red-book reader, the earlier Otto Rank quotation, and Finance controls. The supplied illustration was compared pixel-for-pixel with its encoded asset and confirmed in the build output.
 
-## Deployment and live verification
+## Initial deployment and live verification
 
 [PR #9](https://github.com/bruce12-glitch/Neuroplastic/pull/9) merged three focused commits. GitHub Actions [run 41584637223](https://github.com/bruce12-glitch/Neuroplastic/actions/runs/41584637223) built and deployed successfully.
 
