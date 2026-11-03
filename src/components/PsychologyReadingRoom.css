@@ -1,0 +1,13 @@
+.psychology-reading-room { background: #ecf9e0; }
+.psychology-reading-room .philosophy-reading-room__eyebrow { color: #4a7a10; }
+.psychology-reading-room .philosophy-reading-room__copy > p,
+.psychology-reading-room .philosophy-reading-room__footer > span { color: #58694a; }
+.psychology-reading-room .philosophy-reading-room__footer button { background: #58cc02; border-color: #439c00; color: #17330a; }
+.psychology-reading-room .philosophy-reading-room__footer button:hover { background: #439c00; color: #ffffff; }
+.psychology-reading-room .philosophy-reading-room__footer button:focus-visible { outline-color: #58cc02; }
+.psychology-reading-room__path { display: flex; flex-wrap: wrap; gap: 12px 20px; margin: 18px 0 0; padding: 0; list-style: none; font-size: 11px; font-weight: 600; }
+.psychology-reading-room__path li { display: inline-flex; align-items: center; gap: 7px; }
+.psychology-reading-room__path li > span { display: grid; place-items: center; width: 24px; height: 24px; background: #d7efc2; border-radius: 7px; color: #3f7a00; font-size: 10px; }
+@media (max-width: 539px) {
+  .psychology-reading-room__path { margin-top: 14px; }
+}
