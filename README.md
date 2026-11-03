@@ -2,6 +2,8 @@
 
 **Live website:** [https://bruce12-glitch.github.io/Neuroplastic/](https://bruce12-glitch.github.io/Neuroplastic/)
 
+**Latest original Psychoanalysis essay:** [The Oedipal Project — Freud, Becker, and the Search for Immortality](https://bruce12-glitch.github.io/Neuroplastic/?essay=the-oedipal-project)
+
 **Latest original Philosophy essay:** [The Internal Generative Mind — On Aquinas, Anselm, and the Dream Sovereign](https://bruce12-glitch.github.io/Neuroplastic/?essay=the-internal-generative-mind)
 
 **Previously:** [The Dreaming Sovereign — On Descartes and the Solipsistic Void](https://bruce12-glitch.github.io/Neuroplastic/?essay=the-dreaming-sovereign)
@@ -26,6 +28,8 @@ The **Money Garden** introduces the Finance section with a six-minute article, *
 **Original essays** preserve the author's full text in the editorial reader, with attributed quotations, reading controls, sources, and discussion. *The Dreaming Sovereign* is the site author's submitted Philosophy article; its Otto Rank passage is credited through Ernest Becker's *The Denial of Death*, chapter eight. Open any essay to obtain a shareable `?essay=<slug>` URL; refresh and browser history retain the selected article.
 
 **The Philosophy reading room** introduces *The Internal Generative Mind* with the supplied seated-reader illustration. The five-section essay includes seven references: Aquinas, Anselm, Plato, Hume, Descartes, and NASA. Separate reference notes link each section to numbered bibliography entries and distinguish the original arguments from the author's interpretation. A second supplied reader illustration accompanies Philosophy bibliographies. The existing 3D thinker portraits remain the subject guides.
+
+**The Psychoanalysis reading room** introduces *The Oedipal Project* with Freud's 3D mascot and a rose reading card. The original three sections retain their bullet lists, subheadings, bold terms, and italics through CommonMark rendering. Five linked references and separate notes distinguish historical theory from the author's interpretation and illustrative speech. A supplied red-book reader accompanies the bibliography. The latest essay is featured under All and Psychoanalysis; the Philosophy reading card remains in its subject view.
 
 ### 2. Three-Level Cognitive Depth Reader (`<CognitiveReader />`)
 Rather than static long-form pages, every monograph can be read across three calibrated epistemic depths:
@@ -89,7 +93,7 @@ npm run dev
 ### 4. Verify Security Rules & Build
 ```bash
 npx eslint firestore.rules
-node --import tsx --test src/utils/rules.test.ts firestore.rules.test.ts
+node --import tsx --test src/utils/rules.test.ts src/components/EditorialMarkdown.test.tsx firestore.rules.test.ts
 npm run lint
 npm run build
 ```
