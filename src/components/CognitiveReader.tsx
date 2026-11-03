@@ -354,7 +354,7 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
       <main className="max-w-3xl mx-auto px-4 sm:px-6 pt-10">
         {/* Anti-Slop Editorial Meta Header (Unboxed typographic hierarchy with · separators) */}
         <header className="mb-8 pb-8 border-b-2 border-[#191919]">
-          <div className={`flex flex-wrap items-center justify-between gap-2 mb-4 ${isOriginalEssay && essay.pillar === "psychoanalysis" ? "essay-meta-with-mascot" : ""}`}>
+          <div className={`flex flex-wrap items-center justify-between gap-2 mb-4 ${isOriginalEssay && (essay.pillar === "psychoanalysis" || essay.pillar === "psychology") ? "essay-meta-with-mascot" : ""}`}>
             <div className="text-xs font-code font-bold uppercase tracking-widest flex flex-wrap items-center gap-2">
               <span
                 className="px-2.5 py-0.5 rounded-md border border-[#191919] text-[#191919]"
@@ -384,6 +384,12 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
               <figure className="essay-header-mascot">
                 <NotionMascot variant={meta.mascot} size={88} decorative interactiveEyes={false} />
                 <figcaption>{THINKER_PORTRAITS[meta.mascot].name}<br />Illustrated guide</figcaption>
+              </figure>
+            )}
+            {isOriginalEssay && essay.pillar === "psychology" && (
+              <figure className="essay-header-mascot">
+                <img src={`${import.meta.env.BASE_URL}mascots/readers/sketching-writer.webp`} width={321} height={240} alt="" loading="lazy" decoding="async" className="essay-header-mascot__img" />
+                <figcaption>The prepared mind<br />Illustrated guide</figcaption>
               </figure>
             )}
             {essay.xpReward > 0 && <span className="text-xs font-code font-bold text-[#D6A600]">
@@ -727,6 +733,9 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
               )}
               {essay.pillar === "psychoanalysis" && (
                 <img className="essay-sources__reader" src={`${import.meta.env.BASE_URL}mascots/readers/red-book-reader.webp`} width={316} height={240} alt="" loading="lazy" decoding="async" />
+              )}
+              {essay.pillar === "psychology" && (
+                <img className="essay-sources__reader" src={`${import.meta.env.BASE_URL}mascots/readers/book-stack.webp`} width={307} height={362} alt="" loading="lazy" decoding="async" />
               )}
             </div>
             {essay.editorialNote && <p>{essay.editorialNote}</p>}

@@ -15,3 +15,4 @@
 .essay-meta-with-mascot > div:first-child { flex: 1; min-width: 0; }
 .essay-header-mascot { flex: 0 0 88px; text-align: center; }
 .essay-header-mascot figcaption { margin-top: 3px; font-family: var(--font-ui); font-size: 9px; line-height: 1.4; font-weight: 600; }
+.essay-header-mascot__img { display: block; width: 88px; height: auto; margin: 0 auto; mix-blend-mode: multiply; }
