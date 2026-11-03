@@ -2,6 +2,8 @@
 
 **Live website:** [https://bruce12-glitch.github.io/Neuroplastic/](https://bruce12-glitch.github.io/Neuroplastic/)
 
+**Latest original Psychology essay:** [The Chaos Theory of Life — How a $2.06 Gift and a Postal Mix-Up Can Rewrite Your Destiny](https://bruce12-glitch.github.io/Neuroplastic/?essay=the-chaos-theory-of-life)
+
 **Latest original Psychoanalysis essay:** [The Oedipal Project — Freud, Becker, and the Search for Immortality](https://bruce12-glitch.github.io/Neuroplastic/?essay=the-oedipal-project)
 
 **Latest original Philosophy essay:** [The Internal Generative Mind — On Aquinas, Anselm, and the Dream Sovereign](https://bruce12-glitch.github.io/Neuroplastic/?essay=the-internal-generative-mind)
@@ -30,6 +32,8 @@ The **Money Garden** introduces the Finance section with a six-minute article, *
 **The Philosophy reading room** introduces *The Internal Generative Mind* with the supplied seated-reader illustration. The five-section essay includes seven references: Aquinas, Anselm, Plato, Hume, Descartes, and NASA. Separate reference notes link each section to numbered bibliography entries and distinguish the original arguments from the author's interpretation. A second supplied reader illustration accompanies Philosophy bibliographies. The existing 3D thinker portraits remain the subject guides.
 
 **The Psychoanalysis reading room** introduces *The Oedipal Project* with Carl Jung as its illustrated subject guide and a rose reading card. The original three sections retain their bullet lists, subheadings, bold terms, and italics through CommonMark rendering. Five linked references and separate notes distinguish historical theory from the author's interpretation and illustrative speech. A supplied red-book reader accompanies the bibliography. The latest essay is featured under All and Psychoanalysis; the Philosophy reading card remains in its subject view.
+
+**The Psychology reading room** introduces *The Chaos Theory of Life* with a supplied cross-legged pink-book reader illustration on a pale-green reading card. The original five sections retain Bandura's chance-encounter definition, the two-timeline collision diagram rendered as an editorial quotation, the three real-world anecdotes, and the Pasteur pull quote with attribution. Five linked references — Bandura's 1982 article and 1986 book, Herbert C. Brown's Nobel biography and lecture, and Pasteur's 1854 Lille lecture — carry separate editorial notes. A supplied sketching-writer mascot appears in the article metadata area, and a supplied book-stack still life accompanies the sources. The latest essay is featured under All and Psychology; the Psychoanalysis reading card remains in its subject view.
 
 ### 2. Three-Level Cognitive Depth Reader (`<CognitiveReader />`)
 Rather than static long-form pages, every monograph can be read across three calibrated epistemic depths:
