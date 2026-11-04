@@ -542,7 +542,7 @@ export default function App() {
   const financeGuide = allEssays.find((essay) => essay.id === "money-time-and-compounding");
   const philosophyFeature = allEssays.find((essay) => essay.id === "internal-generative-mind");
   const psychoanalysisFeature = allEssays.find((essay) => essay.id === "oedipal-project");
-  const psychologyFeature = allEssays.find((essay) => essay.id === "chaos-theory-of-life");
+  const psychologyFeature = allEssays.find((essay) => essay.id === "mental-rehearsal");
 
   return (
     <div className="min-h-screen bg-[#F7F6F3] text-[#191919] font-ui antialiased flex flex-col">

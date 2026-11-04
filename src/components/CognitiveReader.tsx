@@ -27,6 +27,12 @@ import {
   AlignJustify,
 } from "lucide-react";
 
+/** Per-essay article-header mascots for original Psychology essays; essays without an entry fall back to the prepared-mind guide. */
+const PSYCHOLOGY_HEADER_MASCOTS: Record<string, { file: string; width: number; height: number; caption: string }> = {
+  "mental-rehearsal": { file: "pencil-creator.webp", width: 297, height: 242, caption: "The blueprint builder" },
+};
+const PSYCHOLOGY_HEADER_MASCOT_FALLBACK = { file: "sketching-writer.webp", width: 321, height: 240, caption: "The prepared mind" };
+
 interface CognitiveReaderProps {
   essay: EssayItem;
   onBack: () => void;
@@ -386,12 +392,15 @@ export const CognitiveReader: React.FC<CognitiveReaderProps> = ({
                 <figcaption>{THINKER_PORTRAITS[meta.mascot].name}<br />Illustrated guide</figcaption>
               </figure>
             )}
-            {isOriginalEssay && essay.pillar === "psychology" && (
-              <figure className="essay-header-mascot">
-                <img src={`${import.meta.env.BASE_URL}mascots/readers/sketching-writer.webp`} width={321} height={240} alt="" loading="lazy" decoding="async" className="essay-header-mascot__img" />
-                <figcaption>The prepared mind<br />Illustrated guide</figcaption>
-              </figure>
-            )}
+            {isOriginalEssay && essay.pillar === "psychology" && (() => {
+              const mascot = PSYCHOLOGY_HEADER_MASCOTS[essay.id] ?? PSYCHOLOGY_HEADER_MASCOT_FALLBACK;
+              return (
+                <figure className="essay-header-mascot">
+                  <img src={`${import.meta.env.BASE_URL}mascots/readers/${mascot.file}`} width={mascot.width} height={mascot.height} alt="" loading="lazy" decoding="async" className="essay-header-mascot__img" />
+                  <figcaption>{mascot.caption}<br />Illustrated guide</figcaption>
+                </figure>
+              );
+            })()}
             {essay.xpReward > 0 && <span className="text-xs font-code font-bold text-[#D6A600]">
               +{essay.xpReward} XP
             </span>}
