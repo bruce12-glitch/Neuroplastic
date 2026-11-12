@@ -77,6 +77,12 @@ export default function App() {
     return () => window.removeEventListener("popstate", restoreEssayFromLocation);
   }, []);
 
+  useEffect(() => {
+    if (activeEssayId === null && window.location.hash === `#${PUBLISHED_BOOK.id}`) {
+      document.getElementById(PUBLISHED_BOOK.id)?.scrollIntoView({ block: "start" });
+    }
+  }, [activeEssayId]);
+
   // Custom & Updated Blogs State
   const [customEssays, setCustomEssays] = useState<EssayItem[]>(() => {
     try {
