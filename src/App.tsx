@@ -14,6 +14,7 @@ import { FinanceGarden } from "./components/FinanceGarden.tsx";
 import { PhilosophyReadingRoom } from "./components/PhilosophyReadingRoom.tsx";
 import { PsychoanalysisReadingRoom } from "./components/PsychoanalysisReadingRoom.tsx";
 import { PsychologyReadingRoom } from "./components/PsychologyReadingRoom.tsx";
+import { PublishedBookCard, PUBLISHED_BOOK } from "./components/PublishedBookCard.tsx";
 import { SynapseGraph2D } from "./components/SynapseGraph2D.tsx";
 import { LivingAtlas } from "./components/LivingAtlas.tsx";
 import { CognitiveReader } from "./components/CognitiveReader.tsx";
@@ -276,6 +277,13 @@ export default function App() {
     });
   }, [allEssays, selectedPillar, searchFilter]);
 
+  const bookSearch = searchFilter.trim().toLowerCase();
+  const showPublishedBook =
+    (selectedPillar === "all" || selectedPillar === "philosophy") &&
+    [PUBLISHED_BOOK.title, PUBLISHED_BOOK.author, "philosophy", "published book"].some((value) =>
+      value.toLowerCase().includes(bookSearch)
+    );
+
   const activeEssay = useMemo(() => {
     return allEssays.find((e) => e.id === activeEssayId)
       || allEssays.find((e) => e.slug === activeEssayId)
@@ -531,7 +539,7 @@ export default function App() {
   }
 
   const pillarList: { id: "all" | PillarId; label: string; symbol?: string; btnClass?: string }[] = [
-    { id: "all", label: `All Synapses (${allEssays.length})` },
+    { id: "all", label: `All Synapses (${allEssays.length + 1})` },
     { id: "worldview", label: "World View", symbol: "Ω", btnClass: "duo-btn-world" },
     { id: "psychology", label: "Psychology", symbol: "Ψ", btnClass: "duo-btn-bio" },
     { id: "philosophy", label: "Philosophy", symbol: "Φ", btnClass: "duo-btn-phil" },
@@ -664,7 +672,8 @@ export default function App() {
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5A5955]" />
               <input
                 type="text"
-                placeholder="Search essays, thinkers, or concepts (e.g. 'Socrates', 'Lacan', 'entropy')..."
+                aria-label="Search essays and books"
+                placeholder="Search essays, books, thinkers, or concepts…"
                 value={searchFilter}
                 onChange={(e) => setSearchFilter(e.target.value)}
                 className="w-full text-xs sm:text-sm font-ui pl-10 pr-4 py-3 rounded-2xl border-2 border-[#191919] bg-white shadow-[0_4px_0_0_#191919] focus:outline-none"
@@ -771,7 +780,10 @@ export default function App() {
           </div>
 
           <div className="text-xs font-code text-[#5A5955]">
-            {filteredEssays.length} {filteredEssays.length === 1 ? "ESSAY" : "ESSAYS"}
+            {(filteredEssays.length > 0 || !showPublishedBook) && (
+              <span>{filteredEssays.length} {filteredEssays.length === 1 ? "ESSAY" : "ESSAYS"}</span>
+            )}
+            {showPublishedBook && <span>{filteredEssays.length > 0 && " · "}1 BOOK</span>}
           </div>
         </div>
       </section>
@@ -804,9 +816,10 @@ export default function App() {
         </div>
       )}
 
-      {/* Editorial Bento Essay Grid */}
+      {/* Blog and book listings */}
       <section className="max-w-7xl mx-auto px-4 lg:px-8 py-8 flex-1 w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {showPublishedBook && <PublishedBookCard />}
           {filteredEssays.map((essay, index) => {
             const isFeatured = index === 0 && selectedPillar === "all" && !searchFilter;
             const isMastered = masteredEssays.includes(essay.id);
